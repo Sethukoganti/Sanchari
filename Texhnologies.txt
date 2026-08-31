@@ -1,0 +1,36 @@
+## Technology Stack for Explore India 2
+
+Based on your project files, here's the technology stack being used:
+
+### **Frontend Framework**
+- **Next.js 16.2.6** — React-based framework with App Router
+- **React 19.2.6** & **React DOM 19.2.6** — UI library
+- **TypeScript 5.9.3** — Type safety
+
+### **Styling & UI**
+- **Tailwind CSS 4.1.17** — Utility-first CSS framework
+- **PostCSS 8.5.8** — CSS processing
+- **Lucide React 1.37.0** — Icon library
+- **Framer Motion 13.1.1** — Animation library
+- **clsx 2.1.1** — Conditional class utility
+
+### **Database & ORM**
+- **PostgreSQL** (via `pg` driver 8.20.0)
+- **Drizzle ORM 0.45.2** — Type-safe ORM
+- **Drizzle Kit 0.31.10** — Schema migration tool
+
+### **Utilities**
+- **date-fns 4.4.0** — Date manipulation library
+- **dotenv 17.3.1** — Environment variable management
+
+### **Development Tools**
+- **ESLint 9.39.4** — Code linting
+- **TypeScript** — Static type checking (`tsc --noEmit`)
+
+### **Project Structure**
+- Next.js App Router with API routes
+- Server and client components
+- Database schema management with Drizzle
+- Tailwind CSS for styling
+
+This is a modern, full-stack TypeScript web application with strong type safety and scalable architecture.

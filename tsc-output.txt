@@ -1,0 +1,8 @@
+﻿node.exe : npm notice run npx
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\kogan\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run tsc --noEmit
