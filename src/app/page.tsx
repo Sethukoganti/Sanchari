@@ -1,182 +1,185 @@
 import Image from "next/image";
 import Link from "next/link";
-import { articles, events, experiences, getFeaturedDestinations } from "@/data/content";
-import { DeparturesBoard } from "@/components/home/DeparturesBoard";
+import {
+  destinationsData,
+  experiencesData,
+  eventsData,
+  getFeaturedDestinations,
+  testimonials,
+} from "@/data/content";
 import { Hero } from "@/components/home/Hero";
-import { Testimonials } from "@/components/home/Testimonials";
-import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { LiveTicker } from "@/components/home/LiveTicker";
+import { StatsCounter } from "@/components/home/StatsCounter";
+import { NetflixCarousel } from "@/components/home/NetflixCarousel";
+import { MoodFilter } from "@/components/home/MoodFilter";
 import { IndiaMap } from "@/components/map/IndiaMap";
-import { ArticleCard } from "@/components/ui/ArticleCard";
-import { DestinationCard } from "@/components/ui/DestinationCard";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { formatDateRange } from "@/lib/utils";
+import { HiddenGemsSection } from "@/components/home/HiddenGemsSection";
+import { ExploreExperiencesSection } from "@/components/home/ExploreExperiencesSection";
+import { AIPlannerCTA } from "@/components/home/AIPlannerCTA";
+import { WhySanchariSection } from "@/components/home/WhySanchariSection";
+import { LocalBusinessesSection } from "@/components/home/LocalBusinessesSection";
+import { ResponsibleTourismSection } from "@/components/home/ResponsibleTourismSection";
+import { Testimonials } from "@/components/home/Testimonials";
+import { Sparkles, ArrowRight, Calendar, Star, MapPin } from "lucide-react";
 
 export default function HomePage() {
   const featured = getFeaturedDestinations();
-  const storyPreview = articles.slice(0, 3);
-  const experiencePreview = experiences.slice(0, 3);
-  const eventPreview = events.slice(0, 3);
 
   return (
-    <>
+    <div className="min-h-screen bg-navy-deep text-[#F8FAFC] space-y-16 sm:space-y-24 pb-24 overflow-hidden">
+      {/* 1. Hero Section */}
       <Hero />
-      <DeparturesBoard />
 
-      <section className="section-pad py-20 lg:py-28 xl:py-32">
-        <div className="container-site">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading
-              eyebrow="Featured routes"
-              title="Places with room to linger"
-              description="Eight carefully written bases across regions—filter the full board when you are ready to go wider."
-            />
-            <Link href="/destinations" className="btn-ghost">
-              View all destinations
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {featured.map((d) => (
-              <DestinationCard key={d.id} destination={d} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 2. Live Ticker / Real-time Travel News */}
+      <LiveTicker />
 
-      <section className="bg-[#0b0b0b] py-20 text-warm-white lg:py-28 xl:py-32">
-        <div className="container-site section-pad">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading
-              tone="dark"
-              eyebrow="Experiences"
-              title="Book the reason, not just the room"
-              description="Festivals, craft studios, trains, and quiet wellness weeks that shape the arc of a trip."
-            />
-            <Link href="/experiences" className="btn-secondary">
-              Browse experiences
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            {experiencePreview.map((exp) => (
-              <Link
-                key={exp.id}
-                href={`/experiences/${exp.slug}`}
-                className="group relative overflow-hidden rounded-[20px] border border-white/10 bg-[#111111] transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={exp.image}
-                    alt=""
-                    fill
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-300">
-                    {exp.category} · {exp.region}
-                  </p>
-                  <h3 className="mt-2 font-display text-2xl leading-snug text-white">
-                    {exp.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-white/70">{exp.summary}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 3. Stats Counter */}
+      <div className="container-site section-pad">
+        <StatsCounter />
+      </div>
 
-      <section className="section-pad py-20 lg:py-28 xl:py-32">
-        <div className="container-site">
-          <SectionHeading
-            eyebrow="Interactive map"
-            title="Trace the map, then pick a pace"
-            description="Click a state path for a local guide. Keyboard users can tab through every region."
-          />
-          <div className="mt-12 overflow-hidden rounded-[22px] border border-white/5 bg-[#0d0d0d] p-3 shadow-[0_24px_50px_rgba(0,0,0,0.18)] sm:p-5">
-            <IndiaMap />
-          </div>
-        </div>
-      </section>
+      {/* 4. Popular & Trending Destinations Carousel */}
+      <div className="container-site section-pad">
+        <NetflixCarousel
+          badge="Popular Bases"
+          title="Popular Destinations Across India"
+          subtitle="Iconic citadels, serene coastal shores, and sacred riverbanks with verified itineraries."
+          destinations={destinationsData}
+          viewAllHref="/destinations"
+        />
+      </div>
 
-      <section className="section-pad pb-20 lg:pb-28 xl:pb-32">
-        <div className="container-site">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading
-              eyebrow="Stories & culture"
-              title="Field notes from the road"
-              description="Original essays on seasons, platforms, textile towns, and festival etiquette."
-            />
-            <Link href="/stories" className="btn-ghost">
-              All stories
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {storyPreview.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 5. Explore by Experience Section */}
+      <ExploreExperiencesSection />
 
-      <section className="bg-[#101010] py-20 lg:py-28 xl:py-32">
-        <div className="container-site section-pad">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading
-              eyebrow="Events"
-              title="Festival windows worth defending"
-              description="Date-true cards you can filter by month and region on the full calendar."
-            />
-            <Link href="/events" className="btn-ghost">
-              Open calendar
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {eventPreview.map((event) => (
-              <article key={event.id} className="overflow-hidden rounded-[20px] border border-white/10 bg-[#111111] shadow-[0_18px_40px_rgba(0,0,0,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-red-500/35">
-                <div className="relative aspect-[16/10]">
-                  <Image
-                    src={event.image}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-red-300">
-                    {formatDateRange(event.startDate, event.endDate)}
-                  </p>
-                  <h3 className="mt-2 font-display text-2xl text-white">{event.name}</h3>
-                  <p className="mt-1 text-sm text-zinc-300">{event.location}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Testimonials />
-
-      <section className="bg-[#050505] py-20 text-warm-white lg:py-28 xl:py-32">
-        <div className="container-site section-pad grid gap-10 lg:grid-cols-2 lg:items-center">
+      {/* 6. Interactive India SVG Map */}
+      <section className="container-site section-pad">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-6 border-b border-white/10 pb-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-300">
-              Station notes
-            </p>
-            <h2 className="mt-3 font-display text-4xl sm:text-5xl text-white">
-              One thoughtful dispatch a month
+            <div className="flex items-center gap-2">
+              <span className="chip !py-1 !px-2.5 text-[10px] bg-saffron/15 text-saffron border-saffron/30 font-mono font-bold">
+                Interactive Cartography
+              </span>
+            </div>
+            <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-warm-white mt-1">
+              Explore Incredible India
             </h2>
-            <p className="mt-4 max-w-lg text-white/70">
-              Seasons, seat release tips, and festival windows—written like a
-              letter from a careful friend, not a blast from a booking engine.
+            <p className="text-xs sm:text-sm text-muted-gray max-w-xl font-body mt-1">
+              Select any of the 28 states and 8 union territories to filter by regional culture, sacred shrines, and travel routes.
             </p>
           </div>
-          <NewsletterForm source="home" dark />
+          <Link
+            href="/map"
+            className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1.5"
+          >
+            <span>Full Map Explorer</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <IndiaMap />
+      </section>
+
+      {/* 7. AI Trip Planner Interactive CTA */}
+      <AIPlannerCTA />
+
+      {/* 8. Discover India's Hidden Gems */}
+      <HiddenGemsSection />
+
+      {/* 9. Upcoming Festivals & Events */}
+      <section className="container-site section-pad space-y-8">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <span className="font-mono text-xs text-saffron uppercase font-bold tracking-widest block mb-1">
+              Living Cultural Calendar
+            </span>
+            <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-warm-white">
+              Upcoming Festivals & Events
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-gray mt-1 max-w-2xl font-body">
+              Discover vibrant music gatherings, livestock desert melas, and sacred Ganga deepawalis.
+            </p>
+          </div>
+
+          <Link
+            href="/events"
+            className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1.5"
+          >
+            <span>All Festivals & Events ({eventsData.length})</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {eventsData.slice(0, 3).map((evt) => (
+            <div
+              key={evt.id}
+              className="group card-surface overflow-hidden bg-navy-surface/60 border-white/10 rounded-3xl flex flex-col justify-between transition-all duration-300 hover:border-saffron/40 hover:-translate-y-1"
+            >
+              <div>
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src={evt.image}
+                    alt={evt.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-transparent to-black/30" />
+
+                  <div className="absolute top-3.5 left-3.5">
+                    <span className="chip !py-1 !px-2.5 text-[10px] bg-black/60 backdrop-blur-md text-saffron border-saffron/30 font-mono font-bold">
+                      {evt.category}
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-3.5 left-3.5 right-3.5 flex justify-between items-center text-xs">
+                    <span className="text-warm-white font-semibold flex items-center gap-1">
+                      <Calendar className="h-3.5 w-3.5 text-saffron" />
+                      {evt.date.approximateString}
+                    </span>
+                    <span className="text-muted-gray text-[11px] bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">
+                      {evt.state}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-2">
+                  <h3 className="font-display text-base font-bold text-warm-white group-hover:text-saffron transition-colors">
+                    {evt.name}
+                  </h3>
+                  <p className="text-xs text-zinc-300 font-body leading-relaxed line-clamp-2">
+                    {evt.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-5 pt-0">
+                <Link
+                  href={`/festivals`}
+                  className="btn-secondary w-full justify-center !py-2 text-xs flex items-center gap-1.5"
+                >
+                  <span>View Festival Details</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
-    </>
+
+      {/* 10. Why Sanchari Bharat? Platform Impact */}
+      <WhySanchariSection />
+
+      {/* 11. Travel Stories & Reviews */}
+      <div className="container-site section-pad">
+        <Testimonials />
+      </div>
+
+      {/* 12. Local Tourism Businesses */}
+      <LocalBusinessesSection />
+
+      {/* 13. Responsible & Sustainable Tourism */}
+      <ResponsibleTourismSection />
+    </div>
   );
 }

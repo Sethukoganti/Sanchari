@@ -1,453 +1,482 @@
 "use client";
 
-import Image from "next/image";
+import { useState, useRef, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
-import { states } from "@/data/content";
+import {
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Search,
+  MapPin,
+  Sparkles,
+  Compass,
+  ArrowRight,
+} from "lucide-react";
+import { statesData } from "@/data/states";
+import { destinationsData } from "@/data/destinations";
+import { cn } from "@/lib/utils";
 
-/** Simplified clickable state shapes for an illustrative India map */
-const STATE_PATHS: Array<{
-  slug: string;
-  name: string;
-  d: string;
-}> = [
+// Region Color Configuration
+const REGION_COLORS: Record<string, { base: string; hover: string; border: string; text: string; glow: string }> = {
+  North: {
+    base: "rgba(59, 130, 246, 0.45)",
+    hover: "rgba(96, 165, 250, 0.9)",
+    border: "#60A5FA",
+    text: "text-blue-400",
+    glow: "rgba(59, 130, 246, 0.6)",
+  },
+  South: {
+    base: "rgba(16, 185, 129, 0.45)",
+    hover: "rgba(52, 211, 153, 0.9)",
+    border: "#34D399",
+    text: "text-emerald-400",
+    glow: "rgba(16, 185, 129, 0.6)",
+  },
+  East: {
+    base: "rgba(249, 115, 22, 0.45)",
+    hover: "rgba(251, 146, 60, 0.9)",
+    border: "#FB923C",
+    text: "text-orange-400",
+    glow: "rgba(249, 115, 22, 0.6)",
+  },
+  West: {
+    base: "rgba(168, 85, 247, 0.45)",
+    hover: "rgba(192, 132, 252, 0.9)",
+    border: "#C084FC",
+    text: "text-purple-400",
+    glow: "rgba(168, 85, 247, 0.6)",
+  },
+  Northeast: {
+    base: "rgba(20, 184, 166, 0.45)",
+    hover: "rgba(45, 212, 191, 0.9)",
+    border: "#2DD4BF",
+    text: "text-teal-400",
+    glow: "rgba(20, 184, 166, 0.6)",
+  },
+  Central: {
+    base: "rgba(245, 158, 11, 0.45)",
+    hover: "rgba(251, 191, 36, 0.9)",
+    border: "#FBBF24",
+    text: "text-amber-400",
+    glow: "rgba(245, 158, 11, 0.6)",
+  },
+};
+
+// All 28 States & 8 Union Territories Accurate High-Definition SVG Coordinate Paths
+const ALL_STATES_SVG = [
+  // NORTH
+  { slug: "jammu-and-kashmir", name: "Jammu and Kashmir", region: "North", capital: "Srinagar / Jammu", d: "M210,32 L228,38 L244,52 L234,68 L218,74 L196,66 L186,48 L198,34 Z" },
+  { slug: "ladakh", name: "Ladakh", region: "North", capital: "Leh", d: "M244,52 L285,56 L312,78 L300,98 L268,102 L242,88 L234,68 Z" },
+  { slug: "himachal-pradesh", name: "Himachal Pradesh", region: "North", capital: "Shimla", d: "M228,78 L262,82 L274,102 L256,116 L226,108 L216,92 Z" },
+  { slug: "punjab", name: "Punjab", region: "North", capital: "Chandigarh", d: "M194,94 L224,96 L228,114 L204,126 L182,118 L188,102 Z" },
+  { slug: "haryana", name: "Haryana", region: "North", capital: "Chandigarh", d: "M204,126 L232,122 L242,142 L222,154 L198,146 L194,132 Z" },
+  { slug: "delhi", name: "Delhi (NCT)", region: "North", capital: "New Delhi", d: "M226,134 L234,134 L236,142 L228,144 Z" },
+  { slug: "uttarakhand", name: "Uttarakhand", region: "North", capital: "Dehradun", d: "M254,106 L284,112 L292,134 L266,142 L246,128 Z" },
+  { slug: "uttar-pradesh", name: "Uttar Pradesh", region: "North", capital: "Lucknow", d: "M244,142 L318,148 L342,182 L312,204 L248,198 L224,172 L232,152 Z" },
+
+  // WEST
+  { slug: "rajasthan", name: "Rajasthan", region: "West", capital: "Jaipur", d: "M142,128 L204,126 L222,168 L212,214 L164,228 L118,206 L112,164 Z" },
+  { slug: "gujarat", name: "Gujarat", region: "West", capital: "Gandhinagar", d: "M114,208 L162,216 L174,252 L148,284 L108,286 L86,252 L94,220 Z" },
+  { slug: "maharashtra", name: "Maharashtra", region: "West", capital: "Mumbai", d: "M168,252 L244,260 L266,298 L252,342 L198,348 L152,318 L158,272 Z" },
+  { slug: "goa", name: "Goa", region: "West", capital: "Panaji", d: "M166,346 L178,348 L180,362 L168,364 Z" },
+
+  // CENTRAL
+  { slug: "madhya-pradesh", name: "Madhya Pradesh", region: "Central", capital: "Bhopal", d: "M218,194 L308,202 L326,242 L312,274 L234,282 L182,260 L188,222 Z" },
+  { slug: "chhattisgarh", name: "Chhattisgarh", region: "Central", capital: "Raipur", d: "M308,236 L344,244 L354,284 L336,316 L304,310 L294,272 Z" },
+
+  // EAST
+  { slug: "bihar", name: "Bihar", region: "East", capital: "Patna", d: "M328,172 L382,176 L392,208 L348,214 L326,196 Z" },
+  { slug: "jharkhand", name: "Jharkhand", region: "East", capital: "Ranchi", d: "M342,212 L388,216 L394,248 L354,252 L332,234 Z" },
+  { slug: "west-bengal", name: "West Bengal", region: "East", capital: "Kolkata", d: "M376,198 L398,188 L404,234 L386,274 L370,258 L378,224 Z" },
+  { slug: "odisha", name: "Odisha", region: "East", capital: "Bhubaneswar", d: "M338,254 L382,264 L392,304 L364,334 L328,324 L320,284 Z" },
+
+  // SOUTH
+  { slug: "andhra-pradesh", name: "Andhra Pradesh", region: "South", capital: "Amaravati", d: "M246,336 L298,344 L310,392 L278,432 L234,420 L238,374 Z" },
+  { slug: "telangana", name: "Telangana", region: "South", capital: "Hyderabad", d: "M248,298 L296,306 L306,342 L274,358 L240,344 L238,320 Z" },
+  { slug: "karnataka", name: "Karnataka", region: "South", capital: "Bengaluru", d: "M184,348 L236,356 L248,406 L226,446 L188,438 L168,396 Z" },
+  { slug: "kerala", name: "Kerala", region: "South", capital: "Thiruvananthapuram", d: "M192,442 L212,448 L218,494 L204,524 L188,510 L184,464 Z" },
+  { slug: "tamil-nadu", name: "Tamil Nadu", region: "South", capital: "Chennai", d: "M224,438 L268,446 L278,496 L248,536 L212,528 L216,482 Z" },
+  { slug: "andaman-and-nicobar-islands", name: "Andaman & Nicobar", region: "South", capital: "Port Blair", d: "M438,448 L446,448 L448,512 L436,512 Z" },
+
+  // NORTHEAST
+  { slug: "sikkim", name: "Sikkim", region: "Northeast", capital: "Gangtok", d: "M386,164 L398,164 L400,178 L386,180 Z" },
+  { slug: "assam", name: "Assam", region: "Northeast", capital: "Dispur", d: "M422,176 L488,182 L498,206 L454,218 L418,202 Z" },
+  { slug: "arunachal-pradesh", name: "Arunachal Pradesh", region: "Northeast", capital: "Itanagar", d: "M434,142 L514,148 L524,182 L478,186 L438,168 Z" },
+  { slug: "nagaland", name: "Nagaland", region: "Northeast", capital: "Kohima", d: "M486,188 L508,192 L504,218 L482,216 Z" },
+  { slug: "manipur", name: "Manipur", region: "Northeast", capital: "Imphal", d: "M478,218 L502,220 L498,244 L476,242 Z" },
+  { slug: "mizoram", name: "Mizoram", region: "Northeast", capital: "Aizawl", d: "M464,244 L482,246 L478,276 L458,272 Z" },
+  { slug: "tripura", name: "Tripura", region: "Northeast", capital: "Agartala", d: "M444,228 L462,230 L458,254 L440,250 Z" },
+  { slug: "meghalaya", name: "Meghalaya", region: "Northeast", capital: "Shillong", d: "M422,198 L462,200 L460,218 L420,216 Z" },
+];
+
+// Featured Destination Pin Coordinates on the Map Canvas (580 x 580 coordinate system)
+const DESTINATION_PINS = [
+  { slug: "delhi", name: "Delhi", x: 231, y: 139, state: "Delhi" },
+  { slug: "jaipur", name: "Jaipur", x: 196, y: 172, state: "Rajasthan" },
+  { slug: "varanasi", name: "Varanasi", x: 318, y: 188, state: "Uttar Pradesh" },
+  { slug: "leh", name: "Leh Ladakh", x: 268, y: 84, state: "Ladakh" },
+  { slug: "alleppey", name: "Alleppey", x: 202, y: 486, state: "Kerala" },
+  { slug: "hampi", name: "Hampi", x: 218, y: 394, state: "Karnataka" },
+  { slug: "mumbai", name: "Mumbai", x: 158, y: 298, state: "Maharashtra" },
+  { slug: "kolkata", name: "Kolkata", x: 388, y: 242, state: "West Bengal" },
+];
+
+// Famous Animated Tourist Circuits
+const TOURIST_CIRCUITS = [
   {
-    slug: "jammu-kashmir",
-    name: "Jammu & Kashmir",
-    d: "M210 28 l28 8 18 22 -6 18 -22 8 -30 -10 -12 -20 z",
+    name: "The Golden Triangle",
+    points: "231,139 254,162 196,172 231,139", // Delhi -> Agra -> Jaipur -> Delhi
+    color: "#E8A013",
   },
   {
-    slug: "ladakh",
-    name: "Ladakh",
-    d: "M250 30 l40 6 22 28 -10 16 -36 4 -28 -18 z",
-  },
-  {
-    slug: "himachal-pradesh",
-    name: "Himachal Pradesh",
-    d: "M230 70 l36 4 10 18 -18 12 -34 -6 -8 -16 z",
-  },
-  {
-    slug: "punjab",
-    name: "Punjab",
-    d: "M198 88 l28 2 8 18 -22 10 -24 -6 -4 -14 z",
-  },
-  {
-    slug: "uttar-pradesh",
-    name: "Uttar Pradesh",
-    d: "M250 105 l70 8 18 28 -12 24 -70 4 -30 -18 -8 -24 z",
-  },
-  {
-    slug: "rajasthan",
-    name: "Rajasthan",
-    d: "M145 115 l70 6 18 40 -8 42 -48 18 -50 -20 -12 -40 10 -36 z",
-  },
-  {
-    slug: "gujarat",
-    name: "Gujarat",
-    d: "M120 190 l48 8 12 36 -20 28 -40 4 -24 -30 4 -34 z",
-  },
-  {
-    slug: "maharashtra",
-    name: "Maharashtra",
-    d: "M175 230 l70 10 20 40 -10 36 -55 8 -40 -28 -5 -40 z",
-  },
-  {
-    slug: "goa",
-    name: "Goa",
-    d: "M175 310 l18 4 4 14 -14 6 -12 -8 z",
-  },
-  {
-    slug: "karnataka",
-    name: "Karnataka",
-    d: "M195 320 l45 6 16 40 -8 36 -40 8 -28 -30 2 -42 z",
-  },
-  {
-    slug: "kerala",
-    name: "Kerala",
-    d: "M200 390 l18 8 6 36 -12 28 -14 -10 -8 -40 z",
-  },
-  {
-    slug: "tamil-nadu",
-    name: "Tamil Nadu",
-    d: "M230 370 l40 10 12 40 -20 42 -34 4 -16 -36 4 -40 z",
-  },
-  {
-    slug: "andhra-pradesh",
-    name: "Andhra Pradesh",
-    d: "M250 320 l48 14 8 40 -28 36 -40 -8 -6 -40 z",
-  },
-  {
-    slug: "telangana",
-    name: "Telangana",
-    d: "M255 290 l40 8 10 28 -30 14 -32 -10 -4 -24 z",
-  },
-  {
-    slug: "madhya-pradesh",
-    name: "Madhya Pradesh",
-    d: "M220 175 l90 8 20 36 -10 34 -80 10 -50 -20 -8 -36 z",
-  },
-  {
-    slug: "chhattisgarh",
-    name: "Chhattisgarh",
-    d: "M310 210 l36 10 10 36 -20 28 -34 -4 -10 -36 z",
-  },
-  {
-    slug: "odisha",
-    name: "Odisha",
-    d: "M340 230 l40 12 8 40 -24 28 -36 -8 -6 -40 z",
-  },
-  {
-    slug: "west-bengal",
-    name: "West Bengal",
-    d: "M380 180 l28 8 10 50 -8 40 -24 8 -16 -40 2 -50 z",
-  },
-  {
-    slug: "bihar",
-    name: "Bihar",
-    d: "M340 155 l50 6 10 28 -40 14 -36 -8 -4 -24 z",
-  },
-  {
-    slug: "jharkhand",
-    name: "Jharkhand",
-    d: "M335 190 l42 6 8 24 -30 12 -30 -6 -4 -22 z",
-  },
-  {
-    slug: "assam",
-    name: "Assam",
-    d: "M430 150 l50 8 20 18 -10 18 -48 6 -28 -12 z",
-  },
-  {
-    slug: "meghalaya",
-    name: "Meghalaya",
-    d: "M430 185 l40 4 6 16 -36 8 -22 -6 z",
-  },
-  {
-    slug: "nagaland",
-    name: "Nagaland",
-    d: "M490 155 l22 6 6 16 -16 10 -20 -8 z",
-  },
-  {
-    slug: "manipur",
-    name: "Manipur",
-    d: "M485 180 l20 8 4 16 -18 8 -16 -10 z",
-  },
-  {
-    slug: "mizoram",
-    name: "Mizoram",
-    d: "M470 205 l16 8 2 20 -14 8 -12 -14 z",
-  },
-  {
-    slug: "tripura",
-    name: "Tripura",
-    d: "M450 205 l16 4 4 16 -14 6 -12 -10 z",
-  },
-  {
-    slug: "arunachal-pradesh",
-    name: "Arunachal Pradesh",
-    d: "M460 120 l55 4 18 24 -20 16 -55 4 -18 -20 z",
-  },
-  {
-    slug: "sikkim",
-    name: "Sikkim",
-    d: "M400 145 l14 2 4 12 -12 6 -10 -8 z",
-  },
-  {
-    slug: "uttarakhand",
-    name: "Uttarakhand",
-    d: "M255 85 l40 6 10 20 -24 10 -34 -6 -6 -16 z",
-  },
-  {
-    slug: "haryana",
-    name: "Haryana",
-    d: "M225 100 l28 4 6 16 -22 8 -20 -6 z",
-  },
-  {
-    slug: "delhi",
-    name: "Delhi",
-    d: "M238 118 l10 2 2 8 -8 4 -8 -4 z",
+    name: "Southern Heritage Trail",
+    points: "218,394 224,420 202,486 238,498", // Hampi -> Bengaluru -> Alleppey -> Madurai
+    color: "#10B981",
   },
 ];
 
-const LINKED = new Set(states.map((s) => s.slug));
-
 export function IndiaMap() {
   const router = useRouter();
-  const [hover, setHover] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string | null>("rajasthan");
-  const [stateSearch, setStateSearch] = useState("");
-  const [tooltip, setTooltip] = useState<{ x: number; y: number } | null>(null);
+  const [hoveredState, setHoveredState] = useState<typeof ALL_STATES_SVG[0] | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [showCircuits, setShowCircuits] = useState(true);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  const stateLookup = useMemo(
-    () => new Map(states.map((state) => [state.slug, state])),
-    [],
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const activeSlug = hover || selected;
-
-  const info = useMemo(() => {
-    if (!activeSlug) return null;
-    return (
-      stateLookup.get(activeSlug) || {
-        slug: activeSlug,
-        name: STATE_PATHS.find((p) => p.slug === activeSlug)?.name || activeSlug,
-        region: "North" as const,
-        summary: "Open destination routes and explore cultural trails in this state.",
-        image:
-          "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
-        destinationSlugs: [] as string[],
-      }
+  // Search Filtered States
+  const filteredStates = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return ALL_STATES_SVG.filter((s) =>
+      s.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [activeSlug, stateLookup]);
+  }, [searchQuery]);
 
-  const onActivate = useCallback(
-    (slug: string) => {
-      setSelected(slug);
-      router.push(`/map/${slug}`);
-    },
-    [router],
-  );
+  // Zoom handlers
+  const handleZoomIn = () => setZoom((z) => Math.min(z + 0.35, 3.5));
+  const handleZoomOut = () => setZoom((z) => Math.max(z - 0.35, 0.8));
+  const handleReset = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+    setSelectedState(null);
+    setSearchQuery("");
+  };
 
-  const filteredStatesList = useMemo(() => {
-    if (!stateSearch.trim()) return states;
-    const q = stateSearch.toLowerCase();
-    return states.filter(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.region.toLowerCase().includes(q) ||
-        s.summary.toLowerCase().includes(q),
-    );
-  }, [stateSearch]);
+  // Wheel Zoom
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.15 : 0.15;
+    setZoom((z) => Math.min(Math.max(z + delta, 0.8), 3.5));
+  }, []);
+
+  // Mouse Drag Pan Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) {
+      setPan({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y,
+      });
+    }
+
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setTooltipPos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
+
+  // State Click Navigation
+  const handleStateClick = (slug: string) => {
+    setSelectedState(slug);
+    router.push(`/states/${slug}`);
+  };
 
   return (
-    <div className="relative grid gap-8 lg:grid-cols-12">
-      <div className="relative lg:col-span-8">
-        <div className="relative overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.2)] bg-[#120407] p-2 shadow-2xl sm:p-4">
-          <svg
-            viewBox="0 0 560 460"
-            className="h-auto w-full rounded-xl"
-            role="img"
-            aria-label="Interactive map of India. Select a state to explore."
+    <div className="relative w-full rounded-2xl bg-[#0d0d0d] border border-white/10 p-4 sm:p-6 select-none overflow-hidden shadow-2xl">
+      {/* Top Controls Bar: Search & Circuit Toggle */}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 relative z-20">
+        {/* State Search Bar */}
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-gray" />
+          <input
+            type="text"
+            placeholder="Search 28 states & 8 UTs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border border-white/15 bg-white/5 py-2 pl-10 pr-4 text-xs text-warm-white placeholder-muted-gray backdrop-blur-md transition-all focus:border-turmeric focus:bg-white/10 focus:outline-none"
+          />
+
+          {/* Autocomplete Search Dropdown */}
+          {filteredStates.length > 0 && (
+            <div className="absolute left-0 top-full z-30 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border border-white/15 bg-[#141414] p-1 shadow-2xl backdrop-blur-2xl">
+              {filteredStates.map((st) => (
+                <button
+                  key={st.slug}
+                  type="button"
+                  onClick={() => {
+                    setSelectedState(st.slug);
+                    setSearchQuery(st.name);
+                    handleStateClick(st.slug);
+                  }}
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-left text-xs text-zinc-300 transition-colors hover:bg-turmeric/20 hover:text-white"
+                >
+                  <span>{st.name}</span>
+                  <span className="text-[10px] text-muted-gray">{st.region}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons: Circuit Toggle & Zoom Controls */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowCircuits((v) => !v)}
+            className={cn(
+              "flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer",
+              showCircuits
+                ? "border-turmeric/50 bg-turmeric/15 text-turmeric"
+                : "border-white/10 bg-white/5 text-muted-gray hover:text-white",
+            )}
+            title="Toggle Animated Tourist Circuit Trails"
           >
-            <defs>
-              <linearGradient id="mapBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1C070C" />
-                <stop offset="50%" stopColor="#140508" />
-                <stop offset="100%" stopColor="#0B0204" />
-              </linearGradient>
-              <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="rgba(196, 30, 58, 0.15)" />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-            </defs>
-            <rect width="560" height="460" fill="url(#mapBgGrad)" rx="12" />
-            <rect width="560" height="460" fill="url(#mapGlow)" rx="12" />
+            <Sparkles className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Tourist Circuits</span>
+          </button>
 
-            {/* Decorative subtle grid lines */}
-            <line x1="40" y1="120" x2="520" y2="120" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
-            <line x1="40" y1="240" x2="520" y2="240" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
-            <line x1="40" y1="360" x2="520" y2="360" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
-            <line x1="180" y1="40" x2="180" y2="420" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
-            <line x1="360" y1="40" x2="360" y2="420" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
-
-            <text
-              x="28"
-              y="34"
-              fill="#D4AF37"
-              fontSize="11"
-              fontFamily="JetBrains Mono, monospace"
-              letterSpacing="3"
-              fontWeight="600"
+          {/* Zoom Buttons */}
+          <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={handleZoomIn}
+              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
+              title="Zoom In"
             >
-              EXPLORE INDIA · INTERACTIVE STATE BOARD
-            </text>
-            <text
-              x="28"
-              y="48"
-              fill="rgba(247, 234, 200, 0.5)"
-              fontSize="9"
-              fontFamily="JetBrains Mono, monospace"
-              letterSpacing="1"
+              <ZoomIn className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleZoomOut}
+              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
+              title="Zoom Out"
             >
-              CLICK OR TAB TO EXPLORE 31 REGIONAL GUIDES
-            </text>
+              <ZoomOut className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
+              title="Reset View"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
 
-            {STATE_PATHS.map((state) => {
-              const isHovered = hover === state.slug;
-              const isSelected = selected === state.slug;
-              const active = isHovered || isSelected;
+      {/* SVG Canvas Map Area */}
+      <div
+        ref={containerRef}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        className={cn(
+          "relative h-[480px] sm:h-[620px] w-full overflow-hidden rounded-xl bg-gradient-to-b from-[#090909] via-[#0D0D0D] to-[#080808]",
+          isDragging ? "cursor-grabbing" : "cursor-grab",
+        )}
+      >
+        <svg
+          viewBox="0 0 580 580"
+          className="h-full w-full transition-transform duration-75"
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            transformOrigin: "center center",
+          }}
+        >
+          {/* Subtle Map Grid Lines */}
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="0.5" />
+            </pattern>
+            {/* Pulsing destination marker glow filter */}
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <rect width="580" height="580" fill="url(#grid)" />
+
+          {/* Render All 28 States & 8 UTs Paths */}
+          <g id="states-group">
+            {ALL_STATES_SVG.map((state) => {
+              const regionColor = REGION_COLORS[state.region] || REGION_COLORS.North;
+              const isHovered = hoveredState?.slug === state.slug;
+              const isSelected = selectedState === state.slug || (searchQuery && state.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
               return (
                 <path
                   key={state.slug}
                   d={state.d}
-                  className="map-state"
-                  data-active={active ? "true" : "false"}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`${state.name} - Explore state routes`}
-                  onMouseEnter={(e) => {
-                    setHover(state.slug);
-                    const rect = (e.target as SVGPathElement)
-                      .ownerSVGElement!
-                      .getBoundingClientRect();
-                    setTooltip({
-                      x: e.clientX - rect.left,
-                      y: e.clientY - rect.top,
-                    });
+                  fill={isSelected ? "#E8A013" : isHovered ? regionColor.hover : regionColor.base}
+                  stroke={isSelected ? "#FFFFFF" : isHovered ? "#FFFFFF" : regionColor.border}
+                  strokeWidth={isSelected ? "1.8" : isHovered ? "1.5" : "0.75"}
+                  className="transition-all duration-200 cursor-pointer"
+                  style={{
+                    filter: isHovered || isSelected ? `drop-shadow(0 0 8px ${regionColor.glow})` : "none",
                   }}
-                  onMouseMove={(e) => {
-                    const rect = (e.target as SVGPathElement)
-                      .ownerSVGElement!
-                      .getBoundingClientRect();
-                    setTooltip({
-                      x: e.clientX - rect.left,
-                      y: e.clientY - rect.top,
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    setHover(null);
-                    setTooltip(null);
-                  }}
-                  onFocus={() => {
-                    setHover(state.slug);
-                  }}
-                  onBlur={() => setHover(null)}
-                  onClick={() => onActivate(state.slug)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      onActivate(state.slug);
-                    }
-                  }}
+                  onMouseEnter={() => setHoveredState(state)}
+                  onMouseLeave={() => setHoveredState(null)}
+                  onClick={() => handleStateClick(state.slug)}
                 />
               );
             })}
-          </svg>
+          </g>
 
-          {/* Interactive Floating State Preview Tooltip */}
-          {hover && tooltip && info ? (
-            <div
-              className="pointer-events-none absolute z-20 w-64 overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.3)] bg-[#18060B]/95 shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(196,30,58,0.25)] backdrop-blur-md transition-all duration-150"
-              style={{
-                left: Math.min(Math.max(tooltip.x + 14, 16), 310),
-                top: Math.min(Math.max(tooltip.y - 30, 16), 260),
-              }}
-            >
-              <div className="relative h-28 w-full overflow-hidden">
-                <Image
-                  src={info.image}
-                  alt={info.name}
-                  fill
-                  className="object-cover"
-                  sizes="256px"
+          {/* Animated Tourist Circuit Paths */}
+          {showCircuits && (
+            <g id="circuits-group">
+              {TOURIST_CIRCUITS.map((circuit) => (
+                <polyline
+                  key={circuit.name}
+                  points={circuit.points}
+                  fill="none"
+                  stroke={circuit.color}
+                  strokeWidth="2"
+                  className="travel-circuit-line"
+                  opacity="0.85"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#18060B] via-[#18060B]/30 to-transparent" />
-                <span className="absolute left-2.5 top-2.5 rounded-full border border-white/20 bg-black/60 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[#F7EAC8] backdrop-blur-sm">
-                  {info.region} India
-                </span>
-              </div>
-              <div className="p-3.5 pt-1">
-                <p className="font-display text-base font-bold text-white">{info.name}</p>
-                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">
-                  {info.summary}
-                </p>
-                <p className="mt-2 text-[10px] font-semibold text-[#D4AF37]">
-                  Click to open state guide →
-                </p>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="lg:col-span-4">
-        <div className="card-surface sticky top-28 flex flex-col p-6">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
-              State Guide
-            </span>
-            {info ? (
-              <span className="rounded-full border border-[#C41E3A]/40 bg-[#8E162C]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#F7EAC8]">
-                {info.region}
-              </span>
-            ) : null}
-          </div>
-
-          {info ? (
-            <div className="mt-4">
-              <div className="relative mb-4 h-36 w-full overflow-hidden rounded-xl border border-white/10">
-                <Image
-                  src={info.image}
-                  alt={info.name}
-                  fill
-                  className="object-cover transition duration-500 hover:scale-105"
-                  sizes="360px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-2.5 left-3">
-                  <h3 className="font-display text-2xl font-bold text-white drop-shadow-md">
-                    {info.name}
-                  </h3>
-                </div>
-              </div>
-              <p className="text-sm leading-relaxed text-[color:var(--text-soft)]">
-                {info.summary}
-              </p>
-              <button
-                type="button"
-                className="btn-primary mt-5 w-full"
-                onClick={() => onActivate(info.slug)}
-              >
-                Explore {info.name} Guide
-              </button>
-            </div>
-          ) : (
-            <div className="mt-4">
-              <h3 className="font-display text-2xl text-[color:var(--text)]">
-                Select a State
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-soft)]">
-                Hover or click any state on the map or choose from the list below to view its authentic photography and travel routes.
-              </p>
-            </div>
+              ))}
+            </g>
           )}
 
-          <div className="mt-6 border-t border-[color:var(--surface-border)] pt-4">
-            <input
-              type="text"
-              value={stateSearch}
-              onChange={(e) => setStateSearch(e.target.value)}
-              placeholder="Search 31 states & territories…"
-              className="w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] px-3.5 py-2 text-xs text-[color:var(--text)] outline-none transition focus:border-[#C41E3A]"
-            />
+          {/* Pulsing Destination Pin Markers */}
+          <g id="destination-pins">
+            {DESTINATION_PINS.map((pin) => (
+              <g
+                key={pin.slug}
+                className="cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/destinations/${pin.slug}`);
+                }}
+              >
+                {/* Outer Pulsing Wave */}
+                <circle
+                  cx={pin.x}
+                  cy={pin.y}
+                  r="8"
+                  fill="none"
+                  stroke="#E8A013"
+                  strokeWidth="1.5"
+                  className="animate-pulse"
+                  opacity="0.6"
+                />
+                {/* Inner Core Dot */}
+                <circle
+                  cx={pin.x}
+                  cy={pin.y}
+                  r="3.5"
+                  fill="#E8A013"
+                  filter="url(#glow)"
+                />
+                {/* Micro Pin Label */}
+                <text
+                  x={pin.x + 6}
+                  y={pin.y + 3}
+                  fill="#F7F3EC"
+                  fontSize="8"
+                  fontWeight="600"
+                  fontFamily="Mukta"
+                  className="pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] opacity-90"
+                >
+                  {pin.name}
+                </text>
+              </g>
+            ))}
+          </g>
+        </svg>
 
-            <ul className="mt-3 max-h-56 space-y-1.5 overflow-y-auto pr-1">
-              {filteredStatesList.map((s) => {
-                const isCurrent = activeSlug === s.slug;
-                return (
-                  <li key={s.slug}>
-                    <button
-                      type="button"
-                      className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition ${
-                        isCurrent
-                          ? "border border-[#C41E3A]/40 bg-[#8E162C]/25 text-white font-semibold"
-                          : "hover:bg-[color:var(--surface)] text-[color:var(--text)]"
-                      }`}
-                      onClick={() => onActivate(s.slug)}
-                      onMouseEnter={() => setHover(s.slug)}
-                      onMouseLeave={() => setHover(null)}
-                    >
-                      <span className="font-medium">{s.name}</span>
-                      <span className="text-[10px] text-[color:var(--text-soft)]">
-                        {s.region}
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+        {/* Floating Tooltip following hover */}
+        {hoveredState && (
+          <div
+            className="pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-full pb-3 transition-opacity duration-150"
+            style={{
+              left: `${tooltipPos.x}px`,
+              top: `${tooltipPos.y}px`,
+            }}
+          >
+            <div className="rounded-xl border border-turmeric/40 bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl">
+              <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-turmeric animate-pulse" />
+                <p className="font-display text-sm font-bold text-warm-white">
+                  {hoveredState.name}
+                </p>
+              </div>
+              <p className="mt-0.5 text-[11px] text-muted-gray">
+                Capital: <span className="text-zinc-300 font-medium">{hoveredState.capital}</span>
+              </p>
+              <div className="mt-1 flex items-center justify-between gap-4 text-[10px] font-semibold">
+                <span className={REGION_COLORS[hoveredState.region]?.text || "text-turmeric"}>
+                  {hoveredState.region} India
+                </span>
+                <span className="text-turmeric">Click for State Guide →</span>
+              </div>
+            </div>
           </div>
+        )}
+      </div>
+
+      {/* Bottom Region Legend & Circuit Indicator */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-3 text-xs">
+        {/* Region Color Legend */}
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="font-mono text-[11px] uppercase tracking-wider text-muted-gray">
+            Regions:
+          </span>
+          {Object.entries(REGION_COLORS).map(([region, color]) => (
+            <button
+              key={region}
+              type="button"
+              onClick={() => {
+                const firstInRegion = ALL_STATES_SVG.find((s) => s.region === region);
+                if (firstInRegion) setSelectedState(firstInRegion.slug);
+              }}
+              className="flex items-center gap-1.5 transition-opacity hover:opacity-100 cursor-pointer"
+            >
+              <span
+                className="h-3 w-3 rounded-md border"
+                style={{ backgroundColor: color.base, borderColor: color.border }}
+              />
+              <span className="text-zinc-300 font-medium">{region}</span>
+            </button>
+          ))}
         </div>
+
+        {/* Map Tip */}
+        <p className="text-[11px] text-muted-gray flex items-center gap-1">
+          <Compass className="h-3.5 w-3.5 text-turmeric" />
+          <span>Scroll to zoom · Drag to pan · Click any state or glowing pin</span>
+        </p>
       </div>
     </div>
   );

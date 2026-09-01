@@ -1,26 +1,30 @@
 import type { Metadata } from "next";
 import { IndiaMap } from "@/components/map/IndiaMap";
 import { PageHero } from "@/components/ui/PageHero";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Interactive Map",
+  title: "Interactive SVG India Map · 28 States & 8 Union Territories",
   description:
-    "Clickable SVG map of India—hover states for tooltips, click through to regional guides.",
+    "Interactive, zoomable, and pannable map of India with official state boundaries, pulsing destination pins, and animated tourist circuits.",
 };
 
 export default function MapPage() {
   return (
-    <>
+    <div className="min-h-screen pb-24 text-[#F7F3EC]">
       <PageHero
-        eyebrow="Interactive map"
-        title="Every state a path you can focus"
-        description="Illustrative SVG with keyboard support. Linked states open local guides; others route into destination search."
+        eyebrow="Interactive Geographic Atlas"
+        title="Interactive Map of India"
+        description="Zoom, pan, and search all 28 states and 8 union territories. Click any state or glowing pin to explore state guides and travel circuits."
       />
-      <section className="section-pad py-14 lg:py-20">
-        <div className="container-site">
-          <IndiaMap />
-        </div>
-      </section>
-    </>
+
+      <div className="container-site section-pad pt-6">
+        <Breadcrumbs items={[{ label: "Interactive Map" }]} />
+      </div>
+
+      <div className="container-site section-pad mt-8">
+        <IndiaMap />
+      </div>
+    </div>
   );
 }

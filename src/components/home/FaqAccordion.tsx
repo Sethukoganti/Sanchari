@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 import { faqs } from "@/data/content";
 import { cn } from "@/lib/utils";
 
@@ -9,25 +9,26 @@ export function FaqAccordion() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="divide-y divide-[color:var(--surface-border)] rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] shadow-lg">
-      {faqs.map((item, index) => {
+    <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl shadow-2xl overflow-hidden">
+      {faqs.map((item: { q: string; a: string }, index: number) => {
         const isOpen = open === index;
         return (
           <div key={item.q}>
             <h3>
               <button
                 type="button"
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 cursor-pointer transition hover:bg-[#8E162C]/10"
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left cursor-pointer transition hover:bg-white/5"
                 aria-expanded={isOpen}
                 onClick={() => setOpen(isOpen ? null : index)}
               >
-                <span className="font-display text-lg font-semibold text-[color:var(--text)] sm:text-xl">
-                  {item.q}
+                <span className="font-display text-lg font-bold text-warm-white flex items-center gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-turmeric shrink-0" />
+                  <span>{item.q}</span>
                 </span>
                 <ChevronDown
                   className={cn(
-                    "h-5 w-5 shrink-0 text-[#D4AF37] transition duration-200",
-                    isOpen && "rotate-180 text-[#C41E3A]",
+                    "h-5 w-5 shrink-0 text-turmeric transition-transform duration-300",
+                    isOpen && "rotate-180 text-white",
                   )}
                   aria-hidden
                 />
@@ -40,7 +41,7 @@ export function FaqAccordion() {
               )}
             >
               <div className="overflow-hidden">
-                <p className="px-5 pb-5 text-sm leading-relaxed text-[color:var(--text-soft)] sm:px-6">
+                <p className="px-6 pb-6 pt-1 text-sm leading-relaxed text-zinc-300 font-body">
                   {item.a}
                 </p>
               </div>

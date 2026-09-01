@@ -35,7 +35,7 @@ export function StoriesExplorer() {
       </div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {list.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard key={article.slug} article={article} />
         ))}
       </div>
     </div>
