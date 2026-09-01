@@ -5,7 +5,6 @@ export function SectionHeading({
   title,
   description,
   align = "left",
-  tone = "light",
   className,
 }: {
   eyebrow?: string;
@@ -23,31 +22,19 @@ export function SectionHeading({
         className,
       )}
     >
-      {eyebrow ? (
-        <p
-          className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-[#D4AF37]"
-        >
+      {eyebrow && (
+        <p className="mb-2 font-mono text-xs font-bold uppercase tracking-[0.22em] text-turmeric">
           {eyebrow}
         </p>
-      ) : null}
-      <h2
-        className={cn(
-          "font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl",
-          tone === "dark" ? "text-white" : "text-[color:var(--text)]",
-        )}
-      >
+      )}
+      <h2 className="font-display text-3xl font-extrabold leading-tight text-warm-white sm:text-4xl lg:text-5xl">
         {title}
       </h2>
-      {description ? (
-        <p
-          className={cn(
-            "mt-4 text-base leading-relaxed sm:text-lg",
-            tone === "dark" ? "text-zinc-300" : "text-[color:var(--text-soft)]",
-          )}
-        >
+      {description && (
+        <p className="mt-3 text-base sm:text-lg leading-relaxed text-muted-gray">
           {description}
         </p>
-      ) : null}
+      )}
     </div>
   );
 }

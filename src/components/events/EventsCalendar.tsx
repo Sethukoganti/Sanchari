@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { events, REGIONS } from "@/data/content";
 import type { Region } from "@/lib/types";
-import { formatDateRange } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 const monthNames = [
@@ -25,20 +24,20 @@ const monthNames = [
 
 export function EventsCalendar() {
   const [month, setMonth] = useState(0);
-  const [region, setRegion] = useState<Region | "All">("All");
+  const [region, setRegion] = useState<string>("All");
 
   const filtered = useMemo(() => {
     return events
-      .filter((e) => (month === 0 ? true : e.month === month))
-      .filter((e) => (region === "All" ? true : e.region === region))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
+      .filter((e) => {
+        if (month === 0) return true;
+        const targetMonth = monthNames[month];
+        return e.date.month === targetMonth;
+      })
+      .filter((e) => (region === "All" ? true : e.state.toLowerCase().includes(region.toLowerCase())));
   }, [month, region]);
 
   return (
-    <div>
+    <div className="space-y-6">
       <div className="flex gap-2 overflow-x-auto pb-2">
         {monthNames.map((name, i) => (
           <button
@@ -46,10 +45,10 @@ export function EventsCalendar() {
             type="button"
             onClick={() => setMonth(i)}
             className={cn(
-              "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
+              "shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition cursor-pointer",
               month === i
-                ? "bg-saffron text-white"
-                : "bg-warm-white text-dusk-ink hover:bg-surface-elevated",
+                ? "bg-saffron text-black font-bold shadow-md shadow-saffron/20"
+                : "bg-navy-surface/80 border border-white/10 text-muted-gray hover:text-white"
             )}
             aria-pressed={month === i}
           >
@@ -58,20 +57,20 @@ export function EventsCalendar() {
         ))}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          className={cn("chip", region === "All" && "chip-active")}
+          className={cn("chip !py-1 !px-3 text-xs cursor-pointer", region === "All" && "chip-active")}
           onClick={() => setRegion("All")}
           aria-pressed={region === "All"}
         >
-          All regions
+          All States
         </button>
-        {REGIONS.map((r) => (
+        {["Telangana", "Rajasthan", "Uttar Pradesh", "Nagaland", "Arunachal Pradesh"].map((r) => (
           <button
             key={r}
             type="button"
-            className={cn("chip", region === r && "chip-active")}
+            className={cn("chip !py-1 !px-3 text-xs cursor-pointer", region === r && "chip-active")}
             onClick={() => setRegion(r)}
             aria-pressed={region === r}
           >
@@ -82,7 +81,7 @@ export function EventsCalendar() {
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         {filtered.length === 0 ? (
-          <p className="card-surface p-8 text-ink-muted md:col-span-2">
+          <p className="card-surface p-8 text-muted-gray md:col-span-2 text-center text-xs">
             No festivals in this window. Try another month or region.
           </p>
         ) : (
@@ -90,7 +89,7 @@ export function EventsCalendar() {
             <article
               key={event.id}
               id={event.slug}
-              className="card-surface overflow-hidden scroll-mt-28"
+              className="card-surface overflow-hidden bg-navy-surface/60 border-white/10 rounded-3xl"
             >
               <div className="relative aspect-[16/9]">
                 <Image
@@ -101,17 +100,17 @@ export function EventsCalendar() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-              <div className="p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-peacock">
-                  {formatDateRange(event.startDate, event.endDate)} · {event.region}
+              <div className="p-5 space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-saffron font-mono">
+                  {event.date.approximateString} · {event.state}
                 </p>
-                <h3 className="mt-2 font-display text-2xl text-dusk-ink">
+                <h3 className="font-display text-xl font-bold text-warm-white">
                   {event.name}
                 </h3>
-                <p className="mt-1 text-sm font-medium text-ink-muted">
+                <p className="text-xs font-medium text-emerald-accent">
                   {event.location}
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+                <p className="text-xs leading-relaxed text-zinc-300 font-body">
                   {event.description}
                 </p>
               </div>

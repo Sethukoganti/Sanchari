@@ -1,0 +1,105 @@
+import type { LocalBusiness } from "@/lib/types";
+
+export const businessesData: LocalBusiness[] = [
+  {
+    id: "biz-1",
+    name: "Nizami Heritage Walks & Culinary Guild",
+    category: "Local Guide",
+    location: "Charminar Old City, Hyderabad",
+    state: "Telangana",
+    destinationSlug: "hyderabad",
+    description:
+      "A collective of native Hyderabadi historians and food docents conducting immersive heritage walks through Qutb Shahi tombs, Chowmahalla, and midnight culinary alleys.",
+    image: "https://images.unsplash.com/photo-1572445271230-a78b5944a659?auto=format&fit=crop&w=800&q=80",
+    rating: 4.9,
+    reviewsCount: 148,
+    phone: "+91 98490 12345",
+    email: "walks@nizamiheritage.example",
+    whatsapp: "+91 98490 12345",
+    priceRange: "₹800 – ₹1,500 / person",
+    verified: true,
+    features: ["Government Certified Guides", "Audio Headsets Provided", "Vegetarian / Halal Food Options"],
+  },
+  {
+    id: "biz-2",
+    name: "Banyan Tree Organic Eco Homestay",
+    category: "Homestay",
+    location: "Anegundi Village, near Hampi",
+    state: "Karnataka",
+    destinationSlug: "hampi",
+    description:
+      "A sustainable rural farmstay built with mud, terracotta tiles, and granite stones. Powered 100% by solar energy with organic farm-to-table South Indian dining.",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+    rating: 4.9,
+    reviewsCount: 112,
+    phone: "+91 94481 98765",
+    email: "stay@banyantreehampi.example",
+    whatsapp: "+91 94481 98765",
+    priceRange: "₹2,200 – ₹3,800 / night",
+    verified: true,
+    features: ["Solar Powered", "Organic Farm Meals", "Bicycle Rentals", "Tungabhadra River Access"],
+  },
+  {
+    id: "biz-3",
+    name: "Kashi Weavers Handloom Cooperative",
+    category: "Handicrafts & Art",
+    location: "Chowk Bazaar, Varanasi",
+    state: "Uttar Pradesh",
+    destinationSlug: "varanasi",
+    description:
+      "Fair-trade artisan cooperative representing 65 traditional Muslim and Hindu master weaving families crafting certified GI-tagged pure silk Banarasi sarees with zero middlemen.",
+    image: "https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?auto=format&fit=crop&w=800&q=80",
+    rating: 5.0,
+    reviewsCount: 205,
+    phone: "+91 98390 54321",
+    email: "craft@kashiweavers.example",
+    whatsapp: "+91 98390 54321",
+    priceRange: "₹4,500 – ₹45,000",
+    verified: true,
+    features: ["GI-Tagged Silk Mark Certified", "Live Pit-Loom Weaving Tours", "Worldwide Insured Shipping"],
+  },
+  {
+    id: "biz-4",
+    name: "Araku Valley Tribal Coffee Estate & Roastery",
+    category: "Activity Provider",
+    location: "Araku Valley",
+    state: "Andhra Pradesh",
+    destinationSlug: "araku-valley",
+    description:
+      "Tribal farmers' cooperative offering guided coffee estate walks, artisanal manual roasting masterclasses, and certified 100% Arabica shade-grown coffee beans.",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    rating: 4.8,
+    reviewsCount: 89,
+    phone: "+91 89123 67890",
+    email: "contact@arakutribalcoffee.example",
+    whatsapp: "+91 89123 67890",
+    priceRange: "₹500 – ₹1,200",
+    verified: true,
+    features: ["Direct Trade", "Organic Certified", "Specialty Coffee Cupping"],
+  },
+  {
+    id: "biz-5",
+    name: "Spiti High Desert Responsible 4x4 Adventures",
+    category: "Transport Provider",
+    location: "Kaza, Spiti Valley",
+    state: "Himachal Pradesh",
+    destinationSlug: "spiti-valley",
+    description:
+      "Native Spitian mountain drivers equipped with high-clearance 4x4 vehicles, satellite emergency phones, and medical oxygen cylinders for safe Trans-Himalayan journeys.",
+    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",
+    rating: 4.9,
+    reviewsCount: 76,
+    phone: "+91 94180 87654",
+    email: "drive@spitidriverguild.example",
+    whatsapp: "+91 94180 87654",
+    priceRange: "₹4,500 – ₹6,500 / day",
+    verified: true,
+    features: ["Medical Oxygen Onboard", "Satellite Emergency Link", "Native Mountain Drivers"],
+  },
+];
+
+export function getBusinessesByCategory(category: string): LocalBusiness[] {
+  if (category === "All") return businessesData;
+  return businessesData.filter((b) => b.category === category);
+}
+

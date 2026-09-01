@@ -1,365 +1,233 @@
 "use client";
 
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import {
-  ChevronDown,
-  Globe2,
-  Menu,
   Search,
-  TrainFront,
+  Globe,
+  User,
+  Sparkles,
+  Menu,
   X,
+  Compass,
+  MapPin,
+  Calendar,
+  Bookmark,
+  Store,
+  Navigation,
+  ShieldCheck,
 } from "lucide-react";
-import { destinations, REGIONS, THEMES } from "@/data/content";
-import { useLanguage } from "@/lib/i18n";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { UserProfileModal } from "@/components/auth/UserProfileModal";
 import { cn } from "@/lib/utils";
-import { SearchOverlay } from "@/components/search/SearchOverlay";
-import { LanguageModal } from "@/components/layout/LanguageModal";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
-const mainLinks = [
-  { href: "/experiences", key: "experiences" as const },
-  { href: "/plan", key: "plan" as const },
-  { href: "/map", key: "map" as const },
-  { href: "/stories", key: "stories" as const },
-  { href: "/events", key: "events" as const },
-  { href: "/gallery", key: "gallery" as const },
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Experiences", href: "/experiences" },
+  { label: "Events & Festivals", href: "/events" },
+  { label: "AI Trip Planner", href: "/plan", highlight: true },
+  { label: "Saved Trips", href: "/saved-trips" },
+  { label: "Local Businesses", href: "/businesses" },
+  { label: "Travel Smart", href: "/travel-smart" },
 ];
 
 export function Header() {
   const pathname = usePathname();
-  const { t, currentLanguage, openLanguageModal } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileDestOpen, setMobileDestOpen] = useState(false);
-
-  const isHome = pathname === "/";
-  const solid = scrolled || !isHome || mobileOpen;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string; travelStyle?: string } | null>(null);
+  const [language, setLanguage] = useState<"EN" | "HI">("EN");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    try {
+      const stored = localStorage.getItem("sanchari_user");
+      if (stored) setUser(JSON.parse(stored));
+      const storedLang = localStorage.getItem("sanchari_lang");
+      if (storedLang === "HI") setLanguage("HI");
+    } catch (e) {}
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-    setMegaOpen(false);
-    setSearchOpen(false);
-  }, [pathname]);
+  const handleToggleLang = () => {
+    const newLang = language === "EN" ? "HI" : "EN";
+    setLanguage(newLang);
+    localStorage.setItem("sanchari_lang", newLang);
+  };
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen || searchOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen, searchOpen]);
-
-  const featured = destinations.filter((d) => d.featured).slice(0, 4);
+  const handleLogout = () => {
+    localStorage.removeItem("sanchari_user");
+    setUser(null);
+  };
 
   return (
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          solid
-            ? "border-b border-[rgba(230,57,86,0.2)] bg-[#120407]/95 text-white shadow-[0_12px_30px_rgba(0,0,0,0.6)] backdrop-blur-md"
-            : "bg-transparent text-white",
+          "sticky top-0 z-40 w-full transition-all duration-300",
+          scrolled
+            ? "bg-navy-dark/90 backdrop-blur-xl border-b border-white/10 shadow-2xl py-3"
+            : "bg-gradient-to-b from-navy-dark/95 via-navy-dark/80 to-transparent py-4"
         )}
       >
-        <div className="container-site section-pad flex h-16 items-center justify-between gap-4 lg:h-20">
-          <Link
-            href="/"
-            className="group flex items-center gap-2.5"
-            aria-label="Explore India home"
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#8E162C] to-[#4A0E17] text-[#F7EAC8] border border-[#D4AF37]/40 shadow-[0_4px_14px_rgba(114,18,38,0.5)] transition group-hover:scale-105">
-              <TrainFront className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="leading-tight">
-              <span className="block font-display text-lg font-bold tracking-wide sm:text-xl text-white">
+        <div className="container-site flex items-center justify-between gap-4">
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron to-amber-600 text-black font-display font-black text-xl shadow-lg shadow-saffron/20 group-hover:scale-105 transition">
+              SB
+            </div>
+            <div>
+              <span className="font-display text-lg sm:text-xl font-black tracking-tight text-warm-white group-hover:text-saffron transition-colors block leading-tight">
+                SANCHARI BHARAT
+              </span>
+              <span className="font-mono text-[10px] text-saffron uppercase font-bold tracking-widest block leading-none">
                 Explore India
               </span>
-              <span className="hidden text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] sm:block">
-                {t.tagline}
-              </span>
-            </span>
+            </div>
           </Link>
 
-          <nav
-            className="hidden items-center gap-1 xl:flex"
-            aria-label="Primary"
-          >
-            <div
-              className="relative"
-              onMouseEnter={() => setMegaOpen(true)}
-              onMouseLeave={() => setMegaOpen(false)}
-            >
-              <button
-                type="button"
-                className={cn(
-                  "inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-white/10 cursor-pointer",
-                  pathname.startsWith("/destinations") && "text-[#F7EAC8] font-semibold",
-                )}
-                aria-expanded={megaOpen}
-                aria-haspopup="true"
-                onClick={() => setMegaOpen((v) => !v)}
-              >
-                {t.nav.destinations}
-                <ChevronDown className="h-4 w-4" aria-hidden />
-              </button>
-              {megaOpen ? (
-                <div
-                  className="absolute left-1/2 top-full z-50 w-[min(920px,70vw)] -translate-x-1/2 pt-3"
-                  role="menu"
+          {/* Desktop Navigation Links */}
+          <nav className="hidden xl:flex items-center gap-1.5 text-xs font-semibold">
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-3 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5",
+                    link.highlight
+                      ? "bg-gradient-to-r from-saffron/20 to-ai-violet/20 border border-saffron/40 text-saffron font-bold hover:brightness-110 shadow-sm"
+                      : isActive
+                      ? "bg-white/10 text-warm-white font-bold"
+                      : "text-muted-gray hover:text-warm-white hover:bg-white/5"
+                  )}
                 >
-                  <div className="overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.25)] bg-[#140508] shadow-[0_25px_50px_rgba(0,0,0,0.85)]">
-                    <div className="grid grid-cols-12 gap-0">
-                      <div className="col-span-4 border-r border-white/10 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
-                          By region
-                        </p>
-                        <ul className="mt-3 space-y-1">
-                          {REGIONS.map((region) => (
-                            <li key={region}>
-                              <Link
-                                href={`/destinations?region=${encodeURIComponent(region)}`}
-                                className="block rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-[#8E162C]/30 hover:text-white"
-                                role="menuitem"
-                              >
-                                {region}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="col-span-4 border-r border-white/10 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
-                          By theme
-                        </p>
-                        <ul className="mt-3 space-y-1">
-                          {THEMES.map((theme) => (
-                            <li key={theme}>
-                              <Link
-                                href={`/destinations?theme=${encodeURIComponent(theme)}`}
-                                className="block rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-[#8E162C]/30 hover:text-white"
-                                role="menuitem"
-                              >
-                                {theme}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="col-span-4 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
-                          Featured now
-                        </p>
-                        <div className="mt-3 space-y-3">
-                          {featured.map((d) => (
-                            <Link
-                              key={d.id}
-                              href={`/destinations/${d.slug}`}
-                              className="flex items-center gap-3 rounded-xl p-2 hover:bg-[#8E162C]/30"
-                              role="menuitem"
-                            >
-                              <span className="relative h-12 w-12 overflow-hidden rounded-lg">
-                                <Image
-                                  src={d.image}
-                                  alt=""
-                                  fill
-                                  className="object-cover"
-                                  sizes="48px"
-                                />
-                              </span>
-                              <span>
-                                <span className="block text-sm font-semibold text-white">
-                                  {d.name}
-                                </span>
-                                <span className="block text-xs text-zinc-400">
-                                  {d.state}
-                                </span>
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                        <Link
-                          href="/destinations"
-                          className="mt-4 inline-flex text-sm font-semibold text-[#D4AF37] hover:underline"
-                        >
-                          Browse all destinations →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            {mainLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-white/10",
-                  pathname.startsWith(link.href) && "text-[#F7EAC8] font-semibold drop-shadow-[0_0_8px_rgba(230,57,86,0.5)]",
-                )}
-              >
-                {t.nav[link.key]}
-              </Link>
-            ))}
+                  {link.highlight && <Sparkles className="h-3.5 w-3.5" />}
+                  <span>{link.label}</span>
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-1 sm:gap-2">
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-white/10 cursor-pointer"
-              aria-label={t.nav.search}
-            >
-              <Search className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={openLanguageModal}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#1A070B]/80 px-3.5 py-1.5 text-xs font-semibold text-[#F7EAC8] transition hover:border-[#D4AF37] hover:bg-[#8E162C]/40 cursor-pointer shadow-sm"
-              aria-label={`${t.nav.language}: ${currentLanguage.name} (${currentLanguage.nativeName})`}
-              title="Change language / भाषा बदलें"
-            >
-              <span className="text-sm" aria-hidden>{currentLanguage.flag || "🌐"}</span>
-              <span className="font-display font-medium tracking-wide max-w-[80px] sm:max-w-[120px] truncate">
-                {currentLanguage.nativeName}
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#F7EAC8]/70" aria-hidden />
-            </button>
-            <ThemeToggle />
+          {/* Right Action Tools */}
+          <div className="flex items-center gap-2.5">
+            {/* Search Link */}
             <Link
-              href="/plan"
-              className="btn-primary hidden !px-4 !py-2 lg:inline-flex"
+              href="/search"
+              aria-label="Search destinations, experiences, and events"
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-muted-gray hover:text-white hover:border-saffron/40 transition"
+              title="Search Sanchari Bharat"
             >
-              {t.home.plan}
+              <Search className="h-4 w-4" />
             </Link>
+
+            {/* Language Switcher */}
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-white/10 xl:hidden cursor-pointer"
-              aria-label={mobileOpen ? t.nav.closeMenu : t.nav.openMenu}
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen((v) => !v)}
+              onClick={handleToggleLang}
+              className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-xs font-mono font-bold text-warm-white hover:border-saffron/40 transition cursor-pointer"
+              title="Change Language"
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <Globe className="h-3.5 w-3.5 text-emerald-accent" />
+              <span>{language}</span>
             </button>
-          </div>
-        </div>
-      </header>
 
-      {mobileOpen ? (
-        <div
-          className="fixed inset-0 z-40 bg-[#0E0507]/98 backdrop-blur-xl xl:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Mobile navigation"
-        >
-          <div className="flex h-full flex-col overflow-y-auto px-5 pb-10 pt-24">
-            {/* Mobile Language Button */}
-            <div className="mb-4 rounded-2xl border border-[#D4AF37]/30 bg-[#1A070B] p-4 shadow-lg">
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#D4AF37]">
-                {t.nav.language} · भाषा
-              </p>
+            {/* User Account Trigger */}
+            {user ? (
               <button
                 type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  openLanguageModal();
-                }}
-                className="mt-2.5 flex w-full items-center justify-between rounded-xl bg-[#8E162C]/25 border border-[#8E162C]/40 px-3.5 py-2.5 text-sm font-medium text-white hover:bg-[#8E162C]/40 cursor-pointer"
+                onClick={() => setProfileModalOpen(true)}
+                className="flex items-center gap-2 h-9 px-3 rounded-xl bg-saffron/15 border border-saffron/30 text-xs font-bold text-warm-white hover:bg-saffron/25 transition cursor-pointer"
               >
-                <div className="flex items-center gap-2.5">
-                  <span className="text-lg">{currentLanguage.flag}</span>
-                  <span className="font-display text-base font-bold text-[#F7EAC8]">{currentLanguage.nativeName}</span>
-                  <span className="text-xs text-zinc-400">({currentLanguage.name})</span>
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-saffron text-black text-[10px]">
+                  {user.name[0]?.toUpperCase()}
                 </div>
-                <span className="text-xs font-semibold text-[#D4AF37]">Change →</span>
+                <span className="hidden sm:inline max-w-[100px] truncate">{user.name}</span>
               </button>
-            </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setAuthModalOpen(true)}
+                className="btn-primary !py-2 !px-3.5 text-xs flex items-center gap-1.5"
+              >
+                <User className="h-3.5 w-3.5" />
+                <span>Sign In</span>
+              </button>
+            )}
 
+            {/* Mobile Hamburger Menu */}
             <button
               type="button"
-              className="flex w-full items-center justify-between border-b border-white/10 py-4 text-left text-lg text-white cursor-pointer"
-              onClick={() => setMobileDestOpen((v) => !v)}
-              aria-expanded={mobileDestOpen}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex xl:hidden h-9 w-9 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-muted-gray hover:text-white cursor-pointer"
+              aria-label="Toggle navigation menu"
             >
-              {t.nav.destinations}
-              <ChevronDown
-                className={cn(
-                  "h-5 w-5 transition",
-                  mobileDestOpen && "rotate-180",
-                )}
-              />
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            {mobileDestOpen ? (
-              <div className="space-y-2 border-b border-white/10 py-3 pl-3">
-                {REGIONS.map((region) => (
-                  <Link
-                    key={region}
-                    href={`/destinations?region=${encodeURIComponent(region)}`}
-                    className="block py-2 text-zinc-300 hover:text-white"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {region}
-                  </Link>
-                ))}
-                <Link
-                  href="/destinations"
-                  className="block py-2 font-semibold text-[#D4AF37]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  All destinations
-                </Link>
-              </div>
-            ) : null}
-
-            {mainLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="border-b border-white/10 py-4 text-lg text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                {t.nav[link.key]}
-              </Link>
-            ))}
-            <Link
-              href="/about"
-              className="border-b border-white/10 py-4 text-lg text-white"
-              onClick={() => setMobileOpen(false)}
-            >
-              {t.nav.about}
-            </Link>
-            <Link
-              href="/contact"
-              className="border-b border-white/10 py-4 text-lg text-white"
-              onClick={() => setMobileOpen(false)}
-            >
-              {t.nav.contact}
-            </Link>
-            <Link
-              href="/plan"
-              className="btn-primary mt-8 justify-center"
-              onClick={() => setMobileOpen(false)}
-            >
-              {t.home.plan}
-            </Link>
           </div>
         </div>
-      ) : null}
 
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <LanguageModal />
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="xl:hidden border-t border-white/10 bg-navy-dark/95 backdrop-blur-2xl px-6 py-6 space-y-4 animate-fade-in shadow-2xl">
+            <nav className="grid grid-cols-2 gap-2 text-xs font-semibold">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "p-3 rounded-xl border flex items-center gap-2 transition",
+                    link.highlight
+                      ? "bg-saffron/15 border-saffron/40 text-saffron font-bold"
+                      : "bg-navy-surface/60 border-white/5 text-muted-gray hover:text-white"
+                  )}
+                >
+                  {link.highlight ? <Sparkles className="h-4 w-4" /> : <Compass className="h-4 w-4" />}
+                  <span>{link.label}</span>
+                </Link>
+              ))}
+            </nav>
+
+            <div className="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+              <button
+                type="button"
+                onClick={handleToggleLang}
+                className="flex items-center gap-1.5 text-muted-gray hover:text-white cursor-pointer"
+              >
+                <Globe className="h-4 w-4 text-emerald-accent" />
+                <span>Language: <strong className="text-warm-white">{language === "EN" ? "English" : "हिन्दी"}</strong></span>
+              </button>
+              <span className="text-[10px] font-mono text-saffron">SANCHARI BHARAT</span>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onLoginSuccess={(u) => setUser(u)}
+      />
+
+      {/* User Profile Modal */}
+      <UserProfileModal
+        isOpen={profileModalOpen}
+        onClose={() => setProfileModalOpen(false)}
+        user={user}
+        onLogout={handleLogout}
+      />
     </>
   );
 }

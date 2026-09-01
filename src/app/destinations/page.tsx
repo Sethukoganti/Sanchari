@@ -1,39 +1,40 @@
 import type { Metadata } from "next";
+import { destinationsData } from "@/data/destinations";
 import { DestinationExplorer } from "@/components/destinations/DestinationExplorer";
 import { PageHero } from "@/components/ui/PageHero";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Destinations",
+  title: "Explore Destinations across India",
   description:
-    "Filter Explore India destinations by region and theme—heritage cities, backwaters, high deserts, wildlife parks, and more.",
+    "Curated travel bases across 28 states and 8 union territories: heritage fortresses, high mountain passes, emerald backwaters, and holy riverbanks.",
 };
 
 export default async function DestinationsPage({
   searchParams,
 }: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
+  searchParams: Promise<{ region?: string; theme?: string }>;
 }) {
-  const params = await searchParams;
-  const region = typeof params.region === "string" ? params.region : undefined;
-  const theme = typeof params.theme === "string" ? params.theme : undefined;
-  const q = typeof params.q === "string" ? params.q : undefined;
+  const { region, theme } = await searchParams;
 
   return (
-    <>
+    <div className="min-h-screen pb-24 text-[#F7F3EC]">
       <PageHero
-        eyebrow="Destination board"
-        title="Routes worth defending on a map"
-        description="Multi-select region and theme filters run entirely in the browser. Cards zoom on hover; load more when you want a longer list."
+        eyebrow="Curated Bases"
+        title="Destinations with Room to Linger"
+        description="Filter by region, cultural themes, or budget style to plan an authentic, slow-paced journey across the subcontinent."
       />
-      <section className="section-pad py-14 lg:py-20">
-        <div className="container-site">
-          <DestinationExplorer
-            initialRegion={region}
-            initialTheme={theme}
-            initialQuery={q}
-          />
-        </div>
-      </section>
-    </>
+
+      <div className="container-site section-pad pt-6">
+        <Breadcrumbs items={[{ label: "Destinations" }]} />
+      </div>
+
+      <div className="container-site section-pad mt-8">
+        <DestinationExplorer
+          initialRegion={region}
+          initialTheme={theme}
+        />
+      </div>
+    </div>
   );
 }

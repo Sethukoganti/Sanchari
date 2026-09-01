@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Check, Mail, Send } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { isValidEmail } from "@/lib/utils";
 
 const subjects = [
-  "Trip planning help",
-  "Group or family itinerary",
-  "Press & partnerships",
-  "Correction or feedback",
-  "Something else",
+  "Trip planning assistance",
+  "Custom itinerary guidance",
+  "Press & storytelling partnerships",
+  "Correction or state guide feedback",
+  "General inquiry",
 ];
 
 interface Fields {
@@ -85,82 +86,87 @@ export function ContactForm() {
   if (status === "success") {
     return (
       <div
-        className="card-surface border border-[#C41E3A]/30 bg-[#8E162C]/10 p-8"
+        className="card-surface border border-emerald-500/40 bg-emerald-950/20 p-8 text-center rounded-2xl"
         role="status"
       >
-        <p className="font-display text-3xl font-bold text-[color:var(--text)]">{t.common.submitted}</p>
-        <p className="mt-3 text-[color:var(--text-soft)]">
-          Thanks—we read every note. Expect a reply within two business days.
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          <Check className="h-7 w-7" />
+        </div>
+        <p className="mt-4 font-display text-3xl font-bold text-warm-white">
+          Message Received!
+        </p>
+        <p className="mt-2 text-sm text-zinc-300">
+          Thanks for reaching out to the Explore India desk. A human traveler will reply within 24 hours.
         </p>
         <button
           type="button"
           className="btn-primary mt-6"
           onClick={() => setStatus("idle")}
         >
-          Send another message
+          Send Another Message
         </button>
       </div>
     );
   }
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] text-[color:var(--text)] px-4 py-3 text-sm outline-none transition focus:border-[#C41E3A]";
+    "mt-1.5 w-full rounded-xl border border-white/15 bg-black/60 text-warm-white px-4 py-2.5 text-xs outline-none transition focus:border-turmeric";
 
   return (
-    <form onSubmit={onSubmit} noValidate className="card-surface p-6 sm:p-8">
+    <form onSubmit={onSubmit} noValidate className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-2xl">
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="sm:col-span-1">
-          <label htmlFor="contact-name" className="text-sm font-semibold">
-            Name
+          <label htmlFor="contact-name" className="text-xs font-semibold text-zinc-300">
+            Your Name *
           </label>
           <input
             id="contact-name"
             className={fieldClass}
+            placeholder="e.g. Vikramaditya"
             value={fields.name}
             onChange={(e) => set("name", e.target.value)}
             aria-invalid={!!errors.name}
-            aria-describedby={errors.name ? "err-name" : undefined}
           />
-          {errors.name ? (
-            <p id="err-name" className="mt-1 text-sm text-rani" role="alert">
-              {errors.name}
-            </p>
-          ) : null}
+          {errors.name && (
+            <p className="mt-1 text-[11px] text-rose-400">{errors.name}</p>
+          )}
         </div>
+
         <div>
-          <label htmlFor="contact-email" className="text-sm font-semibold">
-            Email
+          <label htmlFor="contact-email" className="text-xs font-semibold text-zinc-300">
+            Email Address *
           </label>
           <input
             id="contact-email"
             type="email"
+            placeholder="you@domain.com"
             className={fieldClass}
             value={fields.email}
             onChange={(e) => set("email", e.target.value)}
             aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "err-email" : undefined}
           />
-          {errors.email ? (
-            <p id="err-email" className="mt-1 text-sm text-rani" role="alert">
-              {errors.email}
-            </p>
-          ) : null}
+          {errors.email && (
+            <p className="mt-1 text-[11px] text-rose-400">{errors.email}</p>
+          )}
         </div>
+
         <div>
-          <label htmlFor="contact-phone" className="text-sm font-semibold">
-            Phone <span className="font-normal text-ink-muted">({t.common.optional})</span>
+          <label htmlFor="contact-phone" className="text-xs font-semibold text-zinc-300">
+            Phone / WhatsApp (Optional)
           </label>
           <input
             id="contact-phone"
             type="tel"
+            placeholder="+91..."
             className={fieldClass}
             value={fields.phone}
             onChange={(e) => set("phone", e.target.value)}
           />
         </div>
+
         <div>
-          <label htmlFor="contact-subject" className="text-sm font-semibold">
-            Subject
+          <label htmlFor="contact-subject" className="text-xs font-semibold text-zinc-300">
+            Subject *
           </label>
           <select
             id="contact-subject"
@@ -168,7 +174,6 @@ export function ContactForm() {
             value={fields.subject}
             onChange={(e) => set("subject", e.target.value)}
             aria-invalid={!!errors.subject}
-            aria-describedby={errors.subject ? "err-subject" : undefined}
           >
             <option value="">Select a topic</option>
             {subjects.map((s) => (
@@ -177,38 +182,37 @@ export function ContactForm() {
               </option>
             ))}
           </select>
-          {errors.subject ? (
-            <p id="err-subject" className="mt-1 text-sm text-rani" role="alert">
-              {errors.subject}
-            </p>
-          ) : null}
+          {errors.subject && (
+            <p className="mt-1 text-[11px] text-rose-400">{errors.subject}</p>
+          )}
         </div>
+
         <div className="sm:col-span-2">
-          <label htmlFor="contact-message" className="text-sm font-semibold">
-            Message
+          <label htmlFor="contact-message" className="text-xs font-semibold text-zinc-300">
+            Message & Details *
           </label>
           <textarea
             id="contact-message"
-            rows={6}
+            rows={5}
+            placeholder="Tell us what you're planning, dates, or how we can help..."
             className={fieldClass}
             value={fields.message}
             onChange={(e) => set("message", e.target.value)}
             aria-invalid={!!errors.message}
-            aria-describedby={errors.message ? "err-message" : undefined}
           />
-          {errors.message ? (
-            <p id="err-message" className="mt-1 text-sm text-rani" role="alert">
-              {errors.message}
-            </p>
-          ) : null}
+          {errors.message && (
+            <p className="mt-1 text-[11px] text-rose-400">{errors.message}</p>
+          )}
         </div>
       </div>
+
       <button
         type="submit"
-        className="btn-primary mt-6"
+        className="btn-primary mt-6 !py-2.5 text-xs flex items-center gap-2"
         disabled={status === "loading"}
       >
-        {status === "loading" ? t.common.sending : t.common.submit}
+        <Send className="h-3.5 w-3.5" />
+        <span>{status === "loading" ? "Sending dispatch..." : "Send Message to Desk"}</span>
       </button>
     </form>
   );

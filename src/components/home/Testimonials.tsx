@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import { testimonials } from "@/data/content";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -11,50 +11,42 @@ export function Testimonials() {
   const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const onChange = () => setReduced(mq.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    if (paused || reduced) return;
+    if (paused) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % testimonials.length);
-    }, 6000);
+    }, 6500);
     return () => window.clearInterval(id);
-  }, [paused, reduced]);
+  }, [paused]);
 
-  const item = testimonials[index];
+  const item = testimonials[index] || testimonials[0];
 
   return (
     <section
-      className="bg-navy py-20 text-white"
+      className="relative section-pad py-20 lg:py-28 bg-navy-deep text-[#F8FAFC] border-t border-white/5 overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-labelledby="testimonials-heading"
     >
-      <div className="container-site section-pad">
+      <div className="container-site">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-turmeric">
-              Traveler letters
-            </p>
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-saffron block mb-1">
+              Explorer Letters & Community Stories
+            </span>
             <h2
               id="testimonials-heading"
-              className="mt-2 font-display text-3xl sm:text-4xl"
+              className="font-display text-3xl sm:text-4xl font-extrabold text-warm-white"
             >
-              {t.home.testimonials}
+              Stories from Fellow Travelers
             </h2>
           </div>
+
           <div className="flex gap-2">
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-warm-white/25 hover:border-turmeric hover:text-turmeric"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-300 hover:border-saffron hover:bg-saffron hover:text-black transition-all cursor-pointer"
               aria-label="Previous testimonial"
               onClick={() =>
                 setIndex((i) => (i - 1 + testimonials.length) % testimonials.length)
@@ -64,7 +56,7 @@ export function Testimonials() {
             </button>
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-warm-white/25 hover:border-turmeric hover:text-turmeric"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-300 hover:border-saffron hover:bg-saffron hover:text-black transition-all cursor-pointer"
               aria-label="Next testimonial"
               onClick={() => setIndex((i) => (i + 1) % testimonials.length)}
             >
@@ -73,57 +65,57 @@ export function Testimonials() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-center">
-          <div className="lg:col-span-8">
-            <div className="flex gap-1" aria-label={`${item.rating} out of 5 stars`}>
+        <div className="mt-10 card-surface p-8 sm:p-12 bg-navy-surface/60 border-white/10 grid gap-8 lg:grid-cols-12 lg:items-center rounded-3xl">
+          <div className="lg:col-span-8 space-y-6">
+            <div className="flex items-center gap-1.5" aria-label={`${item.rating} out of 5 stars`}>
               {Array.from({ length: item.rating }).map((_, i) => (
                 <Star
                   key={i}
-                  className="h-4 w-4 fill-turmeric text-turmeric"
-                  aria-hidden
+                  className="h-5 w-5 fill-amber-300 text-amber-300"
                 />
               ))}
             </div>
-            <blockquote className="mt-6 font-display text-2xl leading-snug sm:text-3xl lg:text-4xl">
-              “{item.quote}”
+
+            <blockquote className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-warm-white leading-snug">
+              &ldquo;{item.quote}&rdquo;
             </blockquote>
-            <div className="mt-8 flex items-center gap-4">
-              <span className="relative h-14 w-14 overflow-hidden rounded-full">
+
+            <div className="flex items-center gap-4 pt-2">
+              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-saffron/30">
                 <Image
-                  src={item.image}
-                  alt=""
+                  src={item.image || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"}
+                  alt={item.name}
                   fill
                   className="object-cover"
                   sizes="56px"
                 />
-              </span>
+              </div>
               <div>
-                <p className="font-semibold">{item.name}</p>
-                <p className="text-sm text-warm-white/60">
-                  {item.location} · {item.trip}
+                <p className="font-display text-lg font-bold text-warm-white">{item.name}</p>
+                <p className="text-xs text-muted-gray">
+                  {item.location} · <span className="text-saffron">{item.trip || item.destination}</span>
                 </p>
               </div>
             </div>
           </div>
-          <div className="lg:col-span-4">
-            <div className="flex gap-2 lg:flex-col">
-              {testimonials.map((tm, i) => (
-                <button
-                  key={tm.id}
-                  type="button"
-                  onClick={() => setIndex(i)}
-                  className={cn(
-                    "rounded-xl border px-4 py-3 text-left text-sm transition",
-                    i === index
-                      ? "border-turmeric bg-turmeric/10 text-warm-white"
-                      : "border-warm-white/15 text-warm-white/60 hover:border-warm-white/30",
-                  )}
-                  aria-current={i === index}
-                >
-                  {tm.name}
-                </button>
-              ))}
-            </div>
+
+          <div className="lg:col-span-4 flex flex-col gap-2">
+            {testimonials.map((tm, i) => (
+              <button
+                key={tm.id}
+                type="button"
+                onClick={() => setIndex(i)}
+                className={cn(
+                  "rounded-2xl border p-4 text-left text-xs font-semibold transition-all cursor-pointer",
+                  i === index
+                    ? "border-saffron/50 bg-saffron/15 text-warm-white shadow-md shadow-saffron/10"
+                    : "border-white/5 bg-navy-dark/60 text-muted-gray hover:border-white/20 hover:text-white",
+                )}
+              >
+                <p className="font-display text-sm font-bold text-warm-white">{tm.name}</p>
+                <p className="text-[11px] text-muted-gray">{tm.trip || tm.destination}</p>
+              </button>
+            ))}
           </div>
         </div>
       </div>

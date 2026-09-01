@@ -1,40 +1,80 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { Clock, MapPin, Sparkles } from "lucide-react";
 import type { Destination } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
-export function DestinationCard({ destination }: { destination: Destination }) {
+interface DestinationCardProps {
+  destination: Destination;
+  priority?: boolean;
+}
+
+export function DestinationCard({ destination, priority = false }: DestinationCardProps) {
   return (
     <Link
       href={`/destinations/${destination.slug}`}
-      className="group block overflow-hidden rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#C41E3A] hover:shadow-[0_20px_45px_rgba(114,18,38,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C41E3A]"
-      aria-label={`Open destination ${destination.name}`}
+      className="card-surface group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:border-turmeric/50 hover:shadow-xl hover:shadow-turmeric/15"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      {/* Image Container with Gradient Overlay */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/60">
         <Image
           src={destination.image}
-          alt={`${destination.name}, ${destination.state}`}
+          alt={destination.name}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition duration-700 group-hover:scale-108"
+          priority={priority}
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0E0507] via-[#0E0507]/40 to-transparent opacity-90 transition group-hover:opacity-95" />
-        <div className="absolute inset-x-0 bottom-0 p-5">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
-            {destination.region} · {destination.state}
-          </p>
-          <h3 className="mt-1 font-display text-2xl font-bold text-white">
-            {destination.name}
-          </h3>
-          <p className="mt-1.5 max-h-0 overflow-hidden text-xs leading-relaxed text-zinc-300 opacity-0 transition-all duration-300 group-hover:max-h-20 group-hover:opacity-100">
-            {destination.tagline}
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-black/30" />
+
+        {/* Top Badges */}
+        <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+          <span className="rounded-full bg-black/75 px-3 py-1 text-[11px] font-bold text-turmeric border border-turmeric/30 backdrop-blur-md font-mono">
+            {destination.region} India
+          </span>
+          <span className="rounded-full bg-black/75 px-2.5 py-1 text-[10px] font-semibold text-teal-300 border border-teal-500/30 backdrop-blur-md">
+            {destination.status}
+          </span>
+        </div>
+
+        {/* Bottom State Label */}
+        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs text-zinc-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+          <MapPin className="h-3.5 w-3.5 text-turmeric" />
+          <span>{destination.state}</span>
+        </div>
+      </div>
+
+      {/* Content Area */}
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div>
+          <div className="flex items-baseline justify-between gap-2">
+            <h3 className="font-display text-2xl font-bold tracking-tight text-warm-white group-hover:text-turmeric transition-colors">
+              {destination.name}
+            </h3>
+            <span className="font-hindi text-base font-semibold text-turmeric/80">
+              {destination.nameHi}
+            </span>
+          </div>
+
+          <p className="mt-2 text-xs sm:text-sm text-muted-gray line-clamp-2 leading-relaxed">
+            {destination.tagline || destination.summary}
           </p>
         </div>
-        <span className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-[#F7EAC8] backdrop-blur-md">
-          {destination.status}
-        </span>
-      </div>
-      <div className="flex items-center justify-between gap-3 px-5 py-4">
-        <p className="line-clamp-2 text-xs leading-relaxed text-[color:var(--text-soft)]">{destination.summary}</p>
+
+        {/* Footer Meta Row */}
+        <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-zinc-400 font-mono">
+          <span className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5 text-turmeric" />
+            <span>{destination.duration}</span>
+          </span>
+
+          <span className="rounded-lg bg-white/5 px-2.5 py-1 text-[11px] font-bold text-zinc-200 border border-white/5 group-hover:border-turmeric/30 group-hover:text-turmeric transition-colors">
+            Explore Guide →
+          </span>
+        </div>
       </div>
     </Link>
   );

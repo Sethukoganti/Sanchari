@@ -1,27 +1,32 @@
 import type { Metadata } from "next";
 import { StoriesExplorer } from "@/components/stories/StoriesExplorer";
 import { PageHero } from "@/components/ui/PageHero";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Stories & Culture",
+  title: "Cultural Stories & Slow Travel Essays · Explore India",
   description:
-    "Original travel essays on seasons, railway breakfasts, textile towns, festival photography, and night markets.",
+    "Original travel essays on mountain seasons, historic railway breakfasts, handloom textile towns, and festival traditions across India.",
 };
 
 export default function StoriesPage() {
   return (
-    <>
+    <div className="min-h-screen pb-24 text-[#F7F3EC]">
       <PageHero
-        eyebrow="Stories & culture"
-        title="Field notes, not brochure copy"
-        description="Filter by category. Every piece is written for Explore India—no scraped tourism text."
-        tone="light"
+        eyebrow="Cultural Essays"
+        title="Field Notes & Subcontinent Stories"
+        description="Thoughtful travel essays exploring regional cuisines, heritage architecture, and living traditions across India."
       />
-      <section className="section-pad pb-20">
+
+      <div className="container-site section-pad pt-6">
+        <Breadcrumbs items={[{ label: "Stories & Culture" }]} />
+      </div>
+
+      <section className="section-pad mt-8">
         <div className="container-site">
           <StoriesExplorer />
         </div>
       </section>
-    </>
+    </div>
   );
 }

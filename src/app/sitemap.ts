@@ -6,6 +6,7 @@ import {
   SITE,
   states,
 } from "@/data/content";
+import type { StateDetails } from "@/lib/types";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
@@ -20,6 +21,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/contact",
     "/search",
+    "/saved-trips",
+    "/businesses",
+    "/travel-smart",
+    "/admin",
   ].map((path) => ({
     url: `${SITE.url}${path}`,
     lastModified: new Date(),
@@ -43,13 +48,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const storyRoutes = articles.map((a) => ({
     url: `${SITE.url}/stories/${a.slug}`,
-    lastModified: new Date(a.date),
+    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  const stateRoutes = states.map((s) => ({
-    url: `${SITE.url}/map/${s.slug}`,
+  const stateRoutes = states.map((s: StateDetails) => ({
+    url: `${SITE.url}/states/${s.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.5,

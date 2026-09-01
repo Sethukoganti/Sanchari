@@ -31,8 +31,8 @@ export default async function StatePage({
   if (!info) notFound();
 
   const local =
-    info.destinationSlugs.length > 0
-      ? destinations.filter((d) => info.destinationSlugs.includes(d.slug))
+    info.destinationSlugs && info.destinationSlugs.length > 0
+      ? destinations.filter((d) => info.destinationSlugs?.includes(d.slug))
       : destinations.filter((d) => d.region === info.region).slice(0, 3);
 
   return (
