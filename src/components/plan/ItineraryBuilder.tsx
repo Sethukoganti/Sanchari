@@ -123,7 +123,7 @@ export function ItineraryBuilder() {
 
   return (
     <div className="card-surface overflow-hidden">
-      <div className="border-b border-dusk-ink/10 bg-surface-elevated px-5 py-4 sm:px-8">
+      <div className="border-b border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] px-5 py-4 sm:px-8">
         <ol className="flex flex-wrap gap-2" aria-label="Itinerary steps">
           {steps.map((label, i) => (
             <li key={label}>
@@ -134,12 +134,12 @@ export function ItineraryBuilder() {
                   else if (result) setStep(4);
                 }}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider",
+                  "rounded-full px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition cursor-pointer",
                   i === step
-                    ? "bg-peacock text-warm-white"
+                    ? "bg-gradient-to-r from-[#8E162C] to-[#4A0E17] text-white shadow-md"
                     : i < step
-                      ? "bg-peacock/15 text-peacock"
-                      : "bg-warm-white text-ink-muted",
+                      ? "bg-[#8E162C]/15 text-[#C41E3A] border border-[#8E162C]/20 hover:bg-[#8E162C]/25"
+                      : "bg-[color:var(--surface)] text-[color:var(--text-soft)] border border-[color:var(--surface-border)] hover:text-[color:var(--text)]",
                 )}
                 aria-current={i === step ? "step" : undefined}
               >
@@ -153,7 +153,7 @@ export function ItineraryBuilder() {
       <div className="p-5 sm:p-8">
         {step === 0 ? (
           <fieldset>
-            <legend className="font-display text-2xl text-dusk-ink">
+            <legend className="font-display text-2xl text-[color:var(--text)]">
               How many days do you have?
             </legend>
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -163,14 +163,17 @@ export function ItineraryBuilder() {
                   type="button"
                   onClick={() => setTripLength(l.value)}
                   className={cn(
-                    "rounded-2xl border px-4 py-6 text-left transition",
+                    "rounded-2xl border px-4 py-6 text-left transition cursor-pointer",
                     tripLength === l.value
-                      ? "border-peacock bg-peacock/10"
-                      : "border-dusk-ink/10 hover:border-peacock/40",
+                      ? "border-[#C41E3A] bg-gradient-to-br from-[#8E162C]/25 to-[#4A0E17]/25 text-white shadow-lg"
+                      : "border-[color:var(--surface-border)] bg-[color:var(--surface)] text-[color:var(--text)] hover:border-[#C41E3A]/50",
                   )}
                   aria-pressed={tripLength === l.value}
                 >
-                  <span className="font-display text-2xl">{l.label}</span>
+                  <span className="font-display text-2xl font-bold">{l.label}</span>
+                  <span className="mt-1 block text-xs text-[color:var(--text-soft)]">
+                    {l.value === "4" ? "Compact highlights loop" : l.value === "7" ? "Balanced signature route" : l.value === "10" ? "Deep immersive journey" : "Grand regional expedition"}
+                  </span>
                 </button>
               ))}
             </div>
@@ -179,11 +182,11 @@ export function ItineraryBuilder() {
 
         {step === 1 ? (
           <fieldset>
-            <legend className="font-display text-2xl text-dusk-ink">
+            <legend className="font-display text-2xl text-[color:var(--text)]">
               What are you hungry for?
             </legend>
-            <p className="mt-2 text-sm text-ink-muted">Select one or more themes.</p>
-            <div className="mt-6 flex flex-wrap gap-2">
+            <p className="mt-2 text-sm text-[color:var(--text-soft)]">Select one or more themes to tailor your experience.</p>
+            <div className="mt-6 flex flex-wrap gap-2.5">
               {THEMES.map((theme) => {
                 const active = interests.includes(theme);
                 return (
@@ -205,7 +208,7 @@ export function ItineraryBuilder() {
 
         {step === 2 ? (
           <fieldset>
-            <legend className="font-display text-2xl text-dusk-ink">
+            <legend className="font-display text-2xl text-[color:var(--text)]">
               Budget & lodging style
             </legend>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -215,20 +218,20 @@ export function ItineraryBuilder() {
                   type="button"
                   onClick={() => setBudget(b)}
                   className={cn(
-                    "rounded-2xl border px-4 py-6 text-left transition",
+                    "rounded-2xl border px-4 py-6 text-left transition cursor-pointer",
                     budget === b
-                      ? "border-peacock bg-peacock/10"
-                      : "border-dusk-ink/10 hover:border-peacock/40",
+                      ? "border-[#C41E3A] bg-gradient-to-br from-[#8E162C]/25 to-[#4A0E17]/25 text-white shadow-lg"
+                      : "border-[color:var(--surface-border)] bg-[color:var(--surface)] text-[color:var(--text)] hover:border-[#C41E3A]/50",
                   )}
                   aria-pressed={budget === b}
                 >
-                  <span className="font-display text-xl">{b}</span>
-                  <span className="mt-2 block text-sm text-ink-muted">
+                  <span className="font-display text-xl font-bold">{b}</span>
+                  <span className="mt-2 block text-sm text-[color:var(--text-soft)]">
                     {b === "Budget"
                       ? "Guesthouses, trains, street kitchens"
                       : b === "Mid-range"
                         ? "Boutique stays, mixed transport"
-                        : "Private guides, heritage hotels"}
+                        : "Private guides, luxury heritage palaces"}
                   </span>
                 </button>
               ))}
@@ -238,17 +241,18 @@ export function ItineraryBuilder() {
 
         {step === 3 ? (
           <fieldset>
-            <legend className="font-display text-2xl text-dusk-ink">
+            <legend className="font-display text-2xl text-[color:var(--text)]">
               Region preference
             </legend>
-            <div className="mt-6 flex flex-wrap gap-2">
+            <p className="mt-2 text-sm text-[color:var(--text-soft)]">Pick a specific region or leave it flexible for optimal matches.</p>
+            <div className="mt-6 flex flex-wrap gap-2.5">
               <button
                 type="button"
                 onClick={() => setRegion("Flexible")}
                 className={cn("chip", region === "Flexible" && "chip-active")}
                 aria-pressed={region === "Flexible"}
               >
-                Flexible
+                Flexible (All India)
               </button>
               {REGIONS.map((r) => (
                 <button
@@ -267,28 +271,38 @@ export function ItineraryBuilder() {
 
         {step === 4 && result ? (
           <div>
-            <h3 className="font-display text-3xl text-dusk-ink">{result.title}</h3>
-            <p className="mt-3 max-w-3xl text-ink-muted">{result.summary}</p>
-            <ol className="relative mt-10 space-y-0 border-l-2 border-turmeric/60 pl-6">
+            <div className="flex items-center gap-2">
+              <span className="rounded-full border border-[#D4AF37]/50 bg-[#8E162C]/20 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-[#F7EAC8]">
+                Customized Arc
+              </span>
+              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-xs text-[color:var(--text-soft)]">
+                {tripLength} Days · {budget} · {region}
+              </span>
+            </div>
+            <h3 className="mt-3 font-display text-3xl text-[color:var(--text)]">{result.title}</h3>
+            <p className="mt-3 max-w-3xl leading-relaxed text-[color:var(--text-soft)]">{result.summary}</p>
+            <ol className="relative mt-10 space-y-0 border-l-2 border-[#D4AF37]/40 pl-6">
               {result.days.map((day) => (
                 <li key={day.day} className="relative pb-10">
-                  <span className="absolute -left-[31px] top-1 flex h-6 w-6 items-center justify-center rounded-full bg-turmeric text-xs font-bold text-dusk-ink">
+                  <span className="absolute -left-[31px] top-1 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C49B28] text-xs font-bold text-[#1A070B] shadow-md">
                     {day.day}
                   </span>
-                  <h4 className="font-display text-xl text-dusk-ink">{day.title}</h4>
-                  <ul className="mt-3 space-y-1.5 text-sm text-ink-muted">
+                  <h4 className="font-display text-xl font-bold text-[color:var(--text)]">{day.title}</h4>
+                  <ul className="mt-3 space-y-1.5 text-sm text-[color:var(--text-soft)]">
                     {day.activities.map((a) => (
                       <li key={a}>• {a}</li>
                     ))}
                   </ul>
-                  <p className="mt-3 text-sm">
-                    <span className="font-semibold text-saffron">Stay:</span>{" "}
-                    {day.stay}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-semibold text-saffron">Meals:</span>{" "}
-                    {day.meals}
-                  </p>
+                  <div className="mt-4 flex flex-wrap gap-4 text-xs">
+                    <p className="rounded-lg border border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] px-3 py-1.5">
+                      <span className="font-semibold text-[#C41E3A]">Stay:</span>{" "}
+                      <span className="text-[color:var(--text)]">{day.stay}</span>
+                    </p>
+                    <p className="rounded-lg border border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] px-3 py-1.5">
+                      <span className="font-semibold text-[#D4AF37]">Meals:</span>{" "}
+                      <span className="text-[color:var(--text)]">{day.meals}</span>
+                    </p>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -296,15 +310,15 @@ export function ItineraryBuilder() {
             <div className="mt-4 flex flex-wrap gap-3">
               <button type="button" className="btn-primary" onClick={download}>
                 <Download className="h-4 w-4" aria-hidden />
-                {downloadState === "done" ? "Downloaded" : t.common.download}
+                {downloadState === "done" ? "Downloaded Itinerary" : t.common.download}
               </button>
             </div>
 
             <form
               onSubmit={emailItinerary}
-              className="mt-6 rounded-2xl border border-dusk-ink/10 bg-surface-elevated p-5"
+              className="mt-6 rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] p-5"
             >
-              <p className="text-sm font-semibold text-dusk-ink">
+              <p className="text-sm font-semibold text-[color:var(--text)]">
                 {t.common.emailItinerary}
               </p>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
@@ -320,11 +334,11 @@ export function ItineraryBuilder() {
                     setEmailError("");
                   }}
                   placeholder="you@email.com"
-                  className="w-full rounded-full border border-navy/15 bg-white px-4 py-3 text-sm outline-none focus:border-saffron"
+                  className="w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] px-4 py-3 text-sm text-[color:var(--text)] outline-none transition focus:border-[#C41E3A]"
                 />
                 <button
                   type="submit"
-                  className="btn-ghost shrink-0"
+                  className="btn-secondary shrink-0"
                   disabled={emailState === "loading" || emailState === "done"}
                 >
                   <Mail className="h-4 w-4" aria-hidden />
@@ -336,12 +350,12 @@ export function ItineraryBuilder() {
                 </button>
               </div>
               {emailError ? (
-                <p className="mt-2 text-sm text-rani" role="alert">
+                <p className="mt-2 text-sm text-[#E63956]" role="alert">
                   {emailError}
                 </p>
               ) : null}
               {emailState === "done" ? (
-                <p className="mt-2 text-sm text-saffron" role="status">
+                <p className="mt-2 text-sm text-[#10B981]" role="status">
                   Itinerary saved and marked for email delivery.
                 </p>
               ) : null}

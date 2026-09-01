@@ -5,46 +5,43 @@
  */
 
 // ============================================
-// COLOR PALETTE (Indian-Inspired)
+// COLOR PALETTE (Dark Reddish Wine & Royal Heritage)
 // ============================================
 export const colors = {
-  // Primary Colors (from Indian Flag & Heritage)
+  // Primary Wine & Crimson Tones
   primary: {
-    saffron: "#FF6B00", // Deep saffron from Indian flag
-    safronLight: "#FF8533",
-    safronDark: "#CC5500",
-    green: "#046A38", // India green from flag
-    greenLight: "#1F8A70",
-    greenDark: "#033D1F",
+    wine: "#721226", // Deep royal wine
+    wineLight: "#9E1B32", // Vibrant wine / ruby
+    wineDark: "#4A0E17", // Dark velvet wine
+    wineDeep: "#2A080F", // Deepest vintage burgundy
+    wineGlow: "#E63956", // Luminous rose crimson
     white: "#FFFFFF",
   },
 
   // Accent Colors (Premium & Luxurious)
   accent: {
-    gold: "#D4AF37", // Temple gold, royal heritage
-    goldLight: "#F4E4C1",
-    goldDark: "#A68C3F",
-    indigo: "#3F00FF", // Indian textile indigo
-    indigoLight: "#6B48FF",
-    indigoDark: "#2D0080",
-    terracotta: "#C65D3E", // Earthy warmth
-    terracottaLight: "#E8957B",
-    terracottaDark: "#8B3A22",
-    maroon: "#800020", // Rich traditional
-    burgundy: "#6B0D1F",
+    gold: "#D4AF37", // Temple gold, royal champagne
+    goldLight: "#F7EAC8",
+    goldDark: "#A6852A",
+    roseGold: "#C97A7E",
+    amber: "#E08D3C",
+    emerald: "#1F8A70",
+    maroon: "#800020",
+    burgundy: "#5B0E1E",
   },
 
   // Neutral & Background
   neutral: {
-    navy: "#1B1B3A", // Deep luxurious dark
-    charcoal: "#2B2B2B",
-    darkGray: "#4A4A4A",
-    gray: "#757575",
-    lightGray: "#D0D0D0",
-    warmGray: "#A8A8A0",
-    cream: "#FFF8DC", // Warm cream
-    ivory: "#FAF7F0", // Warm light background
-    beige: "#E8E4D8",
+    darkNight: "#0E0507", // Deepest wine-dark background
+    darkVelvet: "#1A070B",
+    charcoalWine: "#240A10",
+    darkGray: "#3D1A20",
+    gray: "#8C6E74",
+    lightGray: "#D8C4C8",
+    warmGray: "#A89498",
+    cream: "#FAF0F2", // Warm rose cream
+    ivory: "#FAF5F6", // Warm light background
+    beige: "#F2E2E5",
     white: "#FFFFFF",
   },
 
@@ -52,27 +49,25 @@ export const colors = {
   semantic: {
     success: "#10B981",
     warning: "#F59E0B",
-    error: "#EF4444",
+    error: "#E63956",
     info: "#3B82F6",
     disabled: "#D1D5DB",
   },
 
   // Gradients (Preset combinations)
   gradients: {
-    safronToGold:
-      "linear-gradient(135deg, #FF6B00 0%, #D4AF37 100%)",
-    sunsetOrange:
-      "linear-gradient(135deg, #FF6B00 0%, #FF8533 50%, #D4AF37 100%)",
-    tricolor:
-      "linear-gradient(90deg, #FF6B00 0%, #FFFFFF 50%, #046A38 100%)",
-    deepNightGold:
-      "linear-gradient(135deg, #1B1B3A 0%, #800020 100%)",
-    forestToSky:
-      "linear-gradient(135deg, #046A38 0%, #3F00FF 100%)",
-    terracottaToPeach:
-      "linear-gradient(135deg, #C65D3E 0%, #E8957B 100%)",
+    wineToVelvet:
+      "linear-gradient(135deg, #8B1528 0%, #4A0E17 100%)",
+    wineToGold:
+      "linear-gradient(135deg, #721226 0%, #D4AF37 100%)",
+    crimsonGlow:
+      "linear-gradient(135deg, #C41E3A 0%, #721226 50%, #2A080F 100%)",
+    deepNightWine:
+      "linear-gradient(135deg, #1A070B 0%, #4A0E17 100%)",
+    roseToChampagne:
+      "linear-gradient(135deg, #C97A7E 0%, #F7EAC8 100%)",
     templeGold:
-      "linear-gradient(135deg, #D4AF37 0%, #F4E4C1 100%)",
+      "linear-gradient(135deg, #D4AF37 0%, #F7EAC8 100%)",
   },
 };
 
@@ -174,11 +169,11 @@ export const shadows = {
   lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
   xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
   "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-  // Elevated/Premium shadows
+  // Elevated/Premium wine shadows
   premium:
-    "0 20px 50px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(212, 175, 55, 0.1)",
+    "0 20px 50px rgba(0, 0, 0, 0.35), 0 10px 25px rgba(114, 18, 38, 0.25)",
   dramatic:
-    "0 30px 60px rgba(27, 27, 58, 0.3), 0 15px 30px rgba(212, 175, 55, 0.15)",
+    "0 30px 60px rgba(14, 5, 7, 0.6), 0 15px 30px rgba(180, 24, 54, 0.2)",
   // Soft inner shadows
   inset: "inset 0 2px 4px rgba(0, 0, 0, 0.06)",
 };
@@ -236,34 +231,34 @@ export const breakpoints = {
 // ============================================
 export const components = {
   button: {
-    // Primary button
+    // Primary button - wine velvet
     primary: {
-      bg: colors.primary.saffron,
+      bg: colors.primary.wine,
       text: colors.neutral.white,
-      hover: colors.primary.safronDark,
-      active: colors.primary.safronDark,
+      hover: colors.primary.wineLight,
+      active: colors.primary.wineDark,
       disabled: colors.semantic.disabled,
     },
-    // Secondary button
+    // Secondary button - gold / wine outline
     secondary: {
-      bg: colors.primary.green,
-      text: colors.neutral.white,
-      hover: colors.primary.greenDark,
-      active: colors.primary.greenDark,
+      bg: "transparent",
+      text: colors.accent.gold,
+      hover: colors.primary.wineDeep,
+      active: colors.primary.wineDark,
       disabled: colors.semantic.disabled,
     },
     // Ghost/outline button
     ghost: {
       bg: "transparent",
-      border: colors.primary.saffron,
-      text: colors.primary.saffron,
-      hover: colors.primary.safronLight,
+      border: colors.primary.wineLight,
+      text: colors.primary.wineLight,
+      hover: colors.neutral.charcoalWine,
       disabled: colors.semantic.disabled,
     },
   },
   card: {
-    bg: colors.neutral.white,
-    border: "#E5E7EB",
+    bg: colors.neutral.darkVelvet,
+    border: "rgba(229, 57, 86, 0.15)",
     shadow: shadows.base,
     hover: {
       shadow: shadows.lg,
@@ -275,11 +270,11 @@ export const components = {
     border: colors.neutral.lightGray,
     text: colors.neutral.darkGray,
     placeholder: colors.neutral.warmGray,
-    focus: colors.primary.saffron,
+    focus: colors.primary.wineLight,
   },
   link: {
-    text: colors.primary.saffron,
-    hover: colors.primary.safronDark,
+    text: colors.primary.wineGlow,
+    hover: colors.primary.wineLight,
     underline: "underline",
   },
   badge: {

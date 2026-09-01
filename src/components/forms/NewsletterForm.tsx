@@ -54,10 +54,7 @@ export function NewsletterForm({
   if (status === "success") {
     return (
       <p
-        className={cn(
-          "rounded-xl px-4 py-3 text-sm font-medium",
-          dark ? "bg-saffron/30 text-white" : "bg-saffron/10 text-saffron",
-        )}
+        className="rounded-xl border border-[#C41E3A]/40 bg-[#8E162C]/30 px-4 py-3 text-sm font-medium text-white shadow-md"
         role="status"
       >
         {t.common.subscribed}. Welcome aboard.
@@ -81,10 +78,10 @@ export function NewsletterForm({
           }}
           placeholder="you@email.com"
           className={cn(
-            "w-full rounded-full border px-4 py-3 text-sm outline-none transition",
+            "w-full rounded-xl border px-4 py-3 text-sm outline-none transition",
             dark
-              ? "border-warm-white/20 bg-warm-white/5 text-warm-white placeholder:text-warm-white/40 focus:border-turmeric"
-              : "border-dusk-ink/15 bg-warm-white text-dusk-ink placeholder:text-ink-muted/60 focus:border-peacock",
+              ? "border-white/20 bg-white/5 text-white placeholder:text-zinc-500 focus:border-[#C41E3A]"
+              : "border-[color:var(--surface-border)] bg-[color:var(--surface)] text-[color:var(--text)] placeholder:text-[color:var(--text-soft)] focus:border-[#C41E3A]",
           )}
           aria-invalid={!!error}
           aria-describedby={error ? `newsletter-error-${source}` : undefined}
@@ -100,7 +97,7 @@ export function NewsletterForm({
       {error ? (
         <p
           id={`newsletter-error-${source}`}
-          className="mt-2 text-sm text-rani"
+          className="mt-2 text-sm text-[#E63956]"
           role="alert"
         >
           {error}

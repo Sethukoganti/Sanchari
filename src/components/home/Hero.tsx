@@ -49,20 +49,20 @@ export function Hero() {
             sizes="100vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(229,9,20,0.28),transparent_28%),linear-gradient(to_right,rgba(0,0,0,0.9),rgba(0,0,0,0.72),rgba(14,3,5,0.3))]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(196,30,58,0.32),transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(212,175,55,0.12),transparent_40%),linear-gradient(to_right,rgba(14,5,7,0.94),rgba(20,5,8,0.74),rgba(14,5,7,0.3))]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0E0507] via-transparent to-black/40" />
         </div>
       ))}
 
       <div className="relative container-site section-pad flex min-h-[92vh] flex-col justify-end pb-24 pt-32 lg:pb-32">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-300/90">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
             {SITE.name} · {slide.subtitle}
           </p>
-          <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.8rem,7vw,5.8rem)] leading-[0.9] tracking-[-0.06em] text-balance text-white">
+          <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.8rem,7vw,5.8rem)] font-extrabold leading-[0.9] tracking-[-0.04em] text-balance text-white drop-shadow-md">
             {lang !== "en" ? t.tagline : slide.title}
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/78 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
             {lang === "hi"
               ? "सिनेमाई मार्ग, जीवंत उत्सव, और असली रफ़्तार वाली यात्रा योजनाएँ—ब्रोशर की भागदौड़ नहीं।"
               : "Cinematic routes, living festivals, and itineraries paced for real transfer times—not brochure sprints across a billion stories."}
@@ -86,8 +86,10 @@ export function Hero() {
               aria-selected={i === index}
               aria-label={`Show slide ${i + 1}: ${s.subtitle}`}
               className={cn(
-                "h-1.5 rounded-full transition-all",
-                i === index ? "w-10 bg-turmeric" : "w-3 bg-warm-white/35 hover:bg-warm-white/60",
+                "h-1.5 rounded-full transition-all cursor-pointer",
+                i === index
+                  ? "w-10 bg-gradient-to-r from-[#D4AF37] to-[#F7EAC8] shadow-[0_0_12px_rgba(212,175,55,0.6)]"
+                  : "w-3 bg-white/30 hover:bg-white/60",
               )}
               onClick={() => setIndex(i)}
             />

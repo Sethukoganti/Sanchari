@@ -65,7 +65,7 @@ export function GalleryGrid() {
           <button
             key={item.id}
             type="button"
-            className="group relative w-full overflow-hidden rounded-[14px] text-left shadow-md"
+            className="group relative w-full overflow-hidden rounded-2xl border border-[color:var(--surface-border)] text-left shadow-lg transition duration-300 hover:border-[#C41E3A] cursor-pointer"
             onClick={() => setActive(index)}
             aria-label={`Open ${item.title}`}
           >
@@ -77,12 +77,12 @@ export function GalleryGrid() {
               className="h-auto w-full object-cover transition duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
-            <span className="absolute inset-0 bg-gradient-to-t from-dusk-ink/80 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-            <span className="absolute inset-x-0 bottom-0 p-4 text-warm-white opacity-0 transition group-hover:opacity-100">
-              <span className="block text-xs uppercase tracking-wider text-turmeric">
+            <span className="absolute inset-0 bg-gradient-to-t from-[#140508]/90 via-[#140508]/20 to-transparent opacity-0 transition group-hover:opacity-100" />
+            <span className="absolute inset-x-0 bottom-0 p-5 text-white opacity-0 transition group-hover:opacity-100">
+              <span className="block font-mono text-[10px] uppercase tracking-wider text-[#D4AF37]">
                 {item.category} · {item.location}
               </span>
-              <span className="font-display text-xl">{item.title}</span>
+              <span className="font-display text-xl font-bold">{item.title}</span>
             </span>
           </button>
         ))}
@@ -90,7 +90,7 @@ export function GalleryGrid() {
 
       {current && active !== null ? (
         <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-navy/90 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0E0507]/95 p-4 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-label={current.title}
@@ -98,7 +98,7 @@ export function GalleryGrid() {
         >
           <button
             type="button"
-            className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-warm-white/10 text-warm-white hover:bg-warm-white/20"
+            className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-[#8E162C] hover:border-[#C41E3A] cursor-pointer"
             aria-label="Close lightbox"
             onClick={() => setActive(null)}
           >
@@ -106,7 +106,7 @@ export function GalleryGrid() {
           </button>
           <button
             type="button"
-            className="absolute left-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-warm-white/10 text-warm-white hover:bg-warm-white/20 sm:left-6"
+            className="absolute left-3 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#1A070B]/80 text-white transition hover:bg-[#8E162C] hover:border-[#C41E3A] sm:left-6 cursor-pointer"
             aria-label="Previous image"
             onClick={(e) => {
               e.stopPropagation();
@@ -115,24 +115,24 @@ export function GalleryGrid() {
               );
             }}
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             type="button"
-            className="absolute right-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-warm-white/10 text-warm-white hover:bg-warm-white/20 sm:right-6"
+            className="absolute right-3 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#1A070B]/80 text-white transition hover:bg-[#8E162C] hover:border-[#C41E3A] sm:right-6 cursor-pointer"
             aria-label="Next image"
             onClick={(e) => {
               e.stopPropagation();
               setActive((i) => (i === null ? i : (i + 1) % items.length));
             }}
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-6 w-6" />
           </button>
           <div
             className="relative max-h-[80vh] w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.3)] bg-black/40 shadow-2xl">
               <Image
                 src={current.image}
                 alt={current.title}
@@ -142,10 +142,10 @@ export function GalleryGrid() {
                 priority
               />
             </div>
-            <div className="mt-4 text-center text-warm-white">
-              <p className="font-display text-2xl">{current.title}</p>
-              <p className="mt-1 text-sm text-warm-white/70">
-                {current.caption} · {current.location}
+            <div className="mt-4 text-center text-white">
+              <p className="font-display text-2xl font-bold">{current.title}</p>
+              <p className="mt-1 text-sm text-zinc-300">
+                {current.caption} · <span className="text-[#D4AF37]">{current.location}</span>
               </p>
             </div>
           </div>

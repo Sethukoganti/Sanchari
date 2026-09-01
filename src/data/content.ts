@@ -91,7 +91,7 @@ export const destinations: Destination[] = [
     image:
       "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=80",
     gallery: [
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=900&q=80",
     ],
@@ -147,7 +147,7 @@ export const destinations: Destination[] = [
     image:
       "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
     gallery: [
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=900&q=80",
     ],
@@ -285,7 +285,7 @@ export const destinations: Destination[] = [
     budget: "Mid-range",
     highlights: ["Western Group of Temples", "Light and sound show", "Local crafts", "Sunset viewpoint"],
     image:
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=900&q=80",
@@ -307,67 +307,283 @@ export function getFeaturedDestinations() {
 
 export const states: StateInfo[] = [
   {
-    slug: "rajasthan",
-    name: "Rajasthan",
+    slug: "jammu-kashmir",
+    name: "Jammu & Kashmir",
     region: "North",
-    summary: "Fort cities, desert nights, and trade routes with a cinematic edge.",
+    summary: "Alpine meadows, houseboats on serene Dal Lake, and snow-capped Pir Panjal peaks.",
     image:
-      "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=80",
-    destinationSlugs: ["jaipur", "varanasi"],
+      "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
   },
   {
     slug: "ladakh",
     name: "Ladakh",
     region: "North",
-    summary: "High-altitude roads, monasteries, and glacier-light landscapes.",
+    summary: "High-altitude roads, ancient Buddhist monasteries, and glacier-light desert landscapes.",
     image:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
     destinationSlugs: ["leh"],
   },
   {
-    slug: "kerala",
-    name: "Kerala",
-    region: "South",
-    summary: "Backwaters, beaches, and careful rituals of rest and hospitality.",
+    slug: "himachal-pradesh",
+    name: "Himachal Pradesh",
+    region: "North",
+    summary: "Pine-scented mountain valleys, sacred rivers, and high Himalayan passes.",
     image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    destinationSlugs: ["munnar"],
+      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "punjab",
+    name: "Punjab",
+    region: "North",
+    summary: "The golden reflection of Harmandir Sahib, fertile fields, and world-renowned culinary warmth.",
+    image:
+      "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "uttar-pradesh",
+    name: "Uttar Pradesh",
+    region: "North",
+    summary: "Sacred ghats along the eternal Ganga, Mughal marble architecture, and ancient spiritual centers.",
+    image:
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: ["varanasi"],
+  },
+  {
+    slug: "rajasthan",
+    name: "Rajasthan",
+    region: "North",
+    summary: "Sandstone fortresses, desert dunes at dusk, and royal haveli traditions.",
+    image:
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: ["jaipur"],
+  },
+  {
+    slug: "gujarat",
+    name: "Gujarat",
+    region: "West",
+    summary: "The shimmering white salt desert of Kutch, ancient stepwells, and Asiatic lion reserves.",
+    image:
+      "https://images.unsplash.com/photo-1609137144820-7f2878d65a25?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "maharashtra",
+    name: "Maharashtra",
+    region: "West",
+    summary: "Coastal sea forts, rock-cut UNESCO caves of Ajanta & Ellora, and vibrant urban energy.",
+    image:
+      "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
   },
   {
     slug: "goa",
     name: "Goa",
     region: "West",
-    summary: "A gentle coastal mix of beaches, old churches, and easy dining.",
+    summary: "Golden palm-fringed sands, Portuguese colonial quarters, and laid-back coastal culture.",
     image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
     destinationSlugs: ["goa"],
   },
   {
-    slug: "assam",
-    name: "Assam",
-    region: "Northeast",
-    summary: "Riverways, rainforest edges, and some of the subcontinent’s most vivid fauna.",
+    slug: "karnataka",
+    name: "Karnataka",
+    region: "South",
+    summary: "The carved stone ruins of Hampi, opulent palaces, and mist-covered coffee hills of Coorg.",
     image:
-      "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=80",
-    destinationSlugs: ["kaziranga"],
+      "https://images.unsplash.com/photo-1600100397608-f010f44487b3?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
   },
   {
-    slug: "odisha",
-    name: "Odisha",
-    region: "East",
-    summary: "Temple heritage, sea-facing towns, and a tangible sense of coastal light.",
+    slug: "kerala",
+    name: "Kerala",
+    region: "South",
+    summary: "Serene backwater lagoons, Ayurvedic wellness retreats, and emerald tea hill ranges.",
     image:
-      "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1200&q=80",
-    destinationSlugs: ["puri"],
+      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: ["munnar"],
+  },
+  {
+    slug: "tamil-nadu",
+    name: "Tamil Nadu",
+    region: "South",
+    summary: "Towering Dravidian temple gopurams, coastal shore heritage, and classical Carnatic arts.",
+    image:
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "andhra-pradesh",
+    name: "Andhra Pradesh",
+    region: "South",
+    summary: "The grand red canyon of Gandikota, historic coastal temple towns, and fertile river deltas.",
+    image:
+      "https://images.unsplash.com/photo-1606298855672-3efb63017be8?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "telangana",
+    name: "Telangana",
+    region: "South",
+    summary: "Historic Charminar architecture, massive granite forts, and rich royal culinary heritage.",
+    image:
+      "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
   },
   {
     slug: "madhya-pradesh",
     name: "Madhya Pradesh",
     region: "Central",
-    summary: "A geography of stone temples, forest parks, and slow transit.",
+    summary: "Sculpted stone temple marvels of Khajuraho, dense tiger reserves, and ancient stupas.",
     image:
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?auto=format&fit=crop&w=1200&q=80",
     destinationSlugs: ["khajuraho"],
+  },
+  {
+    slug: "chhattisgarh",
+    name: "Chhattisgarh",
+    region: "Central",
+    summary: "The majestic horseshoe curve of Chitrakote Falls and deep tribal heartland forests.",
+    image:
+      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "odisha",
+    name: "Odisha",
+    region: "East",
+    summary: "The gigantic chariot stone wheels of Konark Sun Temple, sacred coastline, and craft villages.",
+    image:
+      "https://images.unsplash.com/photo-1598890777032-bde17b8ec5a1?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: ["puri"],
+  },
+  {
+    slug: "west-bengal",
+    name: "West Bengal",
+    region: "East",
+    summary: "Colonial heritage facades, Darjeeling toy train views of Kanchenjunga, and Sundarban mangroves.",
+    image:
+      "https://images.unsplash.com/photo-1558431382-27e303142255?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "bihar",
+    name: "Bihar",
+    region: "East",
+    summary: "The revered Mahabodhi Tree of enlightenment, ancient Nalanda ruins, and sacred river trails.",
+    image:
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "jharkhand",
+    name: "Jharkhand",
+    region: "East",
+    summary: "Cascading forest waterfalls, mineral-rich plateau hilltops, and lush national parks.",
+    image:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "assam",
+    name: "Assam",
+    region: "Northeast",
+    summary: "Home of the great Indian one-horned rhino, mighty Brahmaputra river, and tea estates.",
+    image:
+      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: ["kaziranga"],
+  },
+  {
+    slug: "meghalaya",
+    name: "Meghalaya",
+    region: "Northeast",
+    summary: "Living bio-engineered root bridges, cascading Nohkalikai waterfall, and clean cloud villages.",
+    image:
+      "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "nagaland",
+    name: "Nagaland",
+    region: "Northeast",
+    summary: "The vibrant Hornbill tribal festival, emerald Dzukou Valley, and mist-draped peaks.",
+    image:
+      "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "manipur",
+    name: "Manipur",
+    region: "Northeast",
+    summary: "The world's only floating national park on pristine Loktak Lake with rich cultural arts.",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "mizoram",
+    name: "Mizoram",
+    region: "Northeast",
+    summary: "Evergreen rolling hills, dramatic Vantawng waterfall, and tranquil bamboo-clad villages.",
+    image:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "tripura",
+    name: "Tripura",
+    region: "Northeast",
+    summary: "The floating palace of Neermahal on Rudrasagar Lake and ancient rock-carved Unakoti.",
+    image:
+      "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "arunachal-pradesh",
+    name: "Arunachal Pradesh",
+    region: "Northeast",
+    summary: "Perched high-altitude Tawang Buddhist monastery, Sela snow pass, and dawn-lit Himalayan peaks.",
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "sikkim",
+    name: "Sikkim",
+    region: "Northeast",
+    summary: "High-altitude glacial lakes, sacred Kanchenjunga panoramas, and orchid-lined trails.",
+    image:
+      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "uttarakhand",
+    name: "Uttarakhand",
+    region: "North",
+    summary: "Rishikesh yoga sanctuaries along sacred Ganga, Valley of Flowers, and Garhwal Himalayas.",
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "haryana",
+    name: "Haryana",
+    region: "North",
+    summary: "Sacred mythological water sarovars of Kurukshetra and peaceful wetland bird sanctuaries.",
+    image:
+      "https://images.unsplash.com/photo-1500382017468-f049863256f0?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
+  },
+  {
+    slug: "delhi",
+    name: "Delhi",
+    region: "North",
+    summary: "Monumental Mughal gates, ancient minarets, lush gardens, and centuries of capital history.",
+    image:
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1200&q=80",
+    destinationSlugs: [],
   },
 ];
 
@@ -418,7 +634,7 @@ export const experiences: Experience[] = [
     duration: "2 days",
     season: "October to March",
     image:
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
     highlights: ["Workshop access", "Local artisan studio", "Craft market", "Material stories"],
   },
   {
@@ -515,7 +731,7 @@ export const articles: Article[] = [
     ],
     pullQuote: "You do not visit a festival for the spectacle alone; you go for the tempo of the day.",
     gallery: [
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=900&q=80",
     ],
     relatedSlugs: ["railways-quiet", "market-lanterns"],

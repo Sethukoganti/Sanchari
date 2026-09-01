@@ -68,7 +68,7 @@ export function Header() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
           solid
-            ? "border-b border-saffron/20 bg-navy/90 text-white shadow-[0_12px_30px_rgba(0,0,0,0.45)] backdrop-blur-md"
+            ? "border-b border-[rgba(230,57,86,0.2)] bg-[#120407]/95 text-white shadow-[0_12px_30px_rgba(0,0,0,0.6)] backdrop-blur-md"
             : "bg-transparent text-white",
         )}
       >
@@ -78,14 +78,14 @@ export function Header() {
             className="group flex items-center gap-2.5"
             aria-label="Explore India home"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-saffron text-navy shadow-md">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#8E162C] to-[#4A0E17] text-[#F7EAC8] border border-[#D4AF37]/40 shadow-[0_4px_14px_rgba(114,18,38,0.5)] transition group-hover:scale-105">
               <TrainFront className="h-5 w-5" aria-hidden />
             </span>
             <span className="leading-tight">
-              <span className="block font-display text-lg tracking-wide sm:text-xl">
+              <span className="block font-display text-lg font-bold tracking-wide sm:text-xl text-white">
                 Explore India
               </span>
-              <span className="hidden text-[10px] uppercase tracking-[0.18em] text-turmeric sm:block">
+              <span className="hidden text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] sm:block">
                 {t.tagline}
               </span>
             </span>
@@ -103,8 +103,8 @@ export function Header() {
               <button
                 type="button"
                 className={cn(
-                  "inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-white/10",
-                  pathname.startsWith("/destinations") && "text-turmeric",
+                  "inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-white/10 cursor-pointer",
+                  pathname.startsWith("/destinations") && "text-[#F7EAC8] font-semibold",
                 )}
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
@@ -118,10 +118,10 @@ export function Header() {
                   className="absolute left-1/2 top-full z-50 w-[min(920px,70vw)] -translate-x-1/2 pt-3"
                   role="menu"
                 >
-                  <div className="overflow-hidden rounded-2xl border border-white/10 bg-navy shadow-2xl">
+                  <div className="overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.25)] bg-[#140508] shadow-[0_25px_50px_rgba(0,0,0,0.85)]">
                     <div className="grid grid-cols-12 gap-0">
-                      <div className="col-span-4 border-r border-warm-white/10 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turmeric">
+                      <div className="col-span-4 border-r border-white/10 p-5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
                           By region
                         </p>
                         <ul className="mt-3 space-y-1">
@@ -129,7 +129,7 @@ export function Header() {
                             <li key={region}>
                               <Link
                                 href={`/destinations?region=${encodeURIComponent(region)}`}
-                                className="block rounded-lg px-3 py-2 text-sm text-warm-white/85 hover:bg-warm-white/10 hover:text-warm-white"
+                                className="block rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-[#8E162C]/30 hover:text-white"
                                 role="menuitem"
                               >
                                 {region}
@@ -138,8 +138,8 @@ export function Header() {
                           ))}
                         </ul>
                       </div>
-                      <div className="col-span-4 border-r border-warm-white/10 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turmeric">
+                      <div className="col-span-4 border-r border-white/10 p-5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
                           By theme
                         </p>
                         <ul className="mt-3 space-y-1">
@@ -147,7 +147,7 @@ export function Header() {
                             <li key={theme}>
                               <Link
                                 href={`/destinations?theme=${encodeURIComponent(theme)}`}
-                                className="block rounded-lg px-3 py-2 text-sm text-warm-white/85 hover:bg-warm-white/10 hover:text-warm-white"
+                                className="block rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-[#8E162C]/30 hover:text-white"
                                 role="menuitem"
                               >
                                 {theme}
@@ -157,7 +157,7 @@ export function Header() {
                         </ul>
                       </div>
                       <div className="col-span-4 p-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turmeric">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
                           Featured now
                         </p>
                         <div className="mt-3 space-y-3">
@@ -165,7 +165,7 @@ export function Header() {
                             <Link
                               key={d.id}
                               href={`/destinations/${d.slug}`}
-                              className="flex items-center gap-3 rounded-xl p-2 hover:bg-warm-white/10"
+                              className="flex items-center gap-3 rounded-xl p-2 hover:bg-[#8E162C]/30"
                               role="menuitem"
                             >
                               <span className="relative h-12 w-12 overflow-hidden rounded-lg">
@@ -178,10 +178,10 @@ export function Header() {
                                 />
                               </span>
                               <span>
-                                <span className="block text-sm font-semibold text-warm-white">
+                                <span className="block text-sm font-semibold text-white">
                                   {d.name}
                                 </span>
-                                <span className="block text-xs text-warm-white/60">
+                                <span className="block text-xs text-zinc-400">
                                   {d.state}
                                 </span>
                               </span>
@@ -190,7 +190,7 @@ export function Header() {
                         </div>
                         <Link
                           href="/destinations"
-                          className="mt-4 inline-flex text-sm font-semibold text-turmeric hover:underline"
+                          className="mt-4 inline-flex text-sm font-semibold text-[#D4AF37] hover:underline"
                         >
                           Browse all destinations →
                         </Link>
@@ -207,7 +207,7 @@ export function Header() {
                 href={link.href}
                 className={cn(
                   "rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-white/10",
-                  pathname.startsWith(link.href) && "text-turmeric",
+                  pathname.startsWith(link.href) && "text-[#F7EAC8] font-semibold drop-shadow-[0_0_8px_rgba(230,57,86,0.5)]",
                 )}
               >
                 {t.nav[link.key]}
@@ -219,7 +219,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-warm-white/10"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-white/10 cursor-pointer"
               aria-label={t.nav.search}
             >
               <Search className="h-5 w-5" />
@@ -227,7 +227,7 @@ export function Header() {
             <button
               type="button"
               onClick={openLanguageModal}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-warm-white/20 bg-warm-white/10 px-3 py-1.5 text-xs font-semibold text-warm-white transition hover:border-turmeric hover:bg-warm-white/15"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#1A070B]/80 px-3.5 py-1.5 text-xs font-semibold text-[#F7EAC8] transition hover:border-[#D4AF37] hover:bg-[#8E162C]/40 cursor-pointer shadow-sm"
               aria-label={`${t.nav.language}: ${currentLanguage.name} (${currentLanguage.nativeName})`}
               title="Change language / भाषा बदलें"
             >
@@ -235,7 +235,7 @@ export function Header() {
               <span className="font-display font-medium tracking-wide max-w-[80px] sm:max-w-[120px] truncate">
                 {currentLanguage.nativeName}
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-warm-white/60" aria-hidden />
+              <ChevronDown className="h-3.5 w-3.5 text-[#F7EAC8]/70" aria-hidden />
             </button>
             <ThemeToggle />
             <Link
@@ -246,7 +246,7 @@ export function Header() {
             </Link>
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-warm-white/10 xl:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-white/10 xl:hidden cursor-pointer"
               aria-label={mobileOpen ? t.nav.closeMenu : t.nav.openMenu}
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((v) => !v)}
@@ -259,15 +259,15 @@ export function Header() {
 
       {mobileOpen ? (
         <div
-          className="fixed inset-0 z-40 bg-dusk-ink xl:hidden"
+          className="fixed inset-0 z-40 bg-[#0E0507]/98 backdrop-blur-xl xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"
         >
           <div className="flex h-full flex-col overflow-y-auto px-5 pb-10 pt-24">
             {/* Mobile Language Button */}
-            <div className="mb-4 rounded-xl border border-warm-white/15 bg-board/60 p-3.5">
-              <p className="text-xs font-semibold uppercase tracking-wider text-turmeric">
+            <div className="mb-4 rounded-2xl border border-[#D4AF37]/30 bg-[#1A070B] p-4 shadow-lg">
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#D4AF37]">
                 {t.nav.language} · भाषा
               </p>
               <button
@@ -276,20 +276,20 @@ export function Header() {
                   setMobileOpen(false);
                   openLanguageModal();
                 }}
-                className="mt-2 flex w-full items-center justify-between rounded-lg bg-warm-white/10 px-3.5 py-2.5 text-sm font-medium text-warm-white hover:bg-warm-white/20"
+                className="mt-2.5 flex w-full items-center justify-between rounded-xl bg-[#8E162C]/25 border border-[#8E162C]/40 px-3.5 py-2.5 text-sm font-medium text-white hover:bg-[#8E162C]/40 cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <span className="text-lg">{currentLanguage.flag}</span>
-                  <span className="font-display text-base font-bold">{currentLanguage.nativeName}</span>
-                  <span className="text-xs text-warm-white/60">({currentLanguage.name})</span>
+                  <span className="font-display text-base font-bold text-[#F7EAC8]">{currentLanguage.nativeName}</span>
+                  <span className="text-xs text-zinc-400">({currentLanguage.name})</span>
                 </div>
-                <span className="text-xs font-semibold text-turmeric">Change →</span>
+                <span className="text-xs font-semibold text-[#D4AF37]">Change →</span>
               </button>
             </div>
 
             <button
               type="button"
-              className="flex w-full items-center justify-between border-b border-warm-white/10 py-4 text-left text-lg text-warm-white"
+              className="flex w-full items-center justify-between border-b border-white/10 py-4 text-left text-lg text-white cursor-pointer"
               onClick={() => setMobileDestOpen((v) => !v)}
               aria-expanded={mobileDestOpen}
             >
@@ -302,12 +302,12 @@ export function Header() {
               />
             </button>
             {mobileDestOpen ? (
-              <div className="space-y-2 border-b border-warm-white/10 py-3 pl-3">
+              <div className="space-y-2 border-b border-white/10 py-3 pl-3">
                 {REGIONS.map((region) => (
                   <Link
                     key={region}
                     href={`/destinations?region=${encodeURIComponent(region)}`}
-                    className="block py-2 text-warm-white/80"
+                    className="block py-2 text-zinc-300 hover:text-white"
                     onClick={() => setMobileOpen(false)}
                   >
                     {region}
@@ -315,7 +315,7 @@ export function Header() {
                 ))}
                 <Link
                   href="/destinations"
-                  className="block py-2 font-semibold text-turmeric"
+                  className="block py-2 font-semibold text-[#D4AF37]"
                   onClick={() => setMobileOpen(false)}
                 >
                   All destinations
@@ -327,7 +327,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="border-b border-warm-white/10 py-4 text-lg text-warm-white"
+                className="border-b border-white/10 py-4 text-lg text-white"
                 onClick={() => setMobileOpen(false)}
               >
                 {t.nav[link.key]}
@@ -335,14 +335,14 @@ export function Header() {
             ))}
             <Link
               href="/about"
-              className="border-b border-warm-white/10 py-4 text-lg text-warm-white"
+              className="border-b border-white/10 py-4 text-lg text-white"
               onClick={() => setMobileOpen(false)}
             >
               {t.nav.about}
             </Link>
             <Link
               href="/contact"
-              className="border-b border-warm-white/10 py-4 text-lg text-warm-white"
+              className="border-b border-white/10 py-4 text-lg text-white"
               onClick={() => setMobileOpen(false)}
             >
               {t.nav.contact}

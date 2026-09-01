@@ -85,16 +85,16 @@ export function ContactForm() {
   if (status === "success") {
     return (
       <div
-        className="card-surface border border-saffron/20 bg-saffron/5 p-8"
+        className="card-surface border border-[#C41E3A]/30 bg-[#8E162C]/10 p-8"
         role="status"
       >
-        <p className="font-display text-3xl text-dusk-ink">{t.common.submitted}</p>
-        <p className="mt-3 text-ink-muted">
+        <p className="font-display text-3xl font-bold text-[color:var(--text)]">{t.common.submitted}</p>
+        <p className="mt-3 text-[color:var(--text-soft)]">
           Thanks—we read every note. Expect a reply within two business days.
         </p>
         <button
           type="button"
-          className="btn-ghost mt-6"
+          className="btn-primary mt-6"
           onClick={() => setStatus("idle")}
         >
           Send another message
@@ -104,7 +104,7 @@ export function ContactForm() {
   }
 
   const fieldClass =
-    "mt-2 w-full rounded-xl border border-dusk-ink/15 bg-warm-white px-4 py-3 text-sm outline-none transition focus:border-peacock";
+    "mt-2 w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] text-[color:var(--text)] px-4 py-3 text-sm outline-none transition focus:border-[#C41E3A]";
 
   return (
     <form onSubmit={onSubmit} noValidate className="card-surface p-6 sm:p-8">

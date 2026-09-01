@@ -173,170 +173,280 @@ const LINKED = new Set(states.map((s) => s.slug));
 export function IndiaMap() {
   const router = useRouter();
   const [hover, setHover] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>("rajasthan");
+  const [stateSearch, setStateSearch] = useState("");
   const [tooltip, setTooltip] = useState<{ x: number; y: number } | null>(null);
+
   const stateLookup = useMemo(
     () => new Map(states.map((state) => [state.slug, state])),
     [],
   );
 
+  const activeSlug = hover || selected;
+
   const info = useMemo(() => {
-    if (!hover) return null;
+    if (!activeSlug) return null;
     return (
-      stateLookup.get(hover) || {
-        slug: hover,
-        name: STATE_PATHS.find((p) => p.slug === hover)?.name || hover,
-        region: "Central" as const,
-        summary: "Open destinations to explore routes in this state.",
+      stateLookup.get(activeSlug) || {
+        slug: activeSlug,
+        name: STATE_PATHS.find((p) => p.slug === activeSlug)?.name || activeSlug,
+        region: "North" as const,
+        summary: "Open destination routes and explore cultural trails in this state.",
         image:
-          "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
         destinationSlugs: [] as string[],
       }
     );
-  }, [hover, stateLookup]);
+  }, [activeSlug, stateLookup]);
 
   const onActivate = useCallback(
     (slug: string) => {
-      if (LINKED.has(slug)) {
-        router.push(`/map/${slug}`);
-      } else {
-        router.push(`/destinations?q=${encodeURIComponent(slug.replace(/-/g, " "))}`);
-      }
+      setSelected(slug);
+      router.push(`/map/${slug}`);
     },
     [router],
   );
 
+  const filteredStatesList = useMemo(() => {
+    if (!stateSearch.trim()) return states;
+    const q = stateSearch.toLowerCase();
+    return states.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        s.region.toLowerCase().includes(q) ||
+        s.summary.toLowerCase().includes(q),
+    );
+  }, [stateSearch]);
+
   return (
     <div className="relative grid gap-8 lg:grid-cols-12">
       <div className="relative lg:col-span-8">
-        <svg
-          viewBox="0 0 560 460"
-          className="h-auto w-full rounded-2xl bg-navy p-4 shadow-xl"
-          role="img"
-          aria-label="Interactive map of India. Select a state to explore."
-        >
-          <rect width="560" height="460" fill="#241934" rx="12" />
-          <text
-            x="28"
-            y="36"
-            fill="#E8A013"
-            fontSize="12"
-            fontFamily="JetBrains Mono, monospace"
-            letterSpacing="3"
+        <div className="relative overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.2)] bg-[#120407] p-2 shadow-2xl sm:p-4">
+          <svg
+            viewBox="0 0 560 460"
+            className="h-auto w-full rounded-xl"
+            role="img"
+            aria-label="Interactive map of India. Select a state to explore."
           >
-            EXPLORE INDIA · STATE BOARD
-          </text>
-          {STATE_PATHS.map((state) => {
-            const active = hover === state.slug;
-            const hasPage = LINKED.has(state.slug);
-            return (
-              <path
-                key={state.slug}
-                d={state.d}
-                className="map-state"
-                data-active={active ? "true" : "false"}
-                tabIndex={0}
-                role="button"
-                aria-label={`${state.name}${hasPage ? "" : " (search destinations)"}`}
-                onMouseEnter={(e) => {
-                  setHover(state.slug);
-                  const rect = (e.target as SVGPathElement)
-                    .ownerSVGElement!
-                    .getBoundingClientRect();
-                  setTooltip({
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top,
-                  });
-                }}
-                onMouseMove={(e) => {
-                  const rect = (e.target as SVGPathElement)
-                    .ownerSVGElement!
-                    .getBoundingClientRect();
-                  setTooltip({
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top,
-                  });
-                }}
-                onMouseLeave={() => {
-                  setHover(null);
-                  setTooltip(null);
-                }}
-                onFocus={() => setHover(state.slug)}
-                onBlur={() => setHover(null)}
-                onClick={() => onActivate(state.slug)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    onActivate(state.slug);
-                  }
-                }}
-              />
-            );
-          })}
-        </svg>
-        {hover && tooltip && info ? (
-          <div
-            className="pointer-events-none absolute z-10 w-56 overflow-hidden rounded-xl border border-warm-white/10 bg-dusk-ink/95 shadow-2xl"
-            style={{
-              left: Math.min(tooltip.x + 12, 320),
-              top: Math.max(tooltip.y - 20, 8),
-            }}
-          >
-            <div className="relative h-24 w-full">
-              <Image src={info.image} alt="" fill className="object-cover" sizes="224px" />
+            <defs>
+              <linearGradient id="mapBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1C070C" />
+                <stop offset="50%" stopColor="#140508" />
+                <stop offset="100%" stopColor="#0B0204" />
+              </linearGradient>
+              <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="rgba(196, 30, 58, 0.15)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+            </defs>
+            <rect width="560" height="460" fill="url(#mapBgGrad)" rx="12" />
+            <rect width="560" height="460" fill="url(#mapGlow)" rx="12" />
+
+            {/* Decorative subtle grid lines */}
+            <line x1="40" y1="120" x2="520" y2="120" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
+            <line x1="40" y1="240" x2="520" y2="240" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
+            <line x1="40" y1="360" x2="520" y2="360" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
+            <line x1="180" y1="40" x2="180" y2="420" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
+            <line x1="360" y1="40" x2="360" y2="420" stroke="rgba(212, 175, 55, 0.05)" strokeDasharray="4 4" />
+
+            <text
+              x="28"
+              y="34"
+              fill="#D4AF37"
+              fontSize="11"
+              fontFamily="JetBrains Mono, monospace"
+              letterSpacing="3"
+              fontWeight="600"
+            >
+              EXPLORE INDIA · INTERACTIVE STATE BOARD
+            </text>
+            <text
+              x="28"
+              y="48"
+              fill="rgba(247, 234, 200, 0.5)"
+              fontSize="9"
+              fontFamily="JetBrains Mono, monospace"
+              letterSpacing="1"
+            >
+              CLICK OR TAB TO EXPLORE 31 REGIONAL GUIDES
+            </text>
+
+            {STATE_PATHS.map((state) => {
+              const isHovered = hover === state.slug;
+              const isSelected = selected === state.slug;
+              const active = isHovered || isSelected;
+
+              return (
+                <path
+                  key={state.slug}
+                  d={state.d}
+                  className="map-state"
+                  data-active={active ? "true" : "false"}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${state.name} - Explore state routes`}
+                  onMouseEnter={(e) => {
+                    setHover(state.slug);
+                    const rect = (e.target as SVGPathElement)
+                      .ownerSVGElement!
+                      .getBoundingClientRect();
+                    setTooltip({
+                      x: e.clientX - rect.left,
+                      y: e.clientY - rect.top,
+                    });
+                  }}
+                  onMouseMove={(e) => {
+                    const rect = (e.target as SVGPathElement)
+                      .ownerSVGElement!
+                      .getBoundingClientRect();
+                    setTooltip({
+                      x: e.clientX - rect.left,
+                      y: e.clientY - rect.top,
+                    });
+                  }}
+                  onMouseLeave={() => {
+                    setHover(null);
+                    setTooltip(null);
+                  }}
+                  onFocus={() => {
+                    setHover(state.slug);
+                  }}
+                  onBlur={() => setHover(null)}
+                  onClick={() => onActivate(state.slug)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      onActivate(state.slug);
+                    }
+                  }}
+                />
+              );
+            })}
+          </svg>
+
+          {/* Interactive Floating State Preview Tooltip */}
+          {hover && tooltip && info ? (
+            <div
+              className="pointer-events-none absolute z-20 w-64 overflow-hidden rounded-2xl border border-[rgba(230,57,86,0.3)] bg-[#18060B]/95 shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(196,30,58,0.25)] backdrop-blur-md transition-all duration-150"
+              style={{
+                left: Math.min(Math.max(tooltip.x + 14, 16), 310),
+                top: Math.min(Math.max(tooltip.y - 30, 16), 260),
+              }}
+            >
+              <div className="relative h-28 w-full overflow-hidden">
+                <Image
+                  src={info.image}
+                  alt={info.name}
+                  fill
+                  className="object-cover"
+                  sizes="256px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#18060B] via-[#18060B]/30 to-transparent" />
+                <span className="absolute left-2.5 top-2.5 rounded-full border border-white/20 bg-black/60 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[#F7EAC8] backdrop-blur-sm">
+                  {info.region} India
+                </span>
+              </div>
+              <div className="p-3.5 pt-1">
+                <p className="font-display text-base font-bold text-white">{info.name}</p>
+                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">
+                  {info.summary}
+                </p>
+                <p className="mt-2 text-[10px] font-semibold text-[#D4AF37]">
+                  Click to open state guide →
+                </p>
+              </div>
             </div>
-            <div className="p-3">
-              <p className="font-semibold text-warm-white">{info.name}</p>
-              <p className="text-xs text-warm-white/65">{info.summary}</p>
-            </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
 
       <div className="lg:col-span-4">
-        <div className="card-surface sticky top-28 p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-peacock">
-            Selected
-          </p>
+        <div className="card-surface sticky top-28 flex flex-col p-6">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
+              State Guide
+            </span>
+            {info ? (
+              <span className="rounded-full border border-[#C41E3A]/40 bg-[#8E162C]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#F7EAC8]">
+                {info.region}
+              </span>
+            ) : null}
+          </div>
+
           {info ? (
-            <>
-              <h3 className="mt-2 font-display text-3xl text-dusk-ink">{info.name}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+            <div className="mt-4">
+              <div className="relative mb-4 h-36 w-full overflow-hidden rounded-xl border border-white/10">
+                <Image
+                  src={info.image}
+                  alt={info.name}
+                  fill
+                  className="object-cover transition duration-500 hover:scale-105"
+                  sizes="360px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute bottom-2.5 left-3">
+                  <h3 className="font-display text-2xl font-bold text-white drop-shadow-md">
+                    {info.name}
+                  </h3>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-[color:var(--text-soft)]">
                 {info.summary}
               </p>
               <button
                 type="button"
-                className="btn-primary mt-6"
+                className="btn-primary mt-5 w-full"
                 onClick={() => onActivate(info.slug)}
               >
-                Open {info.name}
+                Explore {info.name} Guide
               </button>
-            </>
+            </div>
           ) : (
-            <>
-              <h3 className="mt-2 font-display text-3xl text-dusk-ink">
-                Hover a state
+            <div className="mt-4">
+              <h3 className="font-display text-2xl text-[color:var(--text)]">
+                Select a State
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-                Each path is keyboard-focusable. States with dedicated pages open
-                a local guide; others jump to destination search.
+              <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-soft)]">
+                Hover or click any state on the map or choose from the list below to view its authentic photography and travel routes.
               </p>
-            </>
+            </div>
           )}
-          <ul className="mt-8 max-h-64 space-y-2 overflow-y-auto pr-1">
-            {states.map((s) => (
-              <li key={s.slug}>
-                <button
-                  type="button"
-                  className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-surface-elevated"
-                  onClick={() => onActivate(s.slug)}
-                  onMouseEnter={() => setHover(s.slug)}
-                >
-                  <span className="font-semibold text-dusk-ink">{s.name}</span>
-                  <span className="block text-xs text-ink-muted">{s.region}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+
+          <div className="mt-6 border-t border-[color:var(--surface-border)] pt-4">
+            <input
+              type="text"
+              value={stateSearch}
+              onChange={(e) => setStateSearch(e.target.value)}
+              placeholder="Search 31 states & territories…"
+              className="w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface-strong)] px-3.5 py-2 text-xs text-[color:var(--text)] outline-none transition focus:border-[#C41E3A]"
+            />
+
+            <ul className="mt-3 max-h-56 space-y-1.5 overflow-y-auto pr-1">
+              {filteredStatesList.map((s) => {
+                const isCurrent = activeSlug === s.slug;
+                return (
+                  <li key={s.slug}>
+                    <button
+                      type="button"
+                      className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition ${
+                        isCurrent
+                          ? "border border-[#C41E3A]/40 bg-[#8E162C]/25 text-white font-semibold"
+                          : "hover:bg-[color:var(--surface)] text-[color:var(--text)]"
+                      }`}
+                      onClick={() => onActivate(s.slug)}
+                      onMouseEnter={() => setHover(s.slug)}
+                      onMouseLeave={() => setHover(null)}
+                    >
+                      <span className="font-medium">{s.name}</span>
+                      <span className="text-[10px] text-[color:var(--text-soft)]">
+                        {s.region}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

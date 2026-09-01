@@ -94,12 +94,12 @@ export function DestinationExplorer({
       <aside className="lg:col-span-3">
         <div className="card-surface sticky top-28 p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-peacock">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#D4AF37]">
               {t.common.filters}
             </p>
             <button
               type="button"
-              className="text-xs font-semibold text-ink-muted hover:text-rani"
+              className="text-xs font-semibold text-[color:var(--text-soft)] transition hover:text-[#E63956] cursor-pointer"
               onClick={clearAll}
             >
               {t.common.clear}
@@ -109,7 +109,7 @@ export function DestinationExplorer({
           <label className="relative mt-5 block">
             <span className="sr-only">Keyword search</span>
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted"
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-soft)]"
               aria-hidden
             />
             <input
@@ -119,12 +119,12 @@ export function DestinationExplorer({
                 setVisible(PAGE_SIZE);
               }}
               placeholder="Keyword…"
-              className="w-full rounded-full border border-dusk-ink/15 bg-warm-white py-2.5 pl-10 pr-3 text-sm outline-none focus:border-peacock"
+              className="w-full rounded-full border border-[color:var(--surface-border)] bg-[color:var(--surface)] py-2.5 pl-10 pr-3 text-sm text-[color:var(--text)] outline-none transition focus:border-[#C41E3A]"
             />
           </label>
 
           <div className="mt-6">
-            <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--text-soft)]">
               Region
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -143,7 +143,7 @@ export function DestinationExplorer({
           </div>
 
           <div className="mt-6">
-            <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--text-soft)]">
               Theme
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -162,7 +162,7 @@ export function DestinationExplorer({
           </div>
 
           <div className="mt-6">
-            <label htmlFor="sort-dest" className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            <label htmlFor="sort-dest" className="text-xs font-semibold uppercase tracking-wider text-[color:var(--text-soft)]">
               Sort
             </label>
             <select
@@ -171,7 +171,7 @@ export function DestinationExplorer({
               onChange={(e) =>
                 setSort(e.target.value as "featured" | "name" | "region")
               }
-              className="mt-2 w-full rounded-xl border border-dusk-ink/15 bg-warm-white px-3 py-2.5 text-sm outline-none focus:border-peacock"
+              className="mt-2 w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] px-3 py-2.5 text-sm text-[color:var(--text)] outline-none transition focus:border-[#C41E3A] cursor-pointer"
             >
               <option value="featured">Featured first</option>
               <option value="name">Name A–Z</option>
