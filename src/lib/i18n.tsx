@@ -44,6 +44,20 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     "hero.planCta": "Plan My Trip with AI",
     "hero.exploreCta": "Explore India",
     "hero.searchPlaceholder": "Search destinations, states, festivals, experiences, flights, stays...",
+    "state.capital": "Capital",
+    "state.livingCulture": "Living Culture & Traditions",
+    "state.touristFeatures": "Tourist Features & Signature Experiences",
+    "state.cuisine": "Signature Cuisine & Delicacies",
+    "state.festivals": "Major State Festivals",
+    "state.travelCircuits": "Curated Travel Circuits",
+    "state.transport": "Transport & Hubs",
+    "state.airports": "Major Airports:",
+    "state.railway": "Key Railway Junctions:",
+    "state.highways": "National Highways:",
+    "state.route": "Route:",
+    "state.planTrip": "Plan",
+    "state.trip": "Trip",
+    "state.states": "States",
     "booking.widgetTitle": "Book Travel Across India",
     "booking.flights": "Flights",
     "booking.trains": "Trains",
@@ -117,6 +131,20 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     "hero.planCta": "एआई के साथ यात्रा प्लान करें",
     "hero.exploreCta": "भारत का अन्वेषण करें",
     "hero.searchPlaceholder": "गंतव्य, राज्य, उत्सव, अनुभव, उड़ानें, होटल खोजें...",
+    "state.capital": "राजधानी",
+    "state.livingCulture": "जीवंत संस्कृति और परंपराएं",
+    "state.touristFeatures": "पर्यटक विशेषताएं और विशिष्ट अनुभव",
+    "state.cuisine": "विशेष व्यंजन और लक्ज़री स्वाद",
+    "state.festivals": "मुख्य राज्य उत्सव",
+    "state.travelCircuits": "संस्कृत यात्रा मार्ग",
+    "state.transport": "परिवहन और केंद्र",
+    "state.airports": "मुख्य हवाई अड्डे:",
+    "state.railway": "मुख्य रेलवे जंक्शन:",
+    "state.highways": "राष्ट्रीय राजमार्ग:",
+    "state.route": "मार्ग:",
+    "state.planTrip": "यात्रा योजना",
+    "state.trip": "बनाएँ",
+    "state.states": "राज्य",
     "booking.widgetTitle": "भारत भर में यात्रा बुक करें",
     "booking.flights": "उड़ानें",
     "booking.trains": "ट्रेनें",
@@ -190,6 +218,20 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     "hero.planCta": "AI తో ట్రిప్ ప్లాన్ చేయండి",
     "hero.exploreCta": "భారతాన్ని అన్వేషించండి",
     "hero.searchPlaceholder": "ప్రదేశాలు, రాష్ట్రాలు, పండుగలు, విమానాలు, హోటళ్ళు శోధించండి...",
+    "state.capital": "రాజధాని",
+    "state.livingCulture": "జీవిత సంప్రదాయాలు & సంస్కృతి",
+    "state.touristFeatures": "పర్యాటక సౌలభ్యాలు & ప్రత్యేక ప్రయాణ అనుభవాలు",
+    "state.cuisine": "సంతులిత వంటకాలు & ప్రత్యేక రుచులు",
+    "state.festivals": "ప్రధాన రాష్ట్ర పండుగలు",
+    "state.travelCircuits": "సంస్కృత ప్రయాణ మార్గాలు",
+    "state.transport": "రవాణా & కేంద్రాలు",
+    "state.airports": "ప్రధాన విమానాశ్రయాలు:",
+    "state.railway": "ప్రధాన రైల్వే జంక్షన్లు:",
+    "state.highways": "జాతీయ రహదారులు:",
+    "state.route": "మార్గం:",
+    "state.planTrip": "ప్రయాణం ప్లాన్",
+    "state.trip": "చేయండి",
+    "state.states": "రాష్ట్రాలు",
     "booking.widgetTitle": "భారతదేశంలో ప్రయాణాన్ని బుక్ చేసుకోండి",
     "booking.flights": "విమానాలు",
     "booking.trains": "రైళ్లు",
@@ -277,6 +319,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     } catch (e) {}
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);

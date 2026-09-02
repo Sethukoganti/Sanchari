@@ -295,6 +295,7 @@ export interface StateDetails {
   relatedDestinations?: string[];
   destinationSlugs?: string[];
   highlights?: string[];
+  touristFeatures?: string[];
   bestTimeToVisit?: string;
   itineraries?: Array<{ title: string; days: number; summary: string; route: string[] }>;
   image?: string;
