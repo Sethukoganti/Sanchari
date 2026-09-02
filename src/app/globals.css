@@ -94,9 +94,12 @@
 }
 
 
-/* =========================
-   LIGHT THEME TEXT
-   ========================= */
+/* Global text should stay white across both themes */
+:root {
+  --text-main: #FFFFFF;
+  --text-muted: #E2E8F0;
+}
+
 :root h1,
 :root h2,
 :root h3,
@@ -107,14 +110,14 @@
 :root span,
 :root label,
 :root li,
-:root a {
-  color: #0B132B;
+:root a,
+:root button,
+:root input,
+:root textarea,
+:root select {
+  color: var(--text-main);
 }
 
-
-/* =========================
-   DARK THEME TEXT
-   ========================= */
 .dark h1,
 .dark h2,
 .dark h3,
@@ -125,8 +128,12 @@
 .dark span,
 .dark label,
 .dark li,
-.dark a {
-  color: #FFFFFF;
+.dark a,
+.dark button,
+.dark input,
+.dark textarea,
+.dark select {
+  color: var(--text-main);
 }
 
 body {
@@ -136,6 +143,11 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body,
+body * {
+  color: #FFFFFF !important;
 }
 
 /* Custom Scrollbars */
