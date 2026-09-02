@@ -147,7 +147,7 @@ export const statesData: StateDetails[] = [
         summary: "Royal Mysore Palace illuminated, Coorg spice plantations, and the ancient stone chariots of Hampi.",
       },
     ],
-    image: "https://images.unsplash.com/photo-1600100397608-f010e42e5b72?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
     coordinates: { lat: 15.3173, lng: 75.7139 },
     destinationSlugs: ["hampi", "mysore", "coorg", "gokarna"],
   },

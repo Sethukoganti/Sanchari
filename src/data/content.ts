@@ -174,7 +174,7 @@ export const galleryItems: GalleryItem[] = [
     title: "Ancient Stone Chariot of Vittala",
     location: "Hampi, Karnataka",
     category: "Heritage",
-    image: "https://images.unsplash.com/photo-1600100397608-f010e42e5b72?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
     caption: "Monolithic Vijayanagara stone chariot in Hampi.",
     featured: true,
   },

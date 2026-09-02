@@ -88,7 +88,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
           <div className="grid grid-rows-2 gap-4 h-full">
             {hotel.gallery.slice(1, 3).map((img, i) => (
               <div key={i} className="relative h-full">
-                <Image src={img} alt="" fill className="object-cover" />
+                <Image src={img} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
               </div>
             ))}
           </div>
@@ -130,7 +130,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                   className="card-surface p-6 rounded-3xl bg-white/95 dark:bg-navy-surface/85 border border-black/10 dark:border-white/10 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center"
                 >
                   <div className="sm:col-span-4 relative aspect-[16/11] rounded-2xl overflow-hidden">
-                    <Image src={room.image} alt={room.name} fill className="object-cover" />
+                    <Image src={room.image} alt={room.name} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                   </div>
 
                   <div className="sm:col-span-8 flex flex-col justify-between space-y-3">

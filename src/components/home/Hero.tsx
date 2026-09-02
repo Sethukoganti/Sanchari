@@ -50,6 +50,7 @@ export function Hero() {
           fill
           priority
           className="object-cover object-center brightness-100 dark:brightness-60 scale-105 transition-transform duration-1000"
+          sizes="100vw"
           />
         {/* Multilayered radial and vertical dark blue gradient overlays */}
        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/45 to-white/20 dark:from-navy-deep dark:via-navy-deep/75 dark:to-navy-dark/60" />

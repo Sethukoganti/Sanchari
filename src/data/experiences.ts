@@ -39,7 +39,7 @@ export const experiencesData: Experience[] = [
     estimatedPrice: 1400,
     rating: 4.9,
     reviewsCount: 142,
-    image: "https://images.unsplash.com/photo-1600100397608-f010e42e5b72?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
     description:
       "Climb Matanga Hill before dawn for a surreal 360° sunrise over ancient golden granite boulders, followed by a round wicker coracle boat expedition along the sacred Tungabhadra River.",
     highlights: [

@@ -113,7 +113,7 @@ export default function FoodDiscoveryPage() {
             >
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/60">
-                  <Image src={food.image} alt={food.name} fill className="object-cover" />
+                  <Image src={food.image} alt={food.name} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                   <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 text-saffron text-[10px] font-mono font-bold uppercase backdrop-blur-md border border-saffron/30">
                     {food.cuisine}
                   </span>

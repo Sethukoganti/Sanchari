@@ -293,7 +293,7 @@ export const destinationsData: Destination[] = [
       "Coracle Wicker Boat Ride on Tungabhadra River",
       "Lotus Mahal & Royal Elephant Stables",
     ],
-    image: "https://images.unsplash.com/photo-1600100397608-f010e42e5b72?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
     ],
@@ -325,7 +325,7 @@ export const destinationsData: Destination[] = [
       },
     ],
     nearbyAttractions: [
-      { name: "Anegundi Mythological Village", distance: "5 km", type: "Ancient Kishkindha Kingdom", image: "https://images.unsplash.com/photo-1600100397608-f010e42e5b72?auto=format&fit=crop&w=400&q=80" },
+      { name: "Anegundi Mythological Village", distance: "5 km", type: "Ancient Kishkindha Kingdom", image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=400&q=80" },
     ],
     travelTips: [
       "Rent a bicycle or electric scooter to comfortably explore the vast 25 sq km archaeological site.",
