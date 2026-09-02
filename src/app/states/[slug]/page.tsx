@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       title: state.name,
       description: state.summary,
-      images: [state.image],
+      images: state.image ? [state.image] : ["https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80"],
     },
   };
 }
@@ -55,7 +55,7 @@ export default async function StateDetailPage({
       {/* State Hero */}
       <section className="relative min-h-[60vh] bg-black text-white overflow-hidden flex items-end">
         <Image
-          src={state.image}
+          src={state.image || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80"}
           alt={state.name}
           fill
           priority
@@ -97,52 +97,58 @@ export default async function StateDetailPage({
       <div className="container-site section-pad mt-12 grid gap-10 lg:grid-cols-12">
         <main className="lg:col-span-8 space-y-10">
           {/* Cultural Overview */}
-          <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
-            <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-turmeric" />
-              Living Culture & Traditions
-            </h2>
-            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-body">
-              {state.culture}
-            </p>
-          </div>
+          {state.culture && (
+            <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
+              <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-turmeric" />
+                Living Culture & Traditions
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-body">
+                {state.culture}
+              </p>
+            </div>
+          )}
 
           {/* Signature Gastronomy */}
-          <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
-            <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-              <Utensils className="h-5 w-5 text-rani" />
-              Signature Cuisine & Delicacies
-            </h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {state.cuisine.map((dish) => (
-                <div
-                  key={dish}
-                  className="rounded-xl border border-white/5 bg-black/40 p-4 text-xs font-semibold text-zinc-200 flex items-center gap-2"
-                >
-                  <span className="h-2 w-2 rounded-full bg-turmeric shrink-0" />
-                  <span>{dish}</span>
-                </div>
-              ))}
+          {state.cuisine && state.cuisine.length > 0 && (
+            <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
+              <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
+                <Utensils className="h-5 w-5 text-rani" />
+                Signature Cuisine & Delicacies
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {state.cuisine.map((dish) => (
+                  <div
+                    key={dish}
+                    className="rounded-xl border border-white/5 bg-black/40 p-4 text-xs font-semibold text-zinc-200 flex items-center gap-2"
+                  >
+                    <span className="h-2 w-2 rounded-full bg-turmeric shrink-0" />
+                    <span>{dish}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Major Festivals */}
-          <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
-            <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-              <PartyPopper className="h-5 w-5 text-teal-400" />
-              Major State Festivals
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {state.festivals.map((fest) => (
-                <span
-                  key={fest}
-                  className="chip !py-2 !px-4 text-xs font-semibold border-teal-500/30 text-teal-300"
-                >
-                  {fest}
-                </span>
-              ))}
+          {state.festivals && state.festivals.length > 0 && (
+            <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
+              <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
+                <PartyPopper className="h-5 w-5 text-teal-400" />
+                Major State Festivals
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {state.festivals.map((fest) => (
+                  <span
+                    key={fest}
+                    className="chip !py-2 !px-4 text-xs font-semibold border-teal-500/30 text-teal-300"
+                  >
+                    {fest}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Curated Itineraries */}
           <div className="space-y-6">
@@ -150,33 +156,35 @@ export default async function StateDetailPage({
               <Compass className="h-5 w-5 text-turmeric" />
               Curated Travel Circuits
             </h2>
-            <div className="space-y-4">
-              {state.itineraries.map((itin) => (
-                <div
-                  key={itin.title}
-                  className="card-surface p-6 bg-white/[0.03] border-white/10 rounded-2xl space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-display text-lg font-bold text-warm-white">
-                      {itin.title}
-                    </h3>
-                    <span className="font-mono text-xs text-turmeric bg-turmeric/10 px-2.5 py-0.5 rounded-full border border-turmeric/30">
-                      {itin.days} Days
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-gray">{itin.summary}</p>
-                  <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-zinc-300">
-                    <span className="font-mono text-zinc-400">Route:</span>
-                    {itin.route.map((stop, idx) => (
-                      <span key={stop} className="flex items-center gap-1.5">
-                        <span className="font-semibold text-warm-white">{stop}</span>
-                        {idx < itin.route.length - 1 && <span className="text-turmeric">→</span>}
+            {state.itineraries && state.itineraries.length > 0 && (
+              <div className="space-y-4">
+                {state.itineraries.map((itin) => (
+                  <div
+                    key={itin.title}
+                    className="card-surface p-6 bg-white/[0.03] border-white/10 rounded-2xl space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-display text-lg font-bold text-warm-white">
+                        {itin.title}
+                      </h3>
+                      <span className="font-mono text-xs text-turmeric bg-turmeric/10 px-2.5 py-0.5 rounded-full border border-turmeric/30">
+                        {itin.days} Days
                       </span>
-                    ))}
+                    </div>
+                    <p className="text-xs text-muted-gray">{itin.summary}</p>
+                    <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-zinc-300">
+                      <span className="font-mono text-zinc-400">Route:</span>
+                      {itin.route?.map((stop, idx) => (
+                        <span key={stop} className="flex items-center gap-1.5">
+                          <span className="font-semibold text-warm-white">{stop}</span>
+                          {idx < (itin.route?.length || 0) - 1 && <span className="text-turmeric">→</span>}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </main>
 
@@ -188,29 +196,35 @@ export default async function StateDetailPage({
             </h3>
 
             <div className="space-y-4 text-xs">
-              <div>
-                <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
-                  <Plane className="h-3.5 w-3.5 text-turmeric" />
-                  Major Airports:
-                </span>
-                <p className="text-zinc-200 leading-relaxed">{state.transportHubs.airport}</p>
-              </div>
+              {state.transportHubs?.airport && (
+                <div>
+                  <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
+                    <Plane className="h-3.5 w-3.5 text-turmeric" />
+                    Major Airports:
+                  </span>
+                  <p className="text-zinc-200 leading-relaxed">{state.transportHubs.airport}</p>
+                </div>
+              )}
 
-              <div>
-                <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
-                  <Train className="h-3.5 w-3.5 text-teal-400" />
-                  Key Railway Junctions:
-                </span>
-                <p className="text-zinc-200 leading-relaxed">{state.transportHubs.railway}</p>
-              </div>
+              {state.transportHubs?.railway && (
+                <div>
+                  <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
+                    <Train className="h-3.5 w-3.5 text-teal-400" />
+                    Key Railway Junctions:
+                  </span>
+                  <p className="text-zinc-200 leading-relaxed">{state.transportHubs.railway}</p>
+                </div>
+              )}
 
-              <div>
-                <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
-                  <Car className="h-3.5 w-3.5 text-rani" />
-                  National Highways:
-                </span>
-                <p className="text-zinc-200 leading-relaxed">{state.transportHubs.highways.join(", ")}</p>
-              </div>
+              {state.transportHubs?.highways && state.transportHubs.highways.length > 0 && (
+                <div>
+                  <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
+                    <Car className="h-3.5 w-3.5 text-rani" />
+                    National Highways:
+                  </span>
+                  <p className="text-zinc-200 leading-relaxed">{state.transportHubs.highways.join(", ")}</p>
+                </div>
+              )}
             </div>
 
             <Link
@@ -225,4 +239,3 @@ export default async function StateDetailPage({
     </div>
   );
 }
-

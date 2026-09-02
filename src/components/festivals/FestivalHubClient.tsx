@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Calendar, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { Search, Calendar, MapPin, Sparkles, ArrowRight, Filter } from "lucide-react";
 import type { Festival } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -28,10 +28,11 @@ const MONTHS = [
 ];
 
 const TYPES = [
-  { id: "all", label: "All Celebrations" },
-  { id: "religious", label: "Sacred & Religious" },
-  { id: "cultural", label: "Cultural & Arts" },
-  { id: "harvest", label: "Harvest & Seasonal" },
+  { id: "all", label: "All Traditions" },
+  { id: "Cultural", label: "Cultural & Folk" },
+  { id: "Religious", label: "Sacred & Temple" },
+  { id: "Music & Dance", label: "Music & Dance" },
+  { id: "Harvest", label: "Harvest & Seasonal" },
 ];
 
 export function FestivalHubClient({ festivals }: FestivalHubClientProps) {
@@ -42,14 +43,15 @@ export function FestivalHubClient({ festivals }: FestivalHubClientProps) {
   const filteredFestivals = useMemo(() => {
     return festivals.filter((fest) => {
       const q = searchQuery.toLowerCase().trim();
+      const statesList = fest.states || (fest.state ? [fest.state] : []);
       const matchesSearch =
         !q ||
         fest.name.toLowerCase().includes(q) ||
         (fest.nameHi && fest.nameHi.includes(q)) ||
-        fest.states.some((s) => s.toLowerCase().includes(q));
+        statesList.some((s: string) => s.toLowerCase().includes(q));
 
       const matchesType = selectedType === "all" || fest.type === selectedType;
-      const matchesMonth = selectedMonth === "All" || fest.date.month === selectedMonth;
+      const matchesMonth = selectedMonth === "All" || fest.date?.month === selectedMonth;
 
       return matchesSearch && matchesType && matchesMonth;
     });
@@ -108,57 +110,59 @@ export function FestivalHubClient({ festivals }: FestivalHubClientProps) {
 
       {/* Results Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredFestivals.map((fest) => (
-          <Link
-            key={fest.slug}
-            href={`/festivals/${fest.slug}`}
-            className="group card-surface block overflow-hidden rounded-2xl bg-white/[0.03] border-white/10 transition duration-300 hover:scale-[1.02] hover:border-turmeric/50 hover:shadow-xl hover:shadow-turmeric/10"
-          >
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/60">
-              <Image
-                src={fest.gallery[0] || "https://images.unsplash.com/photo-1605647540924-852290f6b0d5?auto=format&fit=crop&w=800&q=80"}
-                alt={fest.name}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-80" />
-              <div className="absolute top-3 left-3 rounded-full bg-black/75 px-2.5 py-0.5 font-mono text-[10px] font-bold text-turmeric uppercase border border-turmeric/30 backdrop-blur-md">
-                {fest.date.gregorianApprox}
-              </div>
-            </div>
-
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase text-zinc-400">
-                  {fest.type} · {fest.religion}
-                </span>
-                <span className="font-mono text-[10px] text-teal-400">
-                  {fest.duration}
-                </span>
+        {filteredFestivals.map((fest) => {
+          const statesList = fest.states || (fest.state ? [fest.state] : []);
+          return (
+            <Link
+              key={fest.slug}
+              href={`/festivals/${fest.slug}`}
+              className="group card-surface block overflow-hidden rounded-2xl bg-white/[0.03] border-white/10 transition duration-300 hover:scale-[1.02] hover:border-turmeric/50 hover:shadow-xl hover:shadow-turmeric/10"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/60">
+                <Image
+                  src={fest.gallery?.[0] || fest.image || "https://images.unsplash.com/photo-1605647540924-852290f6b0d5?auto=format&fit=crop&w=800&q=80"}
+                  alt={fest.name}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-80" />
+                <div className="absolute top-3 left-3 rounded-full bg-black/75 px-2.5 py-0.5 font-mono text-[10px] font-bold text-turmeric uppercase border border-turmeric/30 backdrop-blur-md">
+                  {fest.date?.gregorianApprox || fest.date?.approximateString || fest.date?.month || "Seasonal"}
+                </div>
               </div>
 
-              <h3 className="font-display text-xl font-bold text-warm-white group-hover:text-turmeric transition-colors flex items-center justify-between">
-                <span>{fest.name}</span>
-                <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-turmeric group-hover:translate-x-1 transition-all" />
-              </h3>
-
-              <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed">
-                {fest.significance}
-              </p>
-
-              <div className="border-t border-white/5 pt-3 flex flex-wrap gap-1.5">
-                {fest.states.slice(0, 3).map((st) => (
-                  <span key={st} className="chip !py-0.5 !px-2 text-[10px]">
-                    {st}
+              <div className="p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase text-zinc-400">
+                    {fest.type} {fest.religion ? `· ${fest.religion}` : ""}
                   </span>
-                ))}
+                  <span className="font-mono text-[10px] text-teal-400">
+                    {fest.duration || `${fest.durationDays} Days`}
+                  </span>
+                </div>
+
+                <h3 className="font-display text-xl font-bold text-warm-white group-hover:text-turmeric transition-colors flex items-center justify-between">
+                  <span>{fest.name}</span>
+                  <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-turmeric group-hover:translate-x-1 transition-all" />
+                </h3>
+
+                <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed">
+                  {fest.significance}
+                </p>
+
+                <div className="border-t border-white/5 pt-3 flex flex-wrap gap-1.5">
+                  {statesList.slice(0, 3).map((st: string) => (
+                    <span key={st} className="chip !py-0.5 !px-2 text-[10px]">
+                      {st}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
 }
-

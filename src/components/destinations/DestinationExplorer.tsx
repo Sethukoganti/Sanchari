@@ -21,12 +21,12 @@ export function DestinationExplorer({
 }) {
   const { t } = useLanguage();
   const [regions, setRegions] = useState<Region[]>(
-    initialRegion && REGIONS.includes(initialRegion as Region)
+    initialRegion && (REGIONS as readonly string[]).includes(initialRegion)
       ? [initialRegion as Region]
       : [],
   );
   const [themes, setThemes] = useState<Theme[]>(
-    initialTheme && THEMES.includes(initialTheme as Theme)
+    initialTheme && (THEMES as readonly string[]).includes(initialTheme)
       ? [initialTheme as Theme]
       : [],
   );
@@ -36,8 +36,8 @@ export function DestinationExplorer({
 
   const filtered = useMemo(() => {
     let list = destinations.filter((d) => {
-      if (regions.length && !regions.includes(d.region)) return false;
-      if (themes.length && !themes.some((th) => d.themes.includes(th)))
+      if (regions.length && !regions.includes(d.region as any)) return false;
+      if (themes.length && !themes.some((th) => (d.themes as string[]).includes(th)))
         return false;
       if (query.trim()) {
         const q = query.toLowerCase();

@@ -73,7 +73,7 @@ export default async function StoryDetailPage({
         {/* Header Hero */}
         <header className="relative min-h-[60vh] bg-black text-white overflow-hidden">
           <Image
-            src={article.image}
+            src={article.image || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80"}
             alt={article.title}
             fill
             priority
@@ -83,7 +83,7 @@ export default async function StoryDetailPage({
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
           <div className="relative container-site section-pad flex min-h-[60vh] flex-col justify-end pb-14 pt-32">
             <span className="w-fit rounded-full border border-turmeric/50 bg-turmeric/15 px-3 py-1 font-mono text-xs font-bold text-turmeric uppercase tracking-wider backdrop-blur-md">
-              {article.category} · {formatDate(article.date)} · {article.readTime}
+              {article.category} · {formatDate(article.date || article.publishDate || "2026-01-01")} · {article.readTime}
             </span>
             <h1 className="mt-4 max-w-4xl font-display text-4xl leading-tight sm:text-5xl lg:text-6xl font-extrabold text-warm-white">
               {article.title}

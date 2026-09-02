@@ -67,8 +67,8 @@ export function Testimonials() {
 
         <div className="mt-10 card-surface p-8 sm:p-12 bg-navy-surface/60 border-white/10 grid gap-8 lg:grid-cols-12 lg:items-center rounded-3xl">
           <div className="lg:col-span-8 space-y-6">
-            <div className="flex items-center gap-1.5" aria-label={`${item.rating} out of 5 stars`}>
-              {Array.from({ length: item.rating }).map((_, i) => (
+            <div className="flex items-center gap-1.5" aria-label={`${item.rating || 5} out of 5 stars`}>
+              {Array.from({ length: item.rating || 5 }).map((_, i) => (
                 <Star
                   key={i}
                   className="h-5 w-5 fill-amber-300 text-amber-300"

@@ -51,7 +51,7 @@ export default function StatesPage() {
                     >
                       <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/60">
                         <Image
-                          src={st.image}
+                          src={st.image || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800&q=80"}
                           alt={st.name}
                           fill
                           className="object-cover transition duration-700 group-hover:scale-105"
@@ -73,7 +73,7 @@ export default function StatesPage() {
                         </p>
 
                         <div className="border-t border-white/5 pt-3 flex flex-wrap gap-1.5">
-                          {st.cuisine.slice(0, 3).map((food) => (
+                          {(st.cuisine || []).slice(0, 3).map((food) => (
                             <span key={food} className="chip !py-0.5 !px-2 text-[10px]">
                               {food}
                             </span>
@@ -91,4 +91,3 @@ export default function StatesPage() {
     </div>
   );
 }
-

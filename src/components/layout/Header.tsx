@@ -17,30 +17,32 @@ import {
   Store,
   Navigation,
   ShieldCheck,
+  Plane,
+  Train,
+  Bus,
+  Hotel,
+  Utensils,
+  ChevronDown,
 } from "lucide-react";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { UserProfileModal } from "@/components/auth/UserProfileModal";
+import { LanguageModal } from "@/components/layout/LanguageModal";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useLanguage, useTranslation } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "Experiences", href: "/experiences" },
-  { label: "Events & Festivals", href: "/events" },
-  { label: "AI Trip Planner", href: "/plan", highlight: true },
-  { label: "Saved Trips", href: "/saved-trips" },
-  { label: "Local Businesses", href: "/businesses" },
-  { label: "Travel Smart", href: "/travel-smart" },
-];
 
 export function Header() {
   const pathname = usePathname();
+  const { language, languageInfo } = useLanguage();
+  const { t } = useTranslation();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [langModalOpen, setLangModalOpen] = useState(false);
+  const [bookDropdownOpen, setBookDropdownOpen] = useState(false);
   const [user, setUser] = useState<{ name: string; email: string; travelStyle?: string } | null>(null);
-  const [language, setLanguage] = useState<"EN" | "HI">("EN");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,45 +53,32 @@ export function Header() {
     try {
       const stored = localStorage.getItem("sanchari_user");
       if (stored) setUser(JSON.parse(stored));
-      const storedLang = localStorage.getItem("sanchari_lang");
-      if (storedLang === "HI") setLanguage("HI");
     } catch (e) {}
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleToggleLang = () => {
-    const newLang = language === "EN" ? "HI" : "EN";
-    setLanguage(newLang);
-    localStorage.setItem("sanchari_lang", newLang);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("sanchari_user");
-    setUser(null);
-  };
-
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
           scrolled
-            ? "bg-navy-dark/90 backdrop-blur-xl border-b border-white/10 shadow-2xl py-3"
-            : "bg-gradient-to-b from-navy-dark/95 via-navy-dark/80 to-transparent py-4"
+            ? "bg-white/90 dark:bg-navy-dark/90 backdrop-blur-2xl py-3 border-b border-black/10 dark:border-white/10 shadow-lg"
+            : "bg-gradient-to-b from-black/60 via-black/25 to-transparent py-4 text-white"
         )}
       >
-        <div className="container-site flex items-center justify-between gap-4">
+        <div className="container-site flex items-center justify-between">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron to-amber-600 text-black font-display font-black text-xl shadow-lg shadow-saffron/20 group-hover:scale-105 transition">
-              SB
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-saffron to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-md shadow-saffron/30 group-hover:scale-105 transition-transform">
+              स
             </div>
-            <div>
-              <span className="font-display text-lg sm:text-xl font-black tracking-tight text-warm-white group-hover:text-saffron transition-colors block leading-tight">
+            <div className="flex flex-col">
+              <span className="font-display font-extrabold text-lg sm:text-xl tracking-tight leading-tight text-zinc-900 dark:text-warm-white group-hover:text-saffron transition-colors">
                 SANCHARI BHARAT
               </span>
-              <span className="font-mono text-[10px] text-saffron uppercase font-bold tracking-widest block leading-none">
+              <span className="text-[9px] font-mono text-saffron tracking-widest uppercase font-bold">
                 Explore India
               </span>
             </div>
@@ -97,136 +86,311 @@ export function Header() {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden xl:flex items-center gap-1.5 text-xs font-semibold">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.href;
-              return (
+            <Link
+              href="/destinations"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/destinations") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              {t("nav.destinations", "Destinations")}
+            </Link>
+
+            <Link
+              href="/experiences"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/experiences") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              {t("nav.experiences", "Experiences")}
+            </Link>
+
+            <Link
+              href="/events"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/events") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              {t("nav.events", "Events")}
+            </Link>
+
+            <Link
+              href="/food"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/food") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              Food
+            </Link>
+
+            <Link
+              href="/map"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/map") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              Map
+            </Link>
+
+            {/* Book Travel Dropdown */}
+            <div className="relative group">
+              <Link
+                href="/book"
+                className={cn(
+                  "px-3 py-2 rounded-xl transition hover:text-saffron inline-flex items-center gap-1",
+                  pathname.startsWith("/book") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                )}
+              >
+                <span>{t("nav.book", "Book")}</span>
+                <ChevronDown className="h-3 w-3" />
+              </Link>
+
+              {/* Dropdown Menu */}
+              <div className="absolute top-full left-0 mt-1 w-44 rounded-2xl bg-white dark:bg-navy-surface border border-black/10 dark:border-white/10 shadow-2xl p-2 hidden group-hover:block space-y-1">
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-3 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5",
-                    link.highlight
-                      ? "bg-gradient-to-r from-saffron/20 to-ai-violet/20 border border-saffron/40 text-saffron font-bold hover:brightness-110 shadow-sm"
-                      : isActive
-                      ? "bg-white/10 text-warm-white font-bold"
-                      : "text-muted-gray hover:text-warm-white hover:bg-white/5"
-                  )}
+                  href="/book/flights"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
                 >
-                  {link.highlight && <Sparkles className="h-3.5 w-3.5" />}
-                  <span>{link.label}</span>
+                  <Plane className="h-3.5 w-3.5 text-saffron" />
+                  <span>Flights</span>
                 </Link>
-              );
-            })}
+                <Link
+                  href="/book/trains"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                >
+                  <Train className="h-3.5 w-3.5 text-emerald-500" />
+                  <span>Trains</span>
+                </Link>
+                <Link
+                  href="/book/buses"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                >
+                  <Bus className="h-3.5 w-3.5 text-ai-violet" />
+                  <span>Buses</span>
+                </Link>
+                <Link
+                  href="/book/stays"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                >
+                  <Hotel className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Stays & Hotels</span>
+                </Link>
+              </div>
+            </div>
+
+            <Link
+              href="/plan"
+              className={cn(
+                "px-3.5 py-1.5 rounded-xl border transition flex items-center gap-1.5 shadow-sm",
+                pathname.startsWith("/plan")
+                  ? "bg-ai-violet text-white border-ai-violet"
+                  : "bg-ai-violet/10 border-ai-violet/30 text-ai-violet hover:bg-ai-violet hover:text-white"
+              )}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>AI Planner</span>
+            </Link>
+
+            <Link
+              href="/my-bookings"
+              className={cn(
+                "px-3 py-2 rounded-xl transition hover:text-saffron",
+                pathname.startsWith("/my-bookings") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+              )}
+            >
+              {t("nav.myBookings", "My Bookings")}
+            </Link>
           </nav>
 
-          {/* Right Action Tools */}
-          <div className="flex items-center gap-2.5">
-            {/* Search Link */}
+          {/* Controls: Search, Theme Toggle, Language, Auth */}
+          <div className="flex items-center gap-2">
+            {/* Search Icon */}
             <Link
               href="/search"
-              aria-label="Search destinations, experiences, and events"
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-muted-gray hover:text-white hover:border-saffron/40 transition"
-              title="Search Sanchari Bharat"
+              className="p-2 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 hover:text-saffron transition"
+              title="Global Search"
             >
               <Search className="h-4 w-4" />
             </Link>
 
-            {/* Language Switcher */}
+            {/* Theme Switcher */}
+            <ThemeToggle className="hidden sm:inline-flex" />
+
+            {/* 23-Language Switcher */}
             <button
               type="button"
-              onClick={handleToggleLang}
-              className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-xl bg-white/5 border border-white/10 text-xs font-mono font-bold text-warm-white hover:border-saffron/40 transition cursor-pointer"
+              onClick={() => setLangModalOpen(true)}
+              className="px-2.5 py-1.5 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-xs font-mono font-bold flex items-center gap-1 text-zinc-800 dark:text-zinc-200 hover:border-saffron/50 transition cursor-pointer"
               title="Change Language"
             >
-              <Globe className="h-3.5 w-3.5 text-emerald-accent" />
-              <span>{language}</span>
+              <Globe className="h-3.5 w-3.5 text-saffron" />
+              <span>{languageInfo?.name.slice(0, 3).toUpperCase() || "EN"}</span>
             </button>
 
-            {/* User Account Trigger */}
+            {/* User Account / Auth */}
             {user ? (
               <button
                 type="button"
                 onClick={() => setProfileModalOpen(true)}
-                className="flex items-center gap-2 h-9 px-3 rounded-xl bg-saffron/15 border border-saffron/30 text-xs font-bold text-warm-white hover:bg-saffron/25 transition cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-saffron/40 bg-saffron/10 text-saffron text-xs font-bold cursor-pointer"
               >
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-saffron text-black text-[10px]">
-                  {user.name[0]?.toUpperCase()}
-                </div>
-                <span className="hidden sm:inline max-w-[100px] truncate">{user.name}</span>
+                <User className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline max-w-[80px] truncate">{user.name}</span>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() => setAuthModalOpen(true)}
-                className="btn-primary !py-2 !px-3.5 text-xs flex items-center gap-1.5"
+                className="btn-primary !py-1.5 !px-3.5 text-xs font-bold cursor-pointer"
               >
-                <User className="h-3.5 w-3.5" />
-                <span>Sign In</span>
+                Sign In
               </button>
             )}
 
-            {/* Mobile Hamburger Menu */}
+            {/* Mobile Menu Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex xl:hidden h-9 w-9 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-muted-gray hover:text-white cursor-pointer"
+              className="p-2 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 xl:hidden cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="xl:hidden border-t border-white/10 bg-navy-dark/95 backdrop-blur-2xl px-6 py-6 space-y-4 animate-fade-in shadow-2xl">
-            <nav className="grid grid-cols-2 gap-2 text-xs font-semibold">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "p-3 rounded-xl border flex items-center gap-2 transition",
-                    link.highlight
-                      ? "bg-saffron/15 border-saffron/40 text-saffron font-bold"
-                      : "bg-navy-surface/60 border-white/5 text-muted-gray hover:text-white"
-                  )}
-                >
-                  {link.highlight ? <Sparkles className="h-4 w-4" /> : <Compass className="h-4 w-4" />}
-                  <span>{link.label}</span>
-                </Link>
-              ))}
-            </nav>
-
-            <div className="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
-              <button
-                type="button"
-                onClick={handleToggleLang}
-                className="flex items-center gap-1.5 text-muted-gray hover:text-white cursor-pointer"
-              >
-                <Globe className="h-4 w-4 text-emerald-accent" />
-                <span>Language: <strong className="text-warm-white">{language === "EN" ? "English" : "हिन्दी"}</strong></span>
-              </button>
-              <span className="text-[10px] font-mono text-saffron">SANCHARI BHARAT</span>
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* Auth Modal */}
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl xl:hidden flex flex-col justify-between p-6 overflow-y-auto">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <span className="font-display font-black text-xl text-warm-white">
+                SANCHARI BHARAT
+              </span>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-xl bg-white/5 text-zinc-300"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between py-2 border-b border-white/10">
+              <span className="text-xs text-zinc-400 font-mono">Theme Mode:</span>
+              <ThemeToggle />
+            </div>
+
+            <nav className="flex flex-col gap-2 font-display text-base font-bold text-white">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Home
+              </Link>
+              <Link
+                href="/destinations"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Destinations
+              </Link>
+              <Link
+                href="/experiences"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Experiences
+              </Link>
+              <Link
+                href="/events"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Events & Festivals
+              </Link>
+              <Link
+                href="/food"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5 text-amber-400"
+              >
+                Food & Dining
+              </Link>
+              <Link
+                href="/map"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Interactive Map
+              </Link>
+              <Link
+                href="/plan"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl bg-ai-violet/20 border border-ai-violet/40 text-ai-violet"
+              >
+                ✨ AI Trip Planner
+              </Link>
+              <Link
+                href="/book"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5 text-saffron"
+              >
+                ✈ Book Travel (Flights, Trains, Buses, Stays)
+              </Link>
+              <Link
+                href="/my-bookings"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                My Bookings
+              </Link>
+              <Link
+                href="/saved-trips"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl hover:bg-white/5"
+              >
+                Saved Trips
+              </Link>
+            </nav>
+          </div>
+
+          <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setLangModalOpen(true);
+              }}
+              className="flex items-center gap-2 text-xs font-mono text-saffron"
+            >
+              <Globe className="h-4 w-4" />
+              <span>{languageInfo?.name || "English"} (Change)</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modals */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-        onLoginSuccess={(u) => setUser(u)}
+        onLoginSuccess={(u: any) => setUser(u)}
       />
-
-      {/* User Profile Modal */}
       <UserProfileModal
         isOpen={profileModalOpen}
         onClose={() => setProfileModalOpen(false)}
         user={user}
-        onLogout={handleLogout}
+        onLogout={() => setUser(null)}
+      />
+      <LanguageModal
+        isOpen={langModalOpen}
+        onClose={() => setLangModalOpen(false)}
       />
     </>
   );

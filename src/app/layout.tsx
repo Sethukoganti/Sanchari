@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { FloatingControls } from "@/components/layout/FloatingControls";
 import { LanguageProvider } from "@/lib/i18n";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { GoogleTranslateEngine } from "@/components/i18n/GoogleTranslateEngine";
 import { SITE } from "@/data/content";
 import "./globals.css";
@@ -18,13 +19,15 @@ export const metadata: Metadata = {
   keywords: [
     "SANCHARI BHARAT",
     "Explore India",
+    "Book Flights India",
+    "IRCTC Train Booking",
+    "Bus Booking India",
+    "Heritage Hotel Booking",
     "AI Trip Planner India",
     "Indian Travel Guide",
     "Indian Festivals",
     "Hidden Gems India",
     "Sustainable Tourism India",
-    "Indian Railways",
-    "India Travel Itinerary",
   ],
   authors: [{ name: "Sanchari Bharat Editorial" }],
   creator: "Sanchari Bharat",
@@ -73,23 +76,25 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-navy-deep font-body text-[#F8FAFC] antialiased selection:bg-saffron/30 selection:text-white">
-        <LanguageProvider>
-          <GoogleTranslateEngine />
-          <Header />
-          <main id="main-content" className="relative min-h-[calc(100vh-80px)]">
-            {children}
-          </main>
-          <Footer />
-          <FloatingControls />
-        </LanguageProvider>
+      <body className="min-h-screen font-body antialiased selection:bg-saffron/30 selection:text-white transition-colors duration-300">
+        <ThemeProvider>
+          <LanguageProvider>
+            <GoogleTranslateEngine />
+            <Header />
+            <main id="main-content" className="relative min-h-[calc(100vh-80px)]">
+              {children}
+            </main>
+            <Footer />
+            <FloatingControls />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -51,14 +51,8 @@ export function GoogleTranslateEngine() {
       const select = document.querySelector<HTMLSelectElement>(".goog-te-combo");
       if (!select) return;
 
-      const targetLang =
-        lang === "zh-CN" || lang === "zh"
-          ? "zh-CN"
-          : lang === "zh-TW"
-          ? "zh-TW"
-          : lang === "or" || lang === "od"
-          ? "or"
-          : lang;
+      const langStr = String(lang);
+      const targetLang = langStr === "or" || langStr === "od" ? "or" : langStr;
 
       if (lang === "en") {
         // Reset to original English
@@ -97,4 +91,3 @@ export function GoogleTranslateEngine() {
     />
   );
 }
-
