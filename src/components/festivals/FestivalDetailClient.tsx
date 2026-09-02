@@ -103,7 +103,7 @@ export function FestivalDetailClient({ festival }: FestivalDetailClientProps) {
           {festival.rituals && festival.rituals.length > 0 && (
             <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-6">
               <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-turmeric" />
+                <Sparkles className="h-5 w-5 text-white" />
                 Sacred Rituals & Ceremonies
               </h2>
               <div className="space-y-4">
@@ -161,7 +161,7 @@ export function FestivalDetailClient({ festival }: FestivalDetailClientProps) {
               {festival.music && festival.music.length > 0 && (
                 <div className="card-surface p-6 bg-white/[0.03] border-white/10 rounded-2xl space-y-3">
                   <h3 className="font-display text-lg font-bold text-warm-white flex items-center gap-2">
-                    <Music className="h-4 w-4 text-amber-400" />
+                    <Music className="h-4 w-4 text-white" />
                     Folk Music & Dances
                   </h3>
                   <div className="flex flex-wrap gap-1.5 pt-1">
@@ -180,7 +180,7 @@ export function FestivalDetailClient({ festival }: FestivalDetailClientProps) {
           {festival.bestPlacesToCelebrate && festival.bestPlacesToCelebrate.length > 0 && (
             <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-6">
               <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-turmeric" />
+                <MapPin className="h-5 w-5 text-white" />
                 Best Places in India to Celebrate
               </h2>
               <div className="space-y-4">
@@ -225,7 +225,7 @@ export function FestivalDetailClient({ festival }: FestivalDetailClientProps) {
 
             <div className="space-y-3">
               <h4 className="font-display text-base font-bold text-warm-white flex items-center gap-2">
-                <Bell className="h-4 w-4 text-turmeric" />
+                <Bell className="h-4 w-4 text-white" />
                 Set a Festival Alert
               </h4>
               <p className="text-xs text-muted-gray">

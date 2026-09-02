@@ -94,7 +94,7 @@ export default function BudgetCalculatorPage() {
   }, [days, travelers, style, season]);
 
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Interactive Travel Planner"
         title="Trip Budget & Cost Calculator"
@@ -111,7 +111,7 @@ export default function BudgetCalculatorPage() {
           <div className="lg:col-span-6 space-y-6">
             <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-2xl space-y-6">
               <h2 className="font-display text-2xl font-bold text-warm-white flex items-center gap-2">
-                <Calculator className="h-5 w-5 text-turmeric" />
+                <Calculator className="h-5 w-5 text-white" />
                 Customize Parameters
               </h2>
 
@@ -243,7 +243,7 @@ export default function BudgetCalculatorPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs p-3 rounded-xl bg-white/[0.02] border border-white/5">
                   <span className="flex items-center gap-2 text-zinc-300">
-                    <Hotel className="h-4 w-4 text-turmeric" />
+                    <Hotel className="h-4 w-4 text-white" />
                     Stay & Accommodation
                   </span>
                   <span className="font-mono font-bold text-warm-white">
@@ -273,7 +273,7 @@ export default function BudgetCalculatorPage() {
 
                 <div className="flex items-center justify-between text-xs p-3 rounded-xl bg-white/[0.02] border border-white/5">
                   <span className="flex items-center gap-2 text-zinc-300">
-                    <Compass className="h-4 w-4 text-amber-400" />
+                    <Compass className="h-4 w-4 text-white" />
                     Guided Tours & Monument Entry
                   </span>
                   <span className="font-mono font-bold text-warm-white">

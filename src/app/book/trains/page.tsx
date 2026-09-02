@@ -69,7 +69,7 @@ function TrainsSearchContent() {
             <div className="card-surface p-6 rounded-3xl bg-white/95 dark:bg-navy-surface/85 border border-black/10 dark:border-white/10 space-y-4">
               <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
                 <h3 className="font-display text-base font-bold flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-saffron" />
+                  <Filter className="h-4 w-4 text-white" />
                   <span>Travel Class</span>
                 </h3>
                 <button

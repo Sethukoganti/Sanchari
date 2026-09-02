@@ -16,7 +16,7 @@ const REGIONS = ["North", "South", "East", "West", "Northeast", "Central"] as co
 
 export default function StatesPage() {
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="The Sovereign Tapestry"
         title="28 States & 8 Union Territories"
@@ -66,7 +66,7 @@ export default function StatesPage() {
                       <div className="p-5 space-y-3">
                         <h3 className="font-display text-xl font-bold text-warm-white group-hover:text-turmeric transition-colors flex items-center justify-between">
                           <span>{st.name}</span>
-                          <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-turmeric group-hover:translate-x-1 transition-all" />
+                          <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
                         </h3>
                         <p className="text-xs text-zinc-300 line-clamp-2 leading-relaxed">
                           {st.summary}

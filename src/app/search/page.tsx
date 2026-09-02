@@ -57,7 +57,7 @@ export default async function SearchPage({
 
           {!q ? (
             <div className="card-surface p-12 text-center bg-white/[0.02] border-white/5 rounded-2xl">
-              <Compass className="mx-auto h-12 w-12 text-turmeric/60 animate-spin" style={{ animationDuration: "16s" }} />
+              <Compass className="mx-auto h-12 w-12 text-white/60 animate-spin" style={{ animationDuration: "16s" }} />
               <h3 className="mt-4 font-display text-xl font-bold text-warm-white">
                 Enter a destination, festival, state, or train to search
               </h3>
@@ -114,7 +114,7 @@ export default async function SearchPage({
                     </div>
                   </div>
 
-                  <ChevronRight className="h-5 w-5 text-zinc-600 group-hover:text-turmeric group-hover:translate-x-1 transition-all shrink-0" />
+                  <ChevronRight className="h-5 w-5 text-zinc-600 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
                 </Link>
               ))}
             </div>

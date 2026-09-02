@@ -42,7 +42,7 @@ export function DestinationCard({ destination, priority = false }: DestinationCa
 
         {/* Bottom State Label */}
         <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs text-zinc-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          <MapPin className="h-3.5 w-3.5 text-turmeric" />
+          <MapPin className="h-3.5 w-3.5 text-white" />
           <span>{destination.state}</span>
         </div>
       </div>
@@ -67,7 +67,7 @@ export function DestinationCard({ destination, priority = false }: DestinationCa
         {/* Footer Meta Row */}
         <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-zinc-400 font-mono">
           <span className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5 text-turmeric" />
+            <Clock className="h-3.5 w-3.5 text-white" />
             <span>{destination.duration}</span>
           </span>
 

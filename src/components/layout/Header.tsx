@@ -24,6 +24,7 @@ import {
   Utensils,
   ChevronDown,
 } from "lucide-react";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { UserProfileModal } from "@/components/auth/UserProfileModal";
 import { LanguageModal } from "@/components/layout/LanguageModal";
@@ -58,79 +59,107 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isTransparent = pathname === "/" && !scrolled;
+
   return (
     <>
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-          scrolled
-            ? "bg-white/90 dark:bg-navy-dark/90 backdrop-blur-2xl py-3 border-b border-black/10 dark:border-white/10 shadow-lg"
-            : "bg-gradient-to-b from-black/60 via-black/25 to-transparent py-4 text-white"
+          isTransparent
+            ? "bg-gradient-to-b from-black/80 via-black/40 to-transparent py-4 text-white"
+            : "bg-white/95 dark:bg-navy-dark/95 backdrop-blur-2xl py-3 border-b border-slate-200 dark:border-white/10 shadow-sm text-zinc-900 dark:text-zinc-100"
         )}
       >
         <div className="container-site flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-saffron to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-md shadow-saffron/30 group-hover:scale-105 transition-transform">
-              स
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-extrabold text-lg sm:text-xl tracking-tight leading-tight text-zinc-900 dark:text-warm-white group-hover:text-saffron transition-colors">
-                SANCHARI BHARAT
+            <LogoIcon className="h-10 w-10 sm:h-12 sm:w-12 group-hover:scale-105" />
+            <div className="flex flex-col justify-center">
+              <span
+                className={cn(
+                  "font-display font-extrabold text-[1.1rem] sm:text-[1.3rem] tracking-tight leading-none group-hover:text-saffron transition-colors",
+                  isTransparent ? "text-white" : "text-navy-deep dark:text-warm-white"
+                )}
+              >
+                Sanchari
               </span>
-              <span className="text-[9px] font-mono text-saffron tracking-widest uppercase font-bold">
-                Explore India
+              <span
+                className={cn(
+                  "font-display font-extrabold text-[1.1rem] sm:text-[1.3rem] tracking-tight leading-none group-hover:text-saffron transition-colors mt-[1px]",
+                  isTransparent ? "text-white" : "text-navy-deep dark:text-warm-white"
+                )}
+              >
+                Bharat
+              </span>
+              <span className="text-[8px] sm:text-[9px] font-mono text-[#FF9933] tracking-widest uppercase font-bold mt-[3px]">
+                Explore Bharat
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden xl:flex items-center gap-1.5 text-xs font-semibold">
-            <Link
-              href="/destinations"
+            <Link href="/destinations"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/destinations") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/destinations")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               {t("nav.destinations", "Destinations")}
             </Link>
 
-            <Link
-              href="/experiences"
+            <Link href="/experiences"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/experiences") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/experiences")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               {t("nav.experiences", "Experiences")}
             </Link>
 
-            <Link
-              href="/events"
+            <Link href="/events"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/events") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/events")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               {t("nav.events", "Events")}
             </Link>
 
-            <Link
-              href="/food"
+            <Link href="/food"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/food") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/food")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               Food
             </Link>
 
-            <Link
-              href="/map"
+            <Link href="/map"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/map") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/map")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               Map
@@ -138,11 +167,14 @@ export function Header() {
 
             {/* Book Travel Dropdown */}
             <div className="relative group">
-              <Link
-                href="/book"
+              <Link href="/book"
                 className={cn(
-                  "px-3 py-2 rounded-xl transition hover:text-saffron inline-flex items-center gap-1",
-                  pathname.startsWith("/book") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                  "px-3 py-2 rounded-xl transition hover:text-white inline-flex items-center gap-1",
+                  pathname.startsWith("/book")
+                    ? "text-saffron font-bold"
+                    : isTransparent
+                    ? "text-white/90 hover:text-white"
+                    : "text-zinc-700 dark:text-zinc-300"
                 )}
               >
                 <span>{t("nav.book", "Book")}</span>
@@ -150,31 +182,31 @@ export function Header() {
               </Link>
 
               {/* Dropdown Menu */}
-              <div className="absolute top-full left-0 mt-1 w-44 rounded-2xl bg-white dark:bg-navy-surface border border-black/10 dark:border-white/10 shadow-2xl p-2 hidden group-hover:block space-y-1">
+              <div className="absolute top-full left-0 mt-1 w-44 rounded-2xl bg-white dark:bg-navy-surface border border-slate-200 dark:border-white/10 shadow-2xl p-2 hidden group-hover:block space-y-1">
                 <Link
                   href="/book/flights"
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
                 >
-                  <Plane className="h-3.5 w-3.5 text-saffron" />
+                  <Plane className="h-3.5 w-3.5 text-white" />
                   <span>Flights</span>
                 </Link>
                 <Link
                   href="/book/trains"
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
                 >
                   <Train className="h-3.5 w-3.5 text-emerald-500" />
                   <span>Trains</span>
                 </Link>
                 <Link
                   href="/book/buses"
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
                 >
                   <Bus className="h-3.5 w-3.5 text-ai-violet" />
                   <span>Buses</span>
                 </Link>
                 <Link
                   href="/book/stays"
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-zinc-800 dark:text-zinc-200"
                 >
                   <Hotel className="h-3.5 w-3.5 text-blue-500" />
                   <span>Stays & Hotels</span>
@@ -195,11 +227,14 @@ export function Header() {
               <span>AI Planner</span>
             </Link>
 
-            <Link
-              href="/my-bookings"
+            <Link href="/my-bookings"
               className={cn(
-                "px-3 py-2 rounded-xl transition hover:text-saffron",
-                pathname.startsWith("/my-bookings") ? "text-saffron font-bold" : "text-zinc-700 dark:text-zinc-300"
+                "px-3 py-2 rounded-xl transition hover:text-white",
+                pathname.startsWith("/my-bookings")
+                  ? "text-saffron font-bold"
+                  : isTransparent
+                  ? "text-white/90 hover:text-white"
+                  : "text-zinc-700 dark:text-zinc-300"
               )}
             >
               {t("nav.myBookings", "My Bookings")}
@@ -209,9 +244,13 @@ export function Header() {
           {/* Controls: Search, Theme Toggle, Language, Auth */}
           <div className="flex items-center gap-2">
             {/* Search Icon */}
-            <Link
-              href="/search"
-              className="p-2 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 hover:text-saffron transition"
+            <Link href="/search"
+              className={cn(
+                "p-2 rounded-xl border transition",
+                isTransparent
+                  ? "border-white/20 bg-white/10 text-white hover:border-saffron"
+                  : "border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 hover:text-white"
+              )}
               title="Global Search"
             >
               <Search className="h-4 w-4" />
@@ -224,10 +263,15 @@ export function Header() {
             <button
               type="button"
               onClick={() => setLangModalOpen(true)}
-              className="px-2.5 py-1.5 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-xs font-mono font-bold flex items-center gap-1 text-zinc-800 dark:text-zinc-200 hover:border-saffron/50 transition cursor-pointer"
+              className={cn(
+                "px-2.5 py-1.5 rounded-xl border text-xs font-mono font-bold flex items-center gap-1 hover:border-saffron/50 transition cursor-pointer",
+                isTransparent
+                  ? "border-white/20 bg-white/10 text-white"
+                  : "border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-zinc-800 dark:text-zinc-200"
+              )}
               title="Change Language"
             >
-              <Globe className="h-3.5 w-3.5 text-saffron" />
+              <Globe className="h-3.5 w-3.5 text-white" />
               <span>{languageInfo?.name.slice(0, 3).toUpperCase() || "EN"}</span>
             </button>
 
@@ -255,7 +299,12 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 xl:hidden cursor-pointer"
+              className={cn(
+                "p-2 rounded-xl border xl:hidden cursor-pointer",
+                isTransparent
+                  ? "border-white/20 bg-white/10 text-white"
+                  : "border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-zinc-700 dark:text-zinc-300"
+              )}
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

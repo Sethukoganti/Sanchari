@@ -19,10 +19,9 @@ export function LiveTicker() {
         {/* Marquee / Ticker items */}
         <div className="flex items-center gap-8 overflow-x-auto hide-scrollbar text-xs text-zinc-300 whitespace-nowrap">
           {upcoming.map((fest) => (
-            <Link
-              key={fest.id}
+            <Link key={fest.id}
               href={`/festivals/${fest.slug}`}
-              className="flex items-center gap-2 transition-colors hover:text-turmeric group"
+              className="flex items-center gap-2 transition-colors hover:text-white group"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-turmeric shrink-0" />
               <strong className="text-warm-white group-hover:text-turmeric">
@@ -38,9 +37,8 @@ export function LiveTicker() {
           ))}
         </div>
 
-        <Link
-          href="/festivals"
-          className="hidden sm:flex items-center gap-1 text-xs font-bold text-turmeric hover:underline shrink-0 ml-auto"
+        <Link href="/festivals"
+          className="hidden sm:flex items-center gap-1 text-xs font-bold text-white hover:underline shrink-0 ml-auto"
         >
           <span>50+ Calendar</span>
           <ArrowRight className="h-3 w-3" />

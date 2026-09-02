@@ -293,7 +293,7 @@ export const destinationsData: Destination[] = [
       "Coracle Wicker Boat Ride on Tungabhadra River",
       "Lotus Mahal & Royal Elephant Stables",
     ],
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
     ],

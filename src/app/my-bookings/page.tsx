@@ -70,7 +70,7 @@ export default function MyBookingsPage() {
   const getIcon = (type: string) => {
     switch (type) {
       case "flight":
-        return <Plane className="h-5 w-5 text-saffron" />;
+        return <Plane className="h-5 w-5 text-white" />;
       case "train":
         return <Train className="h-5 w-5 text-emerald-500" />;
       case "bus":

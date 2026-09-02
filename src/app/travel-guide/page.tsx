@@ -55,7 +55,7 @@ export default function TravelGuidePage() {
   };
 
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Practical Field Handbook"
         title="Comprehensive Travel Guide"
@@ -112,7 +112,7 @@ export default function TravelGuidePage() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-warm-white flex items-center gap-2.5">
-                  <CheckSquare className="h-6 w-6 text-turmeric" />
+                  <CheckSquare className="h-6 w-6 text-white" />
                   Interactive Packing Checklist Generator
                 </h2>
                 <p className="text-xs text-muted-gray mt-1">

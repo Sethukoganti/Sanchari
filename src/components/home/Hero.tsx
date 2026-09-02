@@ -91,7 +91,7 @@ export function Hero() {
             href="/destinations"
             className="btn-secondary !py-3.5 !px-8 text-sm sm:text-base font-bold flex items-center gap-2 cursor-pointer"
           >
-            <Compass className="h-4 w-4 text-saffron" />
+            <Compass className="h-4 w-4 text-white" />
             <span>Explore India</span>
           </Link>
         </div>
@@ -102,7 +102,7 @@ export function Hero() {
             onSubmit={handleSearchSubmit}
             className="relative flex items-center p-2 rounded-2xl bg-white/95 dark:bg-navy-surface/90 border border-slate-300 dark:border-white/20 backdrop-blur-2xl shadow-2xl hover:border-saffron/50 transition-all group"
             >
-            <Search className="h-5 w-5 text-saffron ml-3.5 shrink-0 group-hover:scale-110 transition-transform" />
+            <Search className="h-5 w-5 text-white ml-3.5 shrink-0 group-hover:scale-110 transition-transform" />
             <input
               type="text"
               placeholder="Search destinations, states, festivals, experiences..."

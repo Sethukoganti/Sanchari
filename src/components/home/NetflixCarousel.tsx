@@ -58,9 +58,8 @@ export function NetflixCarousel({
         {/* Right Actions: View All & Carousel Arrows */}
         <div className="flex items-center gap-3">
           {viewAllHref && (
-            <Link
-              href={viewAllHref}
-              className="text-xs font-bold text-turmeric hover:underline hidden sm:inline"
+            <Link href={viewAllHref}
+              className="text-xs font-bold text-white hover:underline hidden sm:inline"
             >
               Explore all →
             </Link>
@@ -119,7 +118,7 @@ export function NetflixCarousel({
               </div>
 
               <div className="absolute bottom-2.5 left-3 text-xs text-zinc-300 font-medium flex items-center gap-1">
-                <MapPin className="h-3 w-3 text-turmeric" />
+                <MapPin className="h-3 w-3 text-white" />
                 <span>{dest.state}</span>
               </div>
             </div>
@@ -142,7 +141,7 @@ export function NetflixCarousel({
 
               <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-2.5 text-xs text-zinc-400 font-mono">
                 <span className="flex items-center gap-1 text-[11px]">
-                  <Clock className="h-3 w-3 text-turmeric" />
+                  <Clock className="h-3 w-3 text-white" />
                   {dest.duration}
                 </span>
                 <span className="text-turmeric font-semibold group-hover:underline">

@@ -18,7 +18,7 @@ export default async function DestinationsPage({
   const { region, theme } = await searchParams;
 
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Curated Bases"
         title="Destinations with Room to Linger"

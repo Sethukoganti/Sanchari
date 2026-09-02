@@ -33,7 +33,7 @@ export default function TravelSmartPage() {
   const dest = destinationsData.find((d) => d.name.includes(activeLocation)) || destinationsData[0];
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="On-Ground Intelligence"
         title="Travel Smart Live Assistant"
@@ -154,7 +154,7 @@ export default function TravelSmartPage() {
           {/* Women Traveler & Solo Safety Advisories */}
           <div className="card-surface p-6 sm:p-8 bg-navy-surface/60 border-white/10 rounded-3xl space-y-4">
             <h3 className="font-display text-xl font-bold text-warm-white flex items-center gap-2">
-              <Heart className="h-5 w-5 text-saffron" />
+              <Heart className="h-5 w-5 text-white" />
               Solo & Women Traveler Field Guidelines
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 text-xs text-zinc-300 font-body leading-relaxed">

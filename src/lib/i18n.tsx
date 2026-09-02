@@ -321,7 +321,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const info = getLanguageByCode(language);
     document.documentElement.lang = language;
+    document.documentElement.dir = info.direction || "ltr";
   }, [language]);
 
   const setLanguage = useCallback((lang: Language) => {

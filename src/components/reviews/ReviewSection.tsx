@@ -208,7 +208,7 @@ export function ReviewSection({
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 rounded-2xl border border-turmeric/30 bg-black/50 px-4 py-2">
-            <Star className="h-5 w-5 text-turmeric fill-turmeric" />
+            <Star className="h-5 w-5 text-white fill-white" />
             <span className="font-mono text-xl font-bold text-warm-white">{averageRating}</span>
             <span className="text-xs text-muted-gray">({reviewsList.length} reviews)</span>
           </div>
@@ -278,11 +278,10 @@ export function ReviewSection({
 
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
+                    <Star key={i}
                       className={cn(
                         "h-4 w-4",
-                        i < rev.rating ? "text-turmeric fill-turmeric" : "text-zinc-600"
+                        i < rev.rating ? "text-white fill-white" : "text-zinc-600"
                       )}
                     />
                   ))}
@@ -374,10 +373,9 @@ export function ReviewSection({
                         onClick={() => setFormRating(star)}
                         className="p-1 cursor-pointer"
                       >
-                        <Star
-                          className={cn(
+                        <Star className={cn(
                             "h-6 w-6 transition-colors",
-                            star <= formRating ? "text-turmeric fill-turmeric" : "text-zinc-600"
+                            star <= formRating ? "text-white fill-white" : "text-zinc-600"
                           )}
                         />
                       </button>

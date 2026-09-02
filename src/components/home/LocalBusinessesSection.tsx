@@ -63,7 +63,7 @@ export function LocalBusinessesSection() {
                     {biz.category}
                   </span>
                   <span className="flex items-center gap-1 text-amber-300 font-bold">
-                    <Star className="h-3 w-3 fill-amber-300" />
+                    <Star className="h-3 w-3 fill-white" />
                     {biz.rating} ({biz.reviewsCount})
                   </span>
                 </div>

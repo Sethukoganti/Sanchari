@@ -171,7 +171,7 @@ export function DestinationExplorer({
               onChange={(e) =>
                 setSort(e.target.value as "featured" | "name" | "region")
               }
-              className="mt-2 w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] px-3 py-2.5 text-sm text-[color:var(--text)] outline-none transition focus:border-[#C41E3A] cursor-pointer"
+              className="mt-2 w-full rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-surface px-3 py-2.5 text-sm text-zinc-800 dark:text-zinc-200 outline-none transition focus:border-[#C41E3A] cursor-pointer"
             >
               <option value="featured">Featured first</option>
               <option value="name">Name A–Z</option>

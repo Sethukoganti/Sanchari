@@ -21,9 +21,8 @@ export function ExploreExperiencesSection() {
           </p>
         </div>
 
-        <Link
-          href="/experiences"
-          className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1.5"
+        <Link href="/experiences"
+          className="text-xs font-semibold text-white hover:underline flex items-center gap-1.5"
         >
           <span>All Experiences ({experiencesData.length})</span>
           <ArrowRight className="h-4 w-4" />
@@ -59,7 +58,7 @@ export function ExploreExperiencesSection() {
                     {exp.duration}
                   </span>
                   <span className="flex items-center gap-1 text-amber-300 font-bold bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">
-                    <Star className="h-3 w-3 fill-amber-300" />
+                    <Star className="h-3 w-3 fill-white" />
                     {exp.rating}
                   </span>
                 </div>

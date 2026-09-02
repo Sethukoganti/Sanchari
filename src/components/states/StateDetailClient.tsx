@@ -69,7 +69,7 @@ export function StateDetailClient({ state }: { state: StateDetails }) {
           {state.culture && (
             <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
               <h2 className="font-display text-2xl font-bold flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-turmeric" />
+                <Sparkles className="h-5 w-5 text-white" />
                 {t?.state?.livingCulture || "Living Culture & Traditions"}
               </h2>
               <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-body">
@@ -81,7 +81,7 @@ export function StateDetailClient({ state }: { state: StateDetails }) {
           {touristFeatures.length > 0 && (
             <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
               <h2 className="font-display text-2xl font-bold flex items-center gap-2">
-                <Compass className="h-5 w-5 text-turmeric" />
+                <Compass className="h-5 w-5 text-white" />
                 {t?.state?.touristFeatures || "Tourist Features & Signature Experiences"}
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -138,7 +138,7 @@ export function StateDetailClient({ state }: { state: StateDetails }) {
 
           <div className="space-y-6">
             <h2 className="font-display text-2xl font-bold flex items-center gap-2">
-              <Compass className="h-5 w-5 text-turmeric" />
+              <Compass className="h-5 w-5 text-white" />
               {t?.state?.travelCircuits || "Curated Travel Circuits"}
             </h2>
             {state.itineraries && state.itineraries.length > 0 && (
@@ -183,7 +183,7 @@ export function StateDetailClient({ state }: { state: StateDetails }) {
               {state.transportHubs?.airport && (
                 <div>
                   <span className="text-muted-gray font-mono flex items-center gap-1.5 mb-1">
-                    <Plane className="h-3.5 w-3.5 text-turmeric" />
+                    <Plane className="h-3.5 w-3.5 text-white" />
                     {t?.state?.airports || "Major Airports:"}
                   </span>
                   <p className="text-zinc-200 leading-relaxed">{state.transportHubs.airport}</p>

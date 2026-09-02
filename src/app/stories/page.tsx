@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function StoriesPage() {
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Cultural Essays"
         title="Field Notes & Subcontinent Stories"

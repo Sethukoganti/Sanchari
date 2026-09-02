@@ -557,7 +557,7 @@ export function AIPlannerWizard() {
                   <div className="flex-1">
                     <h4 className="font-display font-bold text-sm">{food.label}</h4>
                   </div>
-                  {isSelected && <Check className="h-4 w-4 text-amber-500" />}
+                  {isSelected && <Check className="h-4 w-4 text-white" />}
                 </button>
               );
             })}
@@ -818,9 +818,8 @@ export function AIPlannerWizard() {
                             <span>Stay: <strong>{day.stay.name}</strong></span>
                           </div>
 
-                          <Link
-                            href={day.stay.bookingUrl || "/book/stays"}
-                            className="text-saffron font-bold hover:underline"
+                          <Link href={day.stay.bookingUrl || "/book/stays"}
+                            className="text-white font-bold hover:underline"
                           >
                             Book This Stay →
                           </Link>

@@ -197,7 +197,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                       key={hl}
                       className="rounded-xl border border-white/5 bg-black/40 p-4 text-xs font-semibold text-zinc-200 flex items-center gap-2.5"
                     >
-                      <Sparkles className="h-4 w-4 text-turmeric shrink-0" />
+                      <Sparkles className="h-4 w-4 text-white shrink-0" />
                       <span>{hl}</span>
                     </div>
                   ))}
@@ -331,7 +331,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
               {destination.photography && (
                 <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
                   <h3 className="font-display text-xl font-bold text-warm-white flex items-center gap-2">
-                    <Camera className="h-5 w-5 text-turmeric" />
+                    <Camera className="h-5 w-5 text-white" />
                     Photography Golden Hour & Prime Spots
                   </h3>
                   <p className="text-xs text-turmeric font-mono">

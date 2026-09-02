@@ -29,7 +29,7 @@ export default function TransportPage() {
           {/* Section 1: Flights & Airports */}
           <div className="space-y-6">
             <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-              <Plane className="h-6 w-6 text-turmeric" />
+              <Plane className="h-6 w-6 text-white" />
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-warm-white">
                 Major Gateway Airports
               </h2>
@@ -95,7 +95,7 @@ export default function TransportPage() {
                   </p>
                   <div className="pt-2 flex justify-between items-center text-xs">
                     <span className="text-muted-gray">From ₹{tr.classes[0].price.toLocaleString("en-IN")}</span>
-                    <Link href="/trains" className="text-turmeric font-semibold hover:underline">
+                    <Link href="/trains" className="text-white font-semibold hover:underline">
                       Details & Booking →
                     </Link>
                   </div>

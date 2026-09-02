@@ -51,7 +51,7 @@ export default function TrainsPage() {
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
                   <div className="absolute top-4 left-4 rounded-full bg-black/80 px-3 py-1 font-mono text-[10px] font-bold text-turmeric uppercase border border-turmeric/40 backdrop-blur-md flex items-center gap-1.5">
-                    <Star className="h-3 w-3 fill-turmeric" />
+                    <Star className="h-3 w-3 fill-white" />
                     Scenic Score: {train.scenicScore}/10
                   </div>
                 </div>

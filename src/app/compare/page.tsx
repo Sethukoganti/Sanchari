@@ -16,7 +16,7 @@ export default function ComparePage() {
   const d2 = destinationsData.find((d) => d.slug === dest2Slug) || destinationsData[1];
 
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Side-by-Side Analysis"
         title="Compare Destinations"
@@ -126,7 +126,7 @@ export default function ComparePage() {
                     <ul className="space-y-1.5 text-zinc-300">
                       {dest.highlights.slice(0, 4).map((h) => (
                         <li key={h} className="flex items-start gap-2">
-                          <Check className="h-3.5 w-3.5 text-turmeric shrink-0 mt-0.5" />
+                          <Check className="h-3.5 w-3.5 text-white shrink-0 mt-0.5" />
                           <span>{h}</span>
                         </li>
                       ))}

@@ -23,7 +23,7 @@ export default function EventsPage() {
   });
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="Living Cultural Traditions"
         title="Events, Fairs & Living Festivals"
@@ -109,7 +109,7 @@ export default function EventsPage() {
 
                     <div className="absolute bottom-3.5 left-3.5 right-3.5 flex justify-between items-center text-xs">
                       <span className="text-warm-white font-semibold flex items-center gap-1">
-                        <Calendar className="h-3.5 w-3.5 text-saffron" />
+                        <Calendar className="h-3.5 w-3.5 text-white" />
                         {evt.date.approximateString || evt.date.month || "Upcoming"}
                       </span>
                       <span className="text-muted-gray text-[11px] bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">

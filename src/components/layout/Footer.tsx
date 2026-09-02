@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 import {
   Compass,
   MapPin,
@@ -54,15 +55,16 @@ export function Footer() {
         <div className="grid gap-10 lg:grid-cols-12 pb-14 border-b border-white/10">
           <div className="lg:col-span-5 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron to-amber-600 text-black font-display font-black text-xl shadow-lg shadow-saffron/20">
-                SB
-              </span>
-              <div>
-                <span className="font-display text-2xl font-black tracking-tight text-warm-white group-hover:text-saffron transition-colors block">
-                  SANCHARI BHARAT
+              <LogoIcon className="h-10 w-10 sm:h-12 sm:w-12 group-hover:scale-105" />
+              <div className="flex flex-col justify-center">
+                <span className="font-display text-2xl font-black tracking-tight text-warm-white group-hover:text-saffron transition-colors leading-none">
+                  Sanchari
                 </span>
-                <span className="font-mono text-[10px] text-saffron uppercase font-bold tracking-widest block">
-                  Explore India
+                <span className="font-display text-2xl font-black tracking-tight text-warm-white group-hover:text-saffron transition-colors leading-none mt-1">
+                  Bharat
+                </span>
+                <span className="font-mono text-[10px] text-[#FF9933] uppercase font-bold tracking-widest block mt-1.5">
+                  Explore Bharat
                 </span>
               </div>
             </Link>
@@ -102,16 +104,15 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-xs sm:text-sm text-zinc-300">
               {REGIONS.map((region) => (
                 <li key={region}>
-                  <Link
-                    href={`/destinations?region=${encodeURIComponent(region)}`}
-                    className="hover:text-saffron transition-colors"
+                  <Link href={`/destinations?region=${encodeURIComponent(region)}`}
+                    className="hover:text-white transition-colors"
                   >
                     {region} India
                   </Link>
                 </li>
               ))}
               <li className="pt-1">
-                <Link href="/states" className="font-semibold text-saffron hover:underline">
+                <Link href="/states" className="font-semibold text-white hover:underline">
                   All 28 States & 8 UTs →
                 </Link>
               </li>
@@ -158,7 +159,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-xs sm:text-sm text-zinc-300">
               {FOOTER_LINKS.company.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-amber-400 transition-colors">
+                  <Link href={link.href} className="hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>

@@ -82,7 +82,7 @@ export function MoodFilter() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent" />
               <div className="absolute bottom-2.5 left-3 text-xs text-zinc-200 font-medium drop-shadow flex items-center gap-1">
-                <MapPin className="h-3 w-3 text-turmeric" />
+                <MapPin className="h-3 w-3 text-white" />
                 <span>{dest.state}</span>
               </div>
             </div>

@@ -1,38 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Plane, Train, Bus, Hotel, Calendar, Users, MapPin, Search, ArrowRight, Sparkles } from "lucide-react";
+import { Plane, Train, Bus, Hotel, Calendar, Users, MapPin, ArrowRight, Sparkles } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type BookingTab = "flights" | "trains" | "buses" | "stays";
 
+const OFFICIAL_BOOKING_URLS = {
+  flights: "https://www.airindia.in/",
+  trains: "https://www.irctc.co.in/nget/train-search",
+  buses: "https://www.redbus.in/",
+  stays: "https://www.booking.com/",
+} as const;
+
 export function BookingWidget({ className }: { className?: string }) {
-  const router = useRouter();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<BookingTab>("flights");
 
-  // Search Fields
-  const [fromCity, setFromCity] = useState("New Delhi");
-  const [toCity, setToCity] = useState("Hyderabad");
-  const [departureDate, setDepartureDate] = useState("2026-09-15");
-  const [returnDate, setReturnDate] = useState("");
-  const [travellersCount, setTravellersCount] = useState(2);
+  const [fromCity, setFromCity] = useState("");
+  const [toCity, setToCity] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [travellersCount, setTravellersCount] = useState(1);
   const [travelClass, setTravelClass] = useState("Economy");
-  const [destinationStay, setDestinationStay] = useState("Hyderabad");
-  const [stayCheckIn, setStayCheckIn] = useState("2026-09-15");
+  const [destinationStay, setDestinationStay] = useState("");
+  const [stayCheckIn, setStayCheckIn] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (activeTab === "flights") {
-      router.push(`/book/flights?from=${encodeURIComponent(fromCity)}&to=${encodeURIComponent(toCity)}&date=${departureDate}&class=${travelClass}`);
-    } else if (activeTab === "trains") {
-      router.push(`/book/trains?from=${encodeURIComponent(fromCity)}&to=${encodeURIComponent(toCity)}&date=${departureDate}&class=${travelClass}`);
-    } else if (activeTab === "buses") {
-      router.push(`/book/buses?from=${encodeURIComponent(fromCity)}&to=${encodeURIComponent(toCity)}&date=${departureDate}`);
-    } else {
-      router.push(`/book/stays?destination=${encodeURIComponent(destinationStay)}&checkIn=${stayCheckIn}&guests=${travellersCount}`);
+
+    const tabKey = activeTab === "stays" ? "stays" : activeTab;
+    const url = OFFICIAL_BOOKING_URLS[tabKey];
+
+    if (typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -104,7 +105,7 @@ export function BookingWidget({ className }: { className?: string }) {
             {/* From */}
             <div className="p-3 rounded-2xl bg-black/[0.03] dark:bg-navy-dark/60 border border-black/5 dark:border-white/5 space-y-1">
               <label className="text-[10px] font-mono uppercase text-zinc-500 font-bold flex items-center gap-1">
-                <MapPin className="h-3 w-3 text-saffron" />
+                <MapPin className="h-3 w-3 text-white" />
                 <span>From</span>
               </label>
               <input
@@ -148,21 +149,39 @@ export function BookingWidget({ className }: { className?: string }) {
               />
             </div>
 
-            {/* Travellers / Class */}
+            {/* Travellers */}
             <div className="p-3 rounded-2xl bg-black/[0.03] dark:bg-navy-dark/60 border border-black/5 dark:border-white/5 space-y-1">
               <label className="text-[10px] font-mono uppercase text-zinc-500 font-bold flex items-center gap-1">
-                <Users className="h-3 w-3 text-amber-500" />
-                <span>Travellers & Class</span>
+                <Users className="h-3 w-3 text-white" />
+                <span>Travellers</span>
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={12}
+                value={travellersCount}
+                onChange={(e) => setTravellersCount(Math.max(1, Number(e.target.value) || 1))}
+                placeholder="Number of travellers"
+                className="w-full bg-transparent font-mono text-xs font-semibold focus:outline-none"
+                required
+              />
+            </div>
+
+            {/* Class */}
+            <div className="p-3 rounded-2xl bg-black/[0.03] dark:bg-navy-dark/60 border border-black/5 dark:border-white/5 space-y-1">
+              <label className="text-[10px] font-mono uppercase text-zinc-500 font-bold flex items-center gap-1">
+                <Users className="h-3 w-3 text-white" />
+                <span>Class</span>
               </label>
               <select
                 value={travelClass}
                 onChange={(e) => setTravelClass(e.target.value)}
-                className="w-full bg-transparent font-mono text-xs font-semibold focus:outline-none cursor-pointer"
+                className="w-full bg-transparent font-mono text-xs font-semibold focus:outline-none cursor-pointer dark:text-white dark:[&>option]:bg-navy-surface"
               >
-                <option value="Economy">2 Adults · Economy</option>
-                <option value="Premium Economy">2 Adults · Premium</option>
-                <option value="Business / 1A">2 Adults · Business / 1A</option>
-                <option value="Vande Bharat CC">2 Adults · Chair Car</option>
+                <option value="Economy">Economy</option>
+                <option value="Premium Economy">Premium Economy</option>
+                <option value="Business">Business</option>
+                <option value="First Class">First Class</option>
               </select>
             </div>
           </div>
@@ -171,7 +190,7 @@ export function BookingWidget({ className }: { className?: string }) {
             {/* Destination Stay */}
             <div className="p-3 rounded-2xl bg-black/[0.03] dark:bg-navy-dark/60 border border-black/5 dark:border-white/5 space-y-1">
               <label className="text-[10px] font-mono uppercase text-zinc-500 font-bold flex items-center gap-1">
-                <MapPin className="h-3 w-3 text-saffron" />
+                <MapPin className="h-3 w-3 text-white" />
                 <span>Destination or Property</span>
               </label>
               <input
@@ -202,19 +221,19 @@ export function BookingWidget({ className }: { className?: string }) {
             {/* Guests */}
             <div className="p-3 rounded-2xl bg-black/[0.03] dark:bg-navy-dark/60 border border-black/5 dark:border-white/5 space-y-1">
               <label className="text-[10px] font-mono uppercase text-zinc-500 font-bold flex items-center gap-1">
-                <Users className="h-3 w-3 text-amber-500" />
+                <Users className="h-3 w-3 text-white" />
                 <span>Guests</span>
               </label>
-              <select
+              <input
+                type="number"
+                min={1}
+                max={20}
                 value={travellersCount}
-                onChange={(e) => setTravellersCount(Number(e.target.value))}
-                className="w-full bg-transparent font-mono text-xs font-semibold focus:outline-none cursor-pointer"
-              >
-                <option value={1}>1 Guest (1 Room)</option>
-                <option value={2}>2 Guests (1 Room)</option>
-                <option value={4}>4 Guests (2 Rooms)</option>
-                <option value={6}>6+ Guests (Family Suite)</option>
-              </select>
+                onChange={(e) => setTravellersCount(Math.max(1, Number(e.target.value) || 1))}
+                placeholder="Enter number of guests"
+                className="w-full bg-transparent font-mono text-xs font-semibold focus:outline-none"
+                required
+              />
             </div>
           </div>
         )}
@@ -222,7 +241,7 @@ export function BookingWidget({ className }: { className?: string }) {
         {/* Submit CTA */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
           <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
-            <Sparkles className="h-3.5 w-3.5 text-saffron" />
+            <Sparkles className="h-3.5 w-3.5 text-white" />
             <span>Direct IRCTC, Airline & Verified Stay Engine Sync</span>
           </div>
 

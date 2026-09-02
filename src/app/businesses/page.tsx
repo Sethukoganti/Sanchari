@@ -53,7 +53,7 @@ export default function BusinessesPage() {
   };
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="Local Tourism Directory"
         title="Verified Local Businesses & Guides"
@@ -125,7 +125,7 @@ export default function BusinessesPage() {
                         {biz.category}
                       </span>
                       <span className="flex items-center gap-1 text-amber-300 font-bold bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">
-                        <Star className="h-3 w-3 fill-amber-300" />
+                        <Star className="h-3 w-3 fill-white" />
                         {biz.rating} ({biz.reviewsCount})
                       </span>
                     </div>

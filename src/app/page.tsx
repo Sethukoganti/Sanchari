@@ -68,9 +68,8 @@ export default function HomePage() {
               Select any of the 28 states and 8 union territories to filter by regional culture, sacred shrines, and travel routes.
             </p>
           </div>
-          <Link
-            href="/map"
-            className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1.5"
+          <Link href="/map"
+            className="text-xs font-semibold text-white hover:underline flex items-center gap-1.5"
           >
             <span>Full Map Explorer</span>
             <ArrowRight className="h-4 w-4" />
@@ -101,9 +100,8 @@ export default function HomePage() {
             </p>
           </div>
 
-          <Link
-            href="/events"
-            className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1.5"
+          <Link href="/events"
+            className="text-xs font-semibold text-white hover:underline flex items-center gap-1.5"
           >
             <span>All Festivals & Events ({eventsData.length})</span>
             <ArrowRight className="h-4 w-4" />
@@ -135,7 +133,7 @@ export default function HomePage() {
 
                   <div className="absolute bottom-3.5 left-3.5 right-3.5 flex justify-between items-center text-xs">
                     <span className="text-warm-white font-semibold flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5 text-saffron" />
+                      <Calendar className="h-3.5 w-3.5 text-white" />
                       {evt.date.approximateString || evt.date.month || "Upcoming"}
                     </span>
                     <span className="text-muted-gray text-[11px] bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">

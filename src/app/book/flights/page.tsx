@@ -110,7 +110,7 @@ function FlightSearchContent() {
             <div className="card-surface p-6 rounded-3xl bg-white/95 dark:bg-navy-surface/85 border border-black/10 dark:border-white/10 space-y-6">
               <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
                 <h3 className="font-display text-base font-bold flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-saffron" />
+                  <Filter className="h-4 w-4 text-white" />
                   <span>Filters</span>
                 </h3>
                 <button
@@ -205,7 +205,7 @@ function FlightSearchContent() {
             {/* Sort Bar */}
             <div className="card-surface p-4 rounded-2xl bg-white/95 dark:bg-navy-surface/85 border border-black/10 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-saffron" />
+                <SlidersHorizontal className="h-4 w-4 text-white" />
                 <span className="text-xs font-bold font-mono">Sort By:</span>
               </div>
 

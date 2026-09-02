@@ -71,7 +71,7 @@ export function UserProfileModal({ isOpen, onClose, user, onLogout }: UserProfil
             className="flex items-center justify-between p-3 rounded-xl bg-navy-dark/60 hover:bg-navy-light/60 transition text-xs font-semibold text-warm-white"
           >
             <span className="flex items-center gap-2">
-              <Bookmark className="h-4 w-4 text-saffron" />
+              <Bookmark className="h-4 w-4 text-white" />
               <span>View Saved AI Trips</span>
             </span>
             <span className="font-mono text-muted-gray">→</span>

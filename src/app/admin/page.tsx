@@ -100,7 +100,7 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="Platform Administration"
         title="Sanchari Bharat CMS Dashboard"

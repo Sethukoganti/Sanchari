@@ -47,20 +47,27 @@ export function GoogleTranslateEngine() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const mapLangCode = (code: string) => {
+      const normalized = code.toLowerCase();
+      if (normalized === "od") return "or";
+      if (normalized === "zh-cn") return "zh-CN";
+      if (normalized === "zh-tw") return "zh-TW";
+      if (normalized === "zh") return "zh-CN";
+      if (normalized === "en") return "en";
+      return normalized;
+    };
+
     const applyTranslation = () => {
       const select = document.querySelector<HTMLSelectElement>(".goog-te-combo");
       if (!select) return;
 
-      const langStr = String(lang);
-      const targetLang = langStr === "or" || langStr === "od" ? "or" : langStr;
+      const targetLang = mapLangCode(String(lang));
 
       if (lang === "en") {
-        // Reset to original English
         if (select.value && select.value !== "en") {
           select.value = "en";
           select.dispatchEvent(new Event("change"));
         }
-        // Also remove cookies
         document.cookie =
           "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;

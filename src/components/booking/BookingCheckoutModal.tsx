@@ -43,19 +43,26 @@ export function BookingCheckoutModal({
   onBookingSuccess,
 }: BookingCheckoutModalProps) {
   const [step, setStep] = useState<"passengers" | "payment" | "processing">("passengers");
-  const [email, setEmail] = useState("explorer@sancharibharat.in");
-  const [phone, setPhone] = useState("+91 98765 43210");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking">("upi");
-  const [upiId, setUpiId] = useState("traveler@okhdfcbank");
+  const [upiId, setUpiId] = useState("");
 
   const [passengers, setPassengers] = useState<BookingPassenger[]>([
-    { fullName: "Yasaswi Kodimela", age: 24, gender: "Male" },
+    { fullName: "", age: 1, gender: "Male" },
   ]);
 
   if (!isOpen) return null;
 
+  const officialUrls = {
+    flight: "https://www.airindia.in/",
+    train: "https://www.irctc.co.in/nget/train-search",
+    bus: "https://www.redbus.in/",
+    stay: "https://www.booking.com/",
+  } as const;
+
   const addPassenger = () => {
-    setPassengers([...passengers, { fullName: "", age: 25, gender: "Male" }]);
+    setPassengers([...passengers, { fullName: "", age: 1, gender: "Male" }]);
   };
 
   const updatePassenger = (index: number, field: keyof BookingPassenger, value: any) => {
@@ -65,38 +72,49 @@ export function BookingCheckoutModal({
   };
 
   const handlePay = () => {
-    setStep("processing");
-    setTimeout(() => {
-      const bookingRef = `SB-${bookingType.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
-      const newBooking: UserBooking = {
-        id: bookingRef,
-        bookingType,
-        status: "CONFIRMED",
-        referenceNumber: bookingRef,
-        title: itemTitle,
-        subtitle: itemSubtitle,
-        from,
-        to,
-        date: travelDate,
-        passengersCount: passengers.length,
-        passengers,
-        selectedClass,
-        selectedSeats,
-        totalPrice,
-        stayDetails: hotelDetails,
-        qrCodeData: `https://sancharibharat.in/ticket/${bookingRef}`,
-        createdAt: new Date().toISOString(),
-        contactEmail: email,
-        contactPhone: phone,
-      };
+    const hasValidPassengers = passengers.every(
+      (person) => person.fullName.trim().length > 0 && Number(person.age) > 0 && Number(person.age) < 120
+    );
 
-      try {
-        const stored = JSON.parse(localStorage.getItem("sanchari_user_bookings") || "[]");
-        localStorage.setItem("sanchari_user_bookings", JSON.stringify([newBooking, ...stored]));
-      } catch (e) {}
+    if (!hasValidPassengers || !email.trim() || !phone.trim()) {
+      return;
+    }
 
-      onBookingSuccess(newBooking);
-    }, 1800);
+    const bookingRef = `SB-${bookingType.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+    const newBooking: UserBooking = {
+      id: bookingRef,
+      bookingType,
+      status: "CONFIRMED",
+      referenceNumber: bookingRef,
+      title: itemTitle,
+      subtitle: itemSubtitle,
+      from,
+      to,
+      date: travelDate,
+      passengersCount: passengers.length,
+      passengers,
+      selectedClass,
+      selectedSeats,
+      totalPrice,
+      stayDetails: hotelDetails,
+      qrCodeData: `https://sancharibharat.in/ticket/${bookingRef}`,
+      createdAt: new Date().toISOString(),
+      contactEmail: email,
+      contactPhone: phone,
+    };
+
+    try {
+      const stored = JSON.parse(localStorage.getItem("sanchari_user_bookings") || "[]");
+      localStorage.setItem("sanchari_user_bookings", JSON.stringify([newBooking, ...stored]));
+    } catch (e) {}
+
+    const targetUrl = officialUrls[bookingType];
+    if (typeof window !== "undefined") {
+      window.open(targetUrl, "_blank", "noopener,noreferrer");
+    }
+
+    onBookingSuccess(newBooking);
+    onClose();
   };
 
   return (
@@ -208,10 +226,20 @@ export function BookingCheckoutModal({
 
               <button
                 type="button"
-                onClick={() => setStep("payment")}
+                onClick={() => {
+                  const hasValidPassengers = passengers.every(
+                    (person) => person.fullName.trim().length > 0 && Number(person.age) > 0 && Number(person.age) < 120
+                  );
+
+                  if (!hasValidPassengers || !email.trim() || !phone.trim()) {
+                    return;
+                  }
+
+                  setStep("payment");
+                }}
                 className="btn-primary !py-2.5 !px-6 text-xs font-bold cursor-pointer"
               >
-                Proceed to Payment
+                Continue to Official Website
               </button>
             </div>
           </div>

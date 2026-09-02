@@ -37,26 +37,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return;
 
     const root = document.documentElement;
-    let effective: "light" | "dark" = "dark";
-
-    if (theme === "system") {
-      effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    } else {
-      effective = theme;
-    }
+    let effective: "light" | "dark" = theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      : theme === "dark" ? "dark" : "light";
 
     setResolvedTheme(effective);
-
     root.classList.remove("light", "dark");
     root.classList.add(effective);
     root.setAttribute("data-theme", effective);
+    root.style.colorScheme = effective;
 
     try {
       localStorage.setItem("sanchari_theme", theme);
+      localStorage.setItem("explore-india-theme", effective);
     } catch (e) {}
   }, [theme, mounted]);
 
-  // Listen for system theme changes
   useEffect(() => {
     if (theme !== "system") return;
 
@@ -67,6 +63,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.remove("light", "dark");
       document.documentElement.classList.add(newEffective);
       document.documentElement.setAttribute("data-theme", newEffective);
+      document.documentElement.style.colorScheme = newEffective;
     };
 
     mediaQuery.addEventListener("change", handleChange);
@@ -78,7 +75,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+    setThemeState((prev) => {
+      if (prev === "system") return resolvedTheme === "dark" ? "light" : "dark";
+      return prev === "dark" ? "light" : "dark";
+    });
   };
 
   return (

@@ -70,7 +70,7 @@ Have a safe and wonderful journey across Bharat!
   const getIcon = () => {
     switch (booking.bookingType) {
       case "flight":
-        return <Plane className="h-6 w-6 text-saffron" />;
+        return <Plane className="h-6 w-6 text-white" />;
       case "train":
         return <Train className="h-6 w-6 text-emerald-500" />;
       case "bus":

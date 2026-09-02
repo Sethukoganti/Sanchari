@@ -64,7 +64,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
 
             <div className="flex items-center gap-2">
               <span className="px-3 py-1.5 rounded-2xl bg-amber-400/10 text-amber-400 border border-amber-400/30 font-mono text-sm font-bold flex items-center gap-1">
-                <Star className="h-4 w-4 fill-amber-400" />
+                <Star className="h-4 w-4 fill-white" />
                 {hotel.rating} ({hotel.reviewsCount} reviews)
               </span>
             </div>

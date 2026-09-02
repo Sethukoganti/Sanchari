@@ -55,7 +55,7 @@ export default function FoodDiscoveryPage() {
         {/* Search & Filter Bar */}
         <div className="card-surface p-6 rounded-3xl bg-white/95 dark:bg-navy-surface/85 border border-black/10 dark:border-white/10 space-y-4">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-saffron" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
             <input
               type="text"
               value={query}
@@ -128,7 +128,7 @@ export default function FoodDiscoveryPage() {
                       {food.destinationName}
                     </span>
                     <span className="flex items-center gap-1 text-xs font-bold text-amber-400 font-mono">
-                      <Star className="h-3.5 w-3.5 fill-amber-400" />
+                      <Star className="h-3.5 w-3.5 fill-white" />
                       {food.rating} ({food.reviewsCount})
                     </span>
                   </div>
@@ -136,7 +136,7 @@ export default function FoodDiscoveryPage() {
                   <h3 className="font-display text-lg font-bold">{food.name}</h3>
 
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1 font-mono">
-                    <MapPin className="h-3.5 w-3.5 text-saffron shrink-0" />
+                    <MapPin className="h-3.5 w-3.5 text-white shrink-0" />
                     <span>{food.distanceFromCenter}</span>
                   </p>
 

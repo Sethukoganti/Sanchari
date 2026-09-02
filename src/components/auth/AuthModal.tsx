@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { X, Mail, Lock, User, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess: (user: { name: string; email: string }) => void;
+  onLoginSuccess: (user: { name: string; email: string; travelStyle?: string }) => void;
 }
 
 export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
@@ -17,6 +18,7 @@ export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
   const [password, setPassword] = useState("");
   const [travelStyle, setTravelStyle] = useState("Balanced");
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   if (!isOpen) return null;
 
@@ -24,21 +26,75 @@ export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
     e.preventDefault();
     if (!email || !password || (!isLogin && !name)) return;
 
-    const userData = {
-      name: isLogin ? (email.split("@")[0] || "Traveler") : name,
-      email,
-      travelStyle,
-      loggedInAt: new Date().toISOString(),
-    };
+    try {
+      const storedUsersRaw = localStorage.getItem("sanchari_users");
+      const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
 
-    localStorage.setItem("sanchari_user", JSON.stringify(userData));
-    setSubmitted(true);
+      if (isLogin) {
+        const existingUser = storedUsers.find(
+          (user: { email?: string; password?: string }) =>
+            String(user.email).toLowerCase() === email.toLowerCase() && user.password === password
+        );
 
-    setTimeout(() => {
-      onLoginSuccess(userData);
-      onClose();
-      setSubmitted(false);
-    }, 1000);
+        if (!existingUser) {
+          setErrorMessage("Account not found. Please sign up first.");
+          return;
+        }
+
+        const userData = {
+          name: existingUser.name || email.split("@")[0] || "Traveler",
+          email: existingUser.email,
+          travelStyle: existingUser.travelStyle || travelStyle,
+          loggedInAt: new Date().toISOString(),
+        };
+
+        localStorage.setItem("sanchari_user", JSON.stringify(userData));
+        setErrorMessage("");
+        setSubmitted(true);
+
+        setTimeout(() => {
+          onLoginSuccess(userData);
+          onClose();
+          setSubmitted(false);
+        }, 1000);
+        return;
+      }
+
+      const emailAlreadyExists = storedUsers.some(
+        (user: { email?: string }) => String(user.email).toLowerCase() === email.toLowerCase()
+      );
+
+      if (emailAlreadyExists) {
+        setErrorMessage("This email is already registered. Please sign in instead.");
+        return;
+      }
+
+      const userData = {
+        name,
+        email,
+        password,
+        travelStyle,
+        loggedInAt: new Date().toISOString(),
+      };
+
+      localStorage.setItem("sanchari_users", JSON.stringify([...storedUsers, userData]));
+      localStorage.setItem("sanchari_user", JSON.stringify({
+        name,
+        email,
+        travelStyle,
+        loggedInAt: userData.loggedInAt,
+      }));
+      setErrorMessage("");
+      setSubmitted(true);
+
+      setTimeout(() => {
+        onLoginSuccess({ name, email, travelStyle });
+        onClose();
+        setSubmitted(false);
+      }, 1000);
+    } catch (error) {
+      setErrorMessage("Unable to save your account right now. Please try again.");
+    }
   };
 
   return (
@@ -58,9 +114,7 @@ export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-saffron to-amber-600 text-black font-black text-xs font-mono">
-              SB
-            </span>
+            <LogoIcon className="h-8 w-8" />
             <span className="font-mono text-xs text-saffron uppercase font-bold tracking-wider">
               SANCHARI BHARAT
             </span>
@@ -86,6 +140,11 @@ export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
+            {errorMessage && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+                {errorMessage}
+              </div>
+            )}
             {!isLogin && (
               <div>
                 <label className="text-xs font-semibold text-zinc-300 block mb-1">

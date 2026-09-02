@@ -149,7 +149,7 @@ export default function BookTravelHubPage() {
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-mono text-saffron font-bold">{stay.propertyType}</span>
                       <span className="flex items-center gap-1 text-amber-500 font-bold font-mono">
-                        <Star className="h-3.5 w-3.5 fill-amber-400" />
+                        <Star className="h-3.5 w-3.5 fill-white" />
                         {stay.rating}
                       </span>
                     </div>

@@ -474,7 +474,7 @@ export function IndiaMap() {
 
         {/* Map Tip */}
         <p className="text-[11px] text-muted-gray flex items-center gap-1">
-          <Compass className="h-3.5 w-3.5 text-turmeric" />
+          <Compass className="h-3.5 w-3.5 text-white" />
           <span>Scroll to zoom · Drag to pan · Click any state or glowing pin</span>
         </p>
       </div>
