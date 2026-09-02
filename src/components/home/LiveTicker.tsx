@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles, Flame, Calendar, ArrowRight } from "lucide-react";
-import { events, getUpcomingFestivals } from "@/data/content";
+import { getUpcomingFestivals } from "@/data/content";
 
 export function LiveTicker() {
   const upcoming = getUpcomingFestivals();
@@ -28,7 +28,9 @@ export function LiveTicker() {
               <strong className="text-warm-white group-hover:text-turmeric">
                 {fest.name}:
               </strong>
-              <span className="text-muted-gray">{fest.date.gregorianApprox} ({fest.states[0]})</span>
+              <span className="text-muted-gray">
+                {fest.date?.gregorianApprox || fest.date?.approximateString || fest.date?.month || "Upcoming"} ({fest.states?.[0] || fest.state || "India"})
+              </span>
               <span className="text-turmeric text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
                 →
               </span>
@@ -47,4 +49,3 @@ export function LiveTicker() {
     </div>
   );
 }
-

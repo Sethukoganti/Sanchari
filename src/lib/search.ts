@@ -6,9 +6,11 @@ import {
   statesData,
   trainsData,
 } from "@/data/content";
+import { staysData } from "@/data/booking";
+import { foodPlacesData } from "@/data/food";
 import type { SearchResult } from "@/lib/types";
 
-export function searchAll(query: string, limit = 20): SearchResult[] {
+export function searchAll(query: string, limit = 25): SearchResult[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
 
@@ -23,9 +25,10 @@ export function searchAll(query: string, limit = 20): SearchResult[] {
       d.region,
       d.summary,
       d.tagline,
-      ...d.themes,
-      ...d.highlights,
+      ...(d.themes || []),
+      ...(d.highlights || []),
     ]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
     if (hay.includes(q)) {
@@ -41,16 +44,55 @@ export function searchAll(query: string, limit = 20): SearchResult[] {
     }
   }
 
-  // 2. Festivals
+  // 2. Stays & Hotels
+  for (const s of staysData) {
+    const hay = [s.name, s.destinationName, s.state, s.location, s.propertyType, s.description]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    if (hay.includes(q)) {
+      results.push({
+        id: `stay-${s.id}`,
+        type: "hotel",
+        slug: s.slug,
+        title: s.name,
+        subtitle: `${s.propertyType} · ${s.destinationName} (₹${s.pricePerNight}/night)`,
+        href: `/stays/${s.slug}`,
+        image: s.featuredImage,
+      });
+    }
+  }
+
+  // 3. Food Places
+  for (const f of foodPlacesData) {
+    const hay = [f.name, f.destinationName, f.cuisine, f.diet, f.category, ...(f.mustTryDishes || [])]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    if (hay.includes(q)) {
+      results.push({
+        id: `food-${f.id}`,
+        type: "food",
+        title: f.name,
+        subtitle: `${f.cuisine} · ${f.destinationName} (${f.diet})`,
+        href: `/food`,
+        image: f.image,
+      });
+    }
+  }
+
+  // 4. Festivals
   for (const f of festivalsData) {
+    const statesList = f.states || (f.state ? [f.state] : []);
     const hay = [
       f.name,
       f.nameHi,
       f.type,
-      ...f.states,
+      ...statesList,
       f.significance,
-      f.date.month,
+      f.date?.month,
     ]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
     if (hay.includes(q)) {
@@ -59,16 +101,17 @@ export function searchAll(query: string, limit = 20): SearchResult[] {
         type: "festival",
         slug: f.slug,
         title: f.name,
-        subtitle: `${f.type} · ${f.states.join(", ")} (${f.date.month})`,
+        subtitle: `${f.type || "Festival"} · ${statesList.join(", ")} (${f.date?.month || "Seasonal"})`,
         href: `/festivals/${f.slug}`,
-        image: f.gallery[0],
+        image: f.gallery?.[0] || f.image || "",
       });
     }
   }
 
-  // 3. States & UTs
+  // 5. States & UTs
   for (const st of statesData) {
-    const hay = [st.name, st.capital, st.region, st.summary, ...st.cuisine, ...st.festivals]
+    const hay = [st.name, st.capital, st.region, st.summary, ...(st.cuisine || []), ...(st.festivals || [])]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
     if (hay.includes(q)) {
@@ -84,27 +127,10 @@ export function searchAll(query: string, limit = 20): SearchResult[] {
     }
   }
 
-  // 4. Trains
-  for (const tr of trainsData) {
-    const hay = [tr.name, tr.number, tr.type, tr.route.from, tr.route.to, ...tr.route.via]
-      .join(" ")
-      .toLowerCase();
-    if (hay.includes(q)) {
-      results.push({
-        id: `train-${tr.id}`,
-        type: "train",
-        slug: tr.id,
-        title: tr.name,
-        subtitle: `${tr.type} · ${tr.route.from} to ${tr.route.to}`,
-        href: `/trains`,
-        image: tr.image,
-      });
-    }
-  }
-
-  // 5. Experiences
+  // 6. Experiences
   for (const exp of experiences) {
     const hay = [exp.title, exp.category, exp.destination, exp.state, exp.description, ...(exp.highlights || [])]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
     if (hay.includes(q)) {
@@ -120,9 +146,10 @@ export function searchAll(query: string, limit = 20): SearchResult[] {
     }
   }
 
-  // 6. Articles / Stories
+  // 7. Articles / Stories
   for (const a of articles) {
-    const hay = [a.title, a.excerpt, a.category, ...a.tags, a.author]
+    const hay = [a.title, a.excerpt, a.category, ...(a.tags || []), a.author]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
     if (hay.includes(q)) {

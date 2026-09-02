@@ -98,7 +98,7 @@ export default function TravelSmartPage() {
                   <Compass className="h-3.5 w-3.5" />
                   Verified Food Trail:
                 </span>
-                <p className="text-xs text-warm-white font-semibold">{dest.localCuisine[0]?.name || "Traditional Regional Meal"}</p>
+                <p className="text-xs text-warm-white font-semibold">{dest.localFoodSpecialities?.[0] || "Traditional Regional Meal"}</p>
                 <span className="text-[11px] text-muted-gray block">Distance: ~0.4 km · Highly Recommended</span>
               </div>
 
@@ -107,7 +107,7 @@ export default function TravelSmartPage() {
                   <CloudSun className="h-3.5 w-3.5" />
                   Current Climate & Best Time:
                 </span>
-                <p className="text-xs text-warm-white font-semibold">{dest.bestTime}</p>
+                <p className="text-xs text-warm-white font-semibold">{dest.bestTimeToVisit || dest.bestTime}</p>
                 <span className="text-[11px] text-muted-gray block">Crowd: {dest.crowdLevel || "Moderate"}</span>
               </div>
             </div>
@@ -175,4 +175,3 @@ export default function TravelSmartPage() {
     </div>
   );
 }
-

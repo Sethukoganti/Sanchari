@@ -18,6 +18,7 @@ export const users = pgTable("users", {
   passwordHash: varchar("password_hash", { length: 255 }),
   profileImage: text("profile_image"),
   preferredLanguage: varchar("preferred_language", { length: 20 }).default("en"),
+  preferredTheme: varchar("preferred_theme", { length: 20 }).default("dark"),
   travelStyle: varchar("travel_style", { length: 40 }).default("Balanced"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -63,7 +64,7 @@ export const states = pgTable("states", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 4. Attractions / Places to Visit
+// 4. Attractions
 export const attractions = pgTable("attractions", {
   id: serial("id").primaryKey(),
   destinationSlug: varchar("destination_slug", { length: 120 }).notNull(),
@@ -132,21 +133,83 @@ export const businesses = pgTable("businesses", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 8. Reviews
-export const reviews = pgTable("reviews", {
+// 8. Transport Bookings (Flights, Trains, Buses)
+export const transportBookings = pgTable("transport_bookings", {
   id: serial("id").primaryKey(),
-  destinationSlug: varchar("destination_slug", { length: 120 }).notNull(),
-  userName: varchar("user_name", { length: 120 }).notNull(),
-  userEmail: varchar("user_email", { length: 180 }),
-  rating: integer("rating").notNull().default(5),
+  userId: integer("user_id"),
+  bookingReference: varchar("booking_reference", { length: 60 }).notNull().unique(),
+  type: varchar("type", { length: 30 }).notNull(),
   title: varchar("title", { length: 200 }).notNull(),
-  comment: text("comment").notNull(),
-  photos: jsonb("photos").$type<string[]>().default([]).notNull(),
-  helpful: integer("helpful").notNull().default(0),
+  subtitle: varchar("subtitle", { length: 200 }),
+  fromCity: varchar("from_city", { length: 120 }),
+  toCity: varchar("to_city", { length: 120 }),
+  travelDate: varchar("travel_date", { length: 60 }).notNull(),
+  passengers: jsonb("passengers").$type<any[]>().default([]).notNull(),
+  selectedClass: varchar("selected_class", { length: 60 }),
+  selectedSeats: jsonb("selected_seats").$type<string[]>().default([]),
+  totalPrice: integer("total_price").notNull(),
+  status: varchar("status", { length: 40 }).default("CONFIRMED"),
+  contactEmail: varchar("contact_email", { length: 180 }).notNull(),
+  contactPhone: varchar("contact_phone", { length: 50 }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 9. Trips & Generated AI Itineraries
+// 9. Hotel Properties & Stays
+export const hotelProperties = pgTable("hotel_properties", {
+  id: serial("id").primaryKey(),
+  slug: varchar("slug", { length: 150 }).notNull().unique(),
+  name: varchar("name", { length: 200 }).notNull(),
+  destinationSlug: varchar("destination_slug", { length: 120 }).notNull(),
+  state: varchar("state", { length: 100 }).notNull(),
+  location: varchar("location", { length: 150 }).notNull(),
+  address: text("address").notNull(),
+  propertyType: varchar("property_type", { length: 60 }).notNull(),
+  rating: doublePrecision("rating").default(4.8),
+  pricePerNight: integer("price_per_night").notNull(),
+  featuredImage: text("featured_image").notNull(),
+  description: text("description").notNull(),
+  amenities: jsonb("amenities").$type<string[]>().default([]),
+  breakfastIncluded: boolean("breakfast_included").default(true),
+  freeCancellation: boolean("free_cancellation").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 10. Hotel Bookings
+export const hotelBookings = pgTable("hotel_bookings", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id"),
+  bookingReference: varchar("booking_reference", { length: 60 }).notNull().unique(),
+  hotelId: integer("hotel_id"),
+  hotelName: varchar("hotel_name", { length: 200 }).notNull(),
+  roomType: varchar("room_type", { length: 100 }).notNull(),
+  checkIn: varchar("check_in", { length: 60 }).notNull(),
+  checkOut: varchar("check_out", { length: 60 }).notNull(),
+  nightsCount: integer("nights_count").default(2),
+  guestsCount: integer("guests_count").default(2),
+  totalPrice: integer("total_price").notNull(),
+  status: varchar("status", { length: 40 }).default("CONFIRMED"),
+  contactEmail: varchar("contact_email", { length: 180 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 11. Food Places & Eateries
+export const foodPlaces = pgTable("food_places", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 180 }).notNull(),
+  destinationSlug: varchar("destination_slug", { length: 120 }).notNull(),
+  cuisine: varchar("cuisine", { length: 100 }).notNull(),
+  diet: varchar("diet", { length: 60 }).notNull(),
+  category: varchar("category", { length: 80 }).notNull(),
+  averageCostForTwo: integer("avg_cost_for_two").default(500),
+  rating: doublePrecision("rating").default(4.8),
+  image: text("image").notNull(),
+  address: text("address").notNull(),
+  mustTryDishes: jsonb("must_try_dishes").$type<string[]>().default([]),
+  description: text("description"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 12. Trips & Generated AI Itineraries
 export const trips = pgTable("trips", {
   id: serial("id").primaryKey(),
   userId: integer("user_id"),
@@ -165,30 +228,17 @@ export const trips = pgTable("trips", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 10. Saved Items & User Preferences
-export const savedDestinations = pgTable("saved_destinations", {
+export const reviews = pgTable("reviews", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id"),
-  sessionId: varchar("session_id", { length: 120 }).notNull(),
   destinationSlug: varchar("destination_slug", { length: 120 }).notNull(),
+  userName: varchar("user_name", { length: 120 }).notNull(),
+  userEmail: varchar("user_email", { length: 180 }),
+  rating: integer("rating").notNull().default(5),
+  title: varchar("title", { length: 200 }).notNull(),
+  comment: text("comment").notNull(),
+  photos: jsonb("photos").$type<string[]>().default([]).notNull(),
+  helpful: integer("helpful").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
-
-export const savedExperiences = pgTable("saved_experiences", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id"),
-  sessionId: varchar("session_id", { length: 120 }).notNull(),
-  experienceSlug: varchar("experience_slug", { length: 120 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
-
-export const userPreferences = pgTable("user_preferences", {
-  id: serial("id").primaryKey(),
-  sessionId: varchar("session_id", { length: 120 }).notNull().unique(),
-  interests: jsonb("interests").$type<string[]>().default([]),
-  preferredBudget: varchar("preferred_budget", { length: 60 }).default("Moderate"),
-  travelStyle: varchar("travel_style", { length: 60 }).default("Balanced"),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 export const savedItineraries = pgTable("saved_itineraries", {
@@ -203,8 +253,6 @@ export const savedItineraries = pgTable("saved_itineraries", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// Legacy aliases & helpers
-export const tripPlans = trips;
 export const festivalReminders = pgTable("festival_reminders", {
   id: serial("id").primaryKey(),
   festivalSlug: varchar("festival_slug", { length: 120 }).notNull(),
@@ -221,6 +269,7 @@ export const pageViews = pgTable("page_views", {
   lastViewed: timestamp("last_viewed", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const tripPlans = trips;
 export const contactMessages = pgTable("contact_messages", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 120 }).notNull(),
@@ -237,11 +286,3 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   source: varchar("source", { length: 60 }).default("footer"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
-
-export type User = typeof users.$inferSelect;
-export type DestinationModel = typeof destinations.$inferSelect;
-export type StateModel = typeof states.$inferSelect;
-export type ExperienceModel = typeof experiences.$inferSelect;
-export type BusinessModel = typeof businesses.$inferSelect;
-export type TripModel = typeof trips.$inferSelect;
-export type ReviewModel = typeof reviews.$inferSelect;

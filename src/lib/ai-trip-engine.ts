@@ -6,8 +6,11 @@ import type {
   TravelStyle,
   AccommodationPreference,
   TransportPreference,
+  Language,
 } from "@/lib/types";
 import { destinationsData } from "@/data/destinations";
+import { getFoodPlacesByDestination } from "@/data/food";
+import { staysData } from "@/data/booking";
 
 export interface AIPlanInput {
   destination: string;
@@ -18,6 +21,8 @@ export interface AIPlanInput {
   travelStyle: TravelStyle;
   accommodationPref?: AccommodationPreference;
   transportPref?: TransportPreference;
+  foodPreferences?: string[];
+  language?: Language;
   availableTime?: string;
   surpriseMe?: boolean;
 }
@@ -31,7 +36,6 @@ export function generateAITripPlan(input: AIPlanInput): AIGeneratedItinerary {
   );
 
   if (!dest || input.surpriseMe) {
-    // Pick a hidden gem or top destination if surprise me
     const gems = destinationsData.filter((d) => d.isHiddenGem);
     dest = gems[Math.floor(Math.random() * gems.length)] || destinationsData[0];
   }
@@ -60,204 +64,159 @@ export function generateAITripPlan(input: AIPlanInput): AIGeneratedItinerary {
   const totalLocalTransport = baseLocalTransport * duration * Math.ceil(travellers / 3);
   const totalTravel = baseIntercityTravel * travellers;
   const misc = Math.round((totalStay + totalFood + totalActivities) * 0.08);
+
   const grandTotal = totalStay + totalFood + totalActivities + totalLocalTransport + totalTravel + misc;
 
-  // Generate day-by-day plans
+  // Smart Trip Bundle Calculation
+  const bundleFlightCost = input.transportPref === "Train" ? 1800 * travellers : 4500 * travellers;
+  const bundleHotelCost = totalStay;
+  const bundleActivitiesCost = totalActivities;
+  const bundleFoodCost = totalFood;
+  const bundleTransportCost = totalLocalTransport;
+  const rawBundleSum = bundleFlightCost + bundleHotelCost + bundleActivitiesCost + bundleFoodCost + bundleTransportCost;
+  const discountApplied = Math.round(rawBundleSum * 0.12);
+  const totalBundlePrice = rawBundleSum - discountApplied;
+
+  const places = dest.placesToVisit || [
+    { name: "Historical Monument Circuit", type: "Heritage", description: "Magnificent architectural marvel.", timings: "09:00 AM - 05:30 PM" },
+    { name: "Local Artisan Crafts Bazaar", type: "Culture", description: "Bustling traditional market.", timings: "11:00 AM - 08:00 PM" },
+    { name: "Scenic Sunset Vantage", type: "Nature", description: "Panoramic hill views.", timings: "04:30 PM - 07:00 PM" },
+  ];
+
+  const destinationFoods = getFoodPlacesByDestination(dest.slug);
+
+  // Day prefix translations
+  const lang = input.language || "en";
+  const getDayPrefix = (dayNum: number) => {
+    if (lang === "te") return `${dayNum}వ రోజు`;
+    if (lang === "hi") return `दिन ${dayNum}`;
+    if (lang === "ta") return `நாள் ${dayNum}`;
+    if (lang === "bn") return `দিন ${dayNum}`;
+    if (lang === "kn") return `ದಿನ ${dayNum}`;
+    if (lang === "ml") return `ദിവസം ${dayNum}`;
+    return `Day ${dayNum}`;
+  };
+
   const days: AIDayPlan[] = [];
 
   for (let i = 1; i <= duration; i++) {
-    const isFirstDay = i === 1;
-    const isLastDay = i === duration;
-    const dayTheme = isFirstDay
-      ? `Arrival & Heritage Orientation in ${dest.name}`
-      : isLastDay
-      ? `Hidden Gems, Crafts & Farewell in ${dest.name}`
-      : `Deep Cultural Immersion & Scenic Landscapes`;
+    const dayTheme =
+      i === 1
+        ? `Arrival, Heritage Exploration & Welcome Food Trail`
+        : i === 2
+        ? `Architectural Wonders, Culture & Artisan Studios`
+        : i === 3
+        ? `Hidden Gem Excursions & Nature Panoramas`
+        : `Leisure, Local Markets & Farewell Sunset Voyage`;
 
-    const activities: AIActivityItem[] = [];
+    const placeA = places[(i * 2 - 2) % places.length];
+    const placeB = places[(i * 2 - 1) % places.length];
+    const recommendedFood = destinationFoods[(i - 1) % destinationFoods.length];
 
-    if (isFirstDay) {
-      activities.push({
-        time: "09:30 AM",
-        title: `Arrival, Check-in & Welcome Chai at ${dest.name}`,
-        type: "hotel",
-        description: `Arrive at your curated ${input.accommodationPref || "boutique stay"}, unpack, and enjoy fresh regional tea and orientation.`,
-        location: `${dest.name} Central`,
-        estimatedCost: 0,
-        durationMinutes: 60,
-        whyRecommended: `Allows smooth acclimatization and hassle-free check-in before afternoon explorations.`,
-      });
-      activities.push({
-        time: "11:30 AM",
-        title: `Historic Monument Walk: ${dest.highlights[0] || "Ancient Citadel"}`,
-        type: "attraction",
-        description: `Explore the iconic architectural centerpiece of ${dest.name} with audio guidance and photography stops.`,
-        location: dest.name,
-        estimatedCost: Math.round(300 * budgetMultiplier),
-        durationMinutes: 120,
-        whyRecommended: `Recommended because you requested heritage and cultural highlights.`,
-      });
-      activities.push({
-        time: "01:30 PM",
-        title: `Authentic Regional Lunch: ${dest.localCuisine[0]?.name || "Traditional Thali"}`,
-        type: "meal",
-        description: `Savor authentic local flavors at a verified community-recommended dining establishment.`,
-        location: `${dest.name} Food Street`,
-        estimatedCost: Math.round(450 * budgetMultiplier),
-        durationMinutes: 75,
-        whyRecommended: `Matches your culinary curiosity with high-hygiene verified authentic cooks.`,
-      });
-      activities.push({
-        time: "04:30 PM",
-        title: `Sunset Viewpoint & Photography: ${dest.highlights[1] || "Scenic Viewpoint"}`,
-        type: "experience",
-        description: `Catch the golden hour light as the landscape is bathed in warm twilight hues.`,
-        location: `${dest.name} Panorama Point`,
-        estimatedCost: 0,
-        durationMinutes: 90,
-        whyRecommended: `Prime photography lighting during the cool evening breeze.`,
-      });
-      activities.push({
-        time: "07:30 PM",
-        title: `Evening Market Stroll & Dinner at ${dest.localMarkets[0]?.name || "Historic Bazaar"}`,
-        type: "meal",
-        description: `Browse local artisanal handicrafts, spices, and enjoy dinner under illuminated lanterns.`,
-        location: dest.localMarkets[0]?.name || "Main Market",
-        estimatedCost: Math.round(600 * budgetMultiplier),
-        durationMinutes: 120,
-        whyRecommended: `Directly supports verified local craftspeople with zero middleman commissions.`,
-      });
-    } else if (isLastDay) {
-      activities.push({
-        time: "08:00 AM",
-        title: `Sunrise Meditation & Nature Walk`,
-        type: "leisure",
-        description: `Start the day with peaceful birdsong and fresh morning mountain/lake air.`,
-        location: `${dest.name} Outskirts`,
-        estimatedCost: 0,
-        durationMinutes: 60,
-        whyRecommended: `Gentle start to your final day designed for relaxation.`,
-      });
-      activities.push({
-        time: "10:30 AM",
-        title: `Hidden Gem Exploration: ${dest.nearbyAttractions[0]?.name || "Quiet Artisan Hamlet"}`,
-        type: "experience",
-        description: `Visit an uncrowded off-beat attraction that mass tourism buses overlook.`,
-        location: `${dest.nearbyAttractions[0]?.distance || "15 km"} from center`,
-        estimatedCost: Math.round(250 * budgetMultiplier),
-        durationMinutes: 120,
-        whyRecommended: `Curated hidden gem to escape crowds and discover living traditions.`,
-      });
-      activities.push({
-        time: "01:00 PM",
-        title: `Farewell Feast & Souvenir Procurement`,
-        type: "meal",
-        description: `Sample final delicacies and purchase certified GI-tagged souvenirs directly from artisans.`,
-        location: `${dest.name} Artisan Guild`,
-        estimatedCost: Math.round(500 * budgetMultiplier),
-        durationMinutes: 90,
-        whyRecommended: `Ensures ethical shopping directly benefiting local families.`,
-      });
-      activities.push({
-        time: "04:00 PM",
-        title: `Departure Transfer to Airport / Railway Station`,
-        type: "transit",
-        description: `Comfortable transit connection for your return or onward journey.`,
-        location: `${dest.name} Transit Hub`,
-        estimatedCost: Math.round(300 * budgetMultiplier),
-        durationMinutes: 60,
-        whyRecommended: `Optimized timing to reach station 90 minutes before scheduled departure.`,
-      });
-    } else {
-      activities.push({
+    const activities: AIActivityItem[] = [
+      {
         time: "08:30 AM",
-        title: `Morning Heritage Expedition: ${dest.highlights[i % dest.highlights.length] || "Monument Exploration"}`,
-        type: "attraction",
-        description: `Beat midday crowds with early entry and explore intricate stone carvings and courtyards.`,
-        location: dest.name,
-        estimatedCost: Math.round(250 * budgetMultiplier),
-        durationMinutes: 120,
-        whyRecommended: `Morning slot avoids heat and allows quiet exploration.`,
-      });
-      activities.push({
-        time: "12:00 PM",
-        title: `Local Workshop / Artisan Masterclass`,
-        type: "experience",
-        description: `Interact with master weavers, potters, or organic farmers preserving regional heritage.`,
-        location: `${dest.name} Craft Center`,
-        estimatedCost: Math.round(400 * budgetMultiplier),
-        durationMinutes: 90,
-        whyRecommended: `Hands-on immersive activity tailored to your selected cultural interests.`,
-      });
-      activities.push({
-        time: "01:30 PM",
-        title: `Traditional Lunch at Verified Eatery`,
-        type: "meal",
-        description: `Savor authentic home-style meal prepared with locally harvested seasonal organic ingredients.`,
-        location: `${dest.name} Old Town`,
-        estimatedCost: Math.round(400 * budgetMultiplier),
+        title: i === 1 ? `Transit Arrival & Hotel Check-in` : `Traditional Morning Breakfast`,
+        type: i === 1 ? "transit" : "meal",
+        description:
+          i === 1
+            ? `Arrive in ${dest.name} via ${input.transportPref || "Express Train / Flight"} and check in.`
+            : `Enjoy local breakfast favorites at a recommended local eatery.`,
+        location: `${dest.name} Transit Gateway`,
+        estimatedCost: i === 1 ? 0 : Math.round(250 * budgetMultiplier),
         durationMinutes: 60,
-        whyRecommended: `Authentic farm-to-table culinary spot recommended by local food docents.`,
-      });
-      activities.push({
-        time: "04:00 PM",
-        title: `Scenic Nature Trail or River/Lake Excursion`,
-        type: "experience",
-        description: `Enjoy a boat ride, nature trail, or temple aarti session during pleasant late afternoon breezes.`,
-        location: `${dest.name} Scenic Zone`,
-        estimatedCost: Math.round(350 * budgetMultiplier),
+        whyRecommended: `Allows hassle-free start aligned with your ${input.travelStyle} travel style.`,
+        bookingAction:
+          i === 1
+            ? {
+                type: "flight",
+                label: `Book Flight / Train to ${dest.name}`,
+                link: `/book/flights?to=${encodeURIComponent(dest.name)}`,
+                estimatedCost: bundleFlightCost,
+              }
+            : undefined,
+      },
+      {
+        time: "10:00 AM",
+        title: `Explore ${placeA.name}`,
+        type: "attraction",
+        description: placeA.description || `Marvel at the ancient architecture and guided heritage trails.`,
+        location: placeA.name,
+        estimatedCost: Math.round(150 * budgetMultiplier),
         durationMinutes: 120,
-        whyRecommended: `Balanced travel pace offering restful scenic recreation.`,
-      });
-      activities.push({
-        time: "07:30 PM",
-        title: `Cultural Folk Music / Classical Recital & Dinner`,
+        whyRecommended: `Ranked as a top landmark matching your interest in ${input.interests[0] || "Heritage"}.`,
+      },
+      {
+        time: "01:30 PM",
+        title: `Lunch at ${recommendedFood ? recommendedFood.name : "Local Heritage Kitchen"}`,
         type: "meal",
-        description: `Evening classical music, dance recital, and candlelit dinner with panoramic night views.`,
-        location: `${dest.name} Cultural Amphitheatre`,
-        estimatedCost: Math.round(700 * budgetMultiplier),
-        durationMinutes: 120,
-        whyRecommended: `Vibrant evening experience showcasing regional performing arts.`,
-      });
-    }
+        description: recommendedFood
+          ? `Must try: ${recommendedFood.mustTryDishes.slice(0, 2).join(", ")} (${recommendedFood.cuisine}).`
+          : `Savor authentic regional thalis with local spices.`,
+        location: recommendedFood ? recommendedFood.name : `${dest.name} Food Trail`,
+        estimatedCost: recommendedFood ? recommendedFood.averageCostForTwo / 2 : Math.round(450 * budgetMultiplier),
+        durationMinutes: 75,
+        whyRecommended: `Matches your dietary preference (${input.foodPreferences?.join(", ") || "Local cuisine"}).`,
+        bookingAction: {
+          type: "food",
+          label: "View Food Menu & Details",
+          link: `/food`,
+          estimatedCost: recommendedFood ? recommendedFood.averageCostForTwo / 2 : 450,
+        },
+      },
+      {
+        time: "03:45 PM",
+        title: `Visit ${placeB.name}`,
+        type: "attraction",
+        description: placeB.description || `Immerse in cultural stories and local craftsmanship.`,
+        location: placeB.name,
+        estimatedCost: Math.round(200 * budgetMultiplier),
+        durationMinutes: 100,
+        whyRecommended: `Optimized route sequence minimizes in-city travel time.`,
+      },
+      {
+        time: "06:30 PM",
+        title: `Sunset Vantage & Evening Leisure`,
+        type: "experience",
+        description: `Stroll through illuminated bazaars and watch evening sunset panoramas.`,
+        location: `${dest.name} Promenade`,
+        estimatedCost: Math.round(150 * budgetMultiplier),
+        durationMinutes: 90,
+        whyRecommended: `The perfect golden hour window for photography and peaceful relaxation.`,
+      },
+    ];
 
     days.push({
       day: i,
-      theme: dayTheme,
+      theme: `${getDayPrefix(i)} — ${dayTheme}`,
       routeSequence: [
-        `Hotel Stay`,
-        activities[0]?.title.slice(0, 30) || "Morning Point",
-        activities[1]?.title.slice(0, 30) || "Midday Attraction",
-        activities[2]?.title.slice(0, 30) || "Lunch Spot",
-        activities[3]?.title.slice(0, 30) || "Evening Sunset",
-        `Hotel Stay`,
+        i === 1 ? "Arrival Hub" : "Stay",
+        placeA.name,
+        recommendedFood ? recommendedFood.name : "Lunch Spot",
+        placeB.name,
+        "Evening Vantage",
       ],
       activities,
       stay: {
-        name: `Curated ${input.accommodationPref || "Heritage Boutique Stay"}, ${dest.name}`,
+        name: `${dest.name} ${input.accommodationPref || "Heritage Palace / Boutique Stay"}`,
         type: input.accommodationPref || "Boutique Hotel",
         estimatedCost: baseStayCost,
-        description: `Verified comfortable stay with modern amenities, organic breakfast, and prime location.`,
+        description: `Centrally situated stay with authentic architecture and modern amenities.`,
+        bookingUrl: `/book/stays?destination=${encodeURIComponent(dest.name)}`,
       },
       meals: {
-        breakfast: "Complimentary regional breakfast at stay",
-        lunch: `${dest.localCuisine[0]?.name || "Traditional Thali"} at verified kitchen`,
-        dinner: "Gourmet regional dinner and dessert",
+        breakfast: `Traditional regional breakfast & chai`,
+        lunch: recommendedFood ? `${recommendedFood.name} (${recommendedFood.cuisine})` : `Regional Thali`,
+        dinner: `Candlelit dinner at scenic rooftop kitchen`,
       },
-      dayEstimatedCost: baseStayCost + baseFoodCost + baseActivityCost + baseLocalTransport,
-      travelTimeHours: input.travelStyle === "Fast-paced" ? 2.5 : input.travelStyle === "Relaxed" ? 1.0 : 1.8,
+      dayEstimatedCost: Math.round(grandTotal / duration),
+      travelTimeHours: input.travelStyle === "Relaxed" ? 1.5 : 2.5,
     });
   }
 
-  const reasons = [
-    `Recommended because you selected ${input.budgetTier} budget with a ${input.travelStyle} travel pace for ${travellers} traveler(s).`,
-    `Optimized to include both iconic monuments and peaceful lesser-known spots to avoid overcrowding.`,
-    `Every activity and restaurant has been cross-referenced with verified local ratings and seasonal safety advisories.`,
-  ];
-
   return {
     id: `trip-ai-${Date.now()}`,
-    title: `${duration}-Day Personalized Journey in ${dest.name} (${dest.state})`,
+    title: `${duration}-Day Tailored Journey in ${dest.name}`,
     destination: dest.name,
     destinationSlugs: [dest.slug],
     state: dest.state,
@@ -265,7 +224,7 @@ export function generateAITripPlan(input: AIPlanInput): AIGeneratedItinerary {
     travellersCount: travellers,
     budgetTier: input.budgetTier,
     travelStyle: input.travelStyle,
-    summary: `A carefully curated ${duration}-day journey across ${dest.name} emphasizing authentic heritage, local cuisine, scenic viewpoints, and sustainable tourism.`,
+    summary: `A carefully balanced ${duration}-day itinerary in ${dest.name} crafted for ${travellers} traveller(s) with focus on ${input.interests.join(", ") || "Heritage, Food, and Nature"}.`,
     days,
     budgetBreakdown: {
       stay: totalStay,
@@ -277,33 +236,41 @@ export function generateAITripPlan(input: AIPlanInput): AIGeneratedItinerary {
       total: grandTotal,
       currency: "INR (₹)",
     },
-    optimizedRoute: {
-      summary: `Optimized chronological circuit starting from Central ${dest.name} through key monuments, scenic viewpoints, and returning to accommodation with minimal backtracking.`,
-      stops: [
-        `Arrival Hub (${dest.howToReach?.air || dest.name})`,
-        ...dest.highlights.slice(0, 3),
-        dest.nearbyAttractions[0]?.name || "Scenic Nature Reserve",
-        `Hotel Sanctuary in ${dest.name}`,
-      ],
-      totalDistanceKm: duration * 35,
-      recommendedTransport: input.transportPref || "Private Taxi / Metro / Local Cab",
+    smartBundle: {
+      flightCost: bundleFlightCost,
+      hotelCost: bundleHotelCost,
+      activitiesCost: bundleActivitiesCost,
+      foodCost: bundleFoodCost,
+      localTransportCost: bundleTransportCost,
+      totalBundlePrice,
+      discountApplied,
     },
-    recommendedReasons: reasons,
-    hiddenGemsIncluded: [
-      dest.nearbyAttractions[0]?.name || "Ancient Village Stepwell",
-      dest.localMarkets[0]?.name || "Artisan Weavers Cooperative",
+    optimizedRoute: {
+      summary: `Circuit optimized across central historic quarter, scenic nature lookouts, and culinary hubs.`,
+      stops: [dest.name, `${dest.name} Heritage Core`, `${dest.name} Cultural Outskirts`],
+      totalDistanceKm: Math.round(duration * 24),
+      recommendedTransport: input.transportPref || "Private Taxi / Metro / Auto-rickshaw",
+    },
+    recommendedReasons: [
+      `100% personalized for ${input.budgetTier} budget with zero overspending.`,
+      `Includes curated hidden gems with low crowd densities for authentic encounters.`,
+      `Route sequence designed to minimize travel fatigue and maximize golden hour sightseeing.`,
+      `Verified local culinary pairings customized to ${input.foodPreferences?.join(", ") || "local delicacies"}.`,
     ],
-    safetyTips: dest.travelTips || [
-      "Carry bottled purified water and small cash notes for local market stalls.",
-      "Dress respectfully when entering temples and religious sanctums.",
-      "Emergency national police/medical helpline: 112.",
+    hiddenGemsIncluded: [
+      `${dest.name} Twilight Artisan Market`,
+      `Ancient Sun Temple & Stepwell Complex`,
+    ],
+    safetyTips: [
+      `Keep digital copies of tickets in your Sanchari Bharat "My Trips" dashboard.`,
+      `Use authorized prepaid taxi booths or ride-hailing at transit terminals.`,
+      `Call the 24x7 Multi-lingual Tourist Helpline at 1800 11 1363 for instant assistance.`,
     ],
     packingAdvice: [
-      "Light cotton layers during day, light jacket for evening lake/hill breezes",
-      "Comfortable slip-on walking shoes for temple and fortress explorations",
-      "Universal adapter (Type D/C) and high-capacity power bank",
+      `Breathable cotton clothing and comfortable walking shoes.`,
+      `Universal charging adapter and power bank for long sightseeing days.`,
+      `Reusable water bottle with built-in filter.`,
     ],
     createdAt: new Date().toISOString(),
   };
 }
-

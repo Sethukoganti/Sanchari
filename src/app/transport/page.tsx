@@ -54,7 +54,7 @@ export default function TransportPage() {
                       Direct Flights:
                     </span>
                     <div className="flex flex-wrap gap-1">
-                      {ap.connections.map((c) => (
+                      {ap.connections.map((c: string) => (
                         <span key={c} className="chip !py-0.5 !px-2 text-[10px]">
                           {c}
                         </span>
@@ -128,7 +128,7 @@ export default function TransportPage() {
                   <p className="text-xs text-muted-gray">{bus.type}</p>
                   <p className="text-xs text-zinc-200">Route: {bus.route} ({bus.duration})</p>
                   <div className="flex flex-wrap gap-1.5 pt-2">
-                    {bus.amenities.map((a) => (
+                    {bus.amenities.map((a: string) => (
                       <span key={a} className="chip !py-0.5 !px-2 text-[10px]">
                         {a}
                       </span>
@@ -143,4 +143,3 @@ export default function TransportPage() {
     </div>
   );
 }
-

@@ -49,12 +49,12 @@ export function Hero() {
           alt="Majestic India Heritage"
           fill
           priority
-          className="object-cover object-center brightness-60 scale-105 transition-transform duration-1000"
-        />
+          className="object-cover object-center brightness-100 dark:brightness-60 scale-105 transition-transform duration-1000"
+          />
         {/* Multilayered radial and vertical dark blue gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy-deep/75 to-navy-dark/60" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(11,19,43,0.3)_0%,rgba(5,8,17,0.95)_100%)]" />
-      </div>
+       <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/45 to-white/20 dark:from-navy-deep dark:via-navy-deep/75 dark:to-navy-dark/60" />
+       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.25)_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(11,19,43,0.3)_0%,rgba(5,8,17,0.95)_100%)]" />
+       </div>
 
       <div className="container-site relative z-10 text-center space-y-8 max-w-5xl mx-auto px-4">
         {/* Brand Tagline Badge */}
@@ -67,10 +67,10 @@ export function Hero() {
 
         {/* Main Headings */}
         <div className="space-y-4">
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-warm-white tracking-tight leading-[1.08]">
-            Discover India. <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron via-amber-400 to-emerald-accent">Plan Smarter.</span> Travel Better.
+         <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-navy dark:text-white tracking-tight leading-[1.08]">
+          Discover India. <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron via-amber-400 to-emerald-accent">Plan Smarter.</span> Travel Better.
           </h1>
-          <p className="font-body text-base sm:text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-body text-base sm:text-xl text-slate-700 dark:text-white max-w-3xl mx-auto leading-relaxed">
             Explore destinations, experiences and hidden gems across India — and let AI create a personalised, day-wise trip for you in seconds.
           </p>
         </div>
@@ -99,16 +99,16 @@ export function Hero() {
         <div className="max-w-2xl mx-auto pt-4">
           <form
             onSubmit={handleSearchSubmit}
-            className="relative flex items-center p-2 rounded-2xl bg-navy-surface/90 border border-white/20 backdrop-blur-2xl shadow-2xl hover:border-saffron/50 transition-all group"
-          >
+            className="relative flex items-center p-2 rounded-2xl bg-white/95 dark:bg-navy-surface/90 border border-slate-300 dark:border-white/20 backdrop-blur-2xl shadow-2xl hover:border-saffron/50 transition-all group"
+            >
             <Search className="h-5 w-5 text-saffron ml-3.5 shrink-0 group-hover:scale-110 transition-transform" />
             <input
               type="text"
               placeholder="Search destinations, states, festivals, experiences..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-transparent px-4 py-2.5 text-xs sm:text-sm text-warm-white placeholder:text-muted-gray outline-none font-body"
-            />
+              className="w-full bg-transparent px-4 py-2.5 text-xs sm:text-sm text-navy dark:text-white placeholder:text-slate-500 dark:placeholder:text-muted-gray outline-none font-body"
+               />
             <button
               type="submit"
               className="btn-primary !py-2.5 !px-5 text-xs shrink-0 cursor-pointer"
@@ -120,8 +120,8 @@ export function Hero() {
 
         {/* Quick Category Chips */}
         <div className="pt-2">
-          <p className="text-[11px] font-mono text-muted-gray uppercase tracking-wider mb-3">
-            Quick Discovery Categories:
+          <p className="text-[11px] font-mono text-slate-700 dark:text-white uppercase tracking-wider mb-3">
+             Quick Discovery Categories:
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {QUICK_CATEGORIES.map((cat) => (

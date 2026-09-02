@@ -119,7 +119,7 @@ export default function HomePage() {
               <div>
                 <div className="relative h-48 w-full overflow-hidden">
                   <Image
-                    src={evt.image}
+                    src={evt.image || evt.heroImage || evt.gallery?.[0] || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800&q=80"}
                     alt={evt.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -135,7 +135,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3.5 left-3.5 right-3.5 flex justify-between items-center text-xs">
                     <span className="text-warm-white font-semibold flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-saffron" />
-                      {evt.date.approximateString}
+                      {evt.date.approximateString || evt.date.month || "Upcoming"}
                     </span>
                     <span className="text-muted-gray text-[11px] bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">
                       {evt.state}

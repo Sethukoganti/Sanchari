@@ -1,17 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* SANCHARI BHARAT Color System */
+  /* Brand Color Tokens */
   --color-navy: #0B132B;
   --color-navy-dark: #070B19;
   --color-navy-deep: #050811;
   --color-navy-light: #1C2541;
   --color-navy-surface: #111C38;
-  --color-dark-bg: #070B19;
-  --color-dark-surface: #0E172F;
-  --color-dark-elevated: #152244;
-  --color-dark-border: rgba(255, 255, 255, 0.12);
 
   /* Primary Saffron / Orange Accent */
   --color-saffron: #F97316;
@@ -28,7 +25,7 @@
   --color-peacock-light: #10B981;
   --color-peacock-dark: #047857;
 
-  /* AI Wizard Violet / Purple Accent */
+  /* AI Violet Accent */
   --color-ai-violet: #8B5CF6;
   --color-ai-light: #A78BFA;
   --color-ai-dark: #6D28D9;
@@ -49,10 +46,87 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
+/* =========================
+   LIGHT THEME
+   ========================= */
 :root {
+  color-scheme: light;
+
+  --background: #F8FAFC;
+  --foreground: #0B132B;
+
+  --surface: #FFFFFF;
+  --surface-elevated: #F1F5F9;
+
+  --border: rgba(15, 23, 42, 0.12);
+  --border-subtle: rgba(15, 23, 42, 0.06);
+
+  --text-main: #0B132B;
+  --text-muted: #475569;
+
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(15, 23, 42, 0.1);
+  --chip-bg: rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   DARK THEME
+   ========================= */
+.dark {
   color-scheme: dark;
+
   --background: #070B19;
-  --foreground: #F8FAFC;
+  --foreground: #FFFFFF;
+
+  --surface: #0E172F;
+  --surface-elevated: #152244;
+
+  --border: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+
+  --text-main: #FFFFFF;
+  --text-muted: #FFFFFF;
+
+  --card-bg: rgba(17, 28, 56, 0.65);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --chip-bg: rgba(255, 255, 255, 0.06);
+}
+
+
+/* =========================
+   LIGHT THEME TEXT
+   ========================= */
+:root h1,
+:root h2,
+:root h3,
+:root h4,
+:root h5,
+:root h6,
+:root p,
+:root span,
+:root label,
+:root li,
+:root a {
+  color: #0B132B;
+}
+
+
+/* =========================
+   DARK THEME TEXT
+   ========================= */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark p,
+.dark span,
+.dark label,
+.dark li,
+.dark a {
+  color: #FFFFFF;
 }
 
 body {
@@ -61,6 +135,7 @@ body {
   font-family: var(--font-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Scrollbars */
@@ -69,11 +144,14 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #070B19;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1C2541;
+  background: #94A3B8;
   border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1C2541;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #F97316;
@@ -108,30 +186,30 @@ body {
   padding-right: 0.25rem;
 }
 
-/* Glassmorphic Surfaces */
+/* Glassmorphic & Adaptive Surfaces */
 .card-surface {
-  background: rgba(17, 28, 56, 0.6);
+  background: var(--card-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-surface:hover {
-  border-color: rgba(249, 115, 22, 0.4);
+  border-color: rgba(249, 115, 22, 0.45);
   box-shadow: 0 16px 40px -12px rgba(249, 115, 22, 0.15);
 }
 
 .card-ai {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(17, 28, 56, 0.7));
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), var(--card-bg));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 1.25rem;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 1.5rem;
 }
 
 .card-ai:hover {
-  border-color: rgba(139, 92, 246, 0.6);
+  border-color: rgba(139, 92, 246, 0.65);
   box-shadow: 0 16px 40px -12px rgba(139, 92, 246, 0.25);
 }
 
@@ -142,7 +220,7 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #F97316, #EA580C);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
@@ -165,7 +243,7 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #8B5CF6, #6D28D9);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
@@ -185,22 +263,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.07);
-  color: #F8FAFC;
+  background: var(--chip-bg);
+  color: var(--text-main);
   font-weight: 600;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
   border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   transition: all 0.25s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(249, 115, 22, 0.1);
   border-color: rgba(249, 115, 22, 0.4);
-  color: #FFFFFF;
+  color: #F97316;
   transform: translateY(-2px);
 }
 
@@ -213,16 +291,16 @@ body {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #94A3B8;
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   transition: all 0.2s ease;
 }
 
 .chip:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  border-color: rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.1);
+  color: #F97316;
+  border-color: rgba(249, 115, 22, 0.4);
 }
 
 .chip-active {
@@ -235,20 +313,24 @@ body {
 .chip-ai {
   background: rgba(139, 92, 246, 0.18);
   border-color: #8B5CF6;
-  color: #A78BFA;
+  color: #8B5CF6;
   font-weight: 700;
 }
 
 .badge-hidden-gem {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
   border: 1px solid rgba(16, 185, 129, 0.4);
-  color: #34D399;
+  color: #059669;
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
+}
+
+.dark .badge-hidden-gem {
+  color: #34D399;
 }
 
 /* Animations */
