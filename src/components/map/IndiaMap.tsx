@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useRef, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
   Search,
   MapPin,
   Sparkles,
@@ -15,6 +12,9 @@ import {
 import { statesData } from "@/data/states";
 import { destinationsData } from "@/data/destinations";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
 
 // Region Color Configuration
 const REGION_COLORS: Record<string, { base: string; hover: string; border: string; text: string; glow: string }> = {
@@ -140,14 +140,7 @@ export function IndiaMap() {
   const [hoveredState, setHoveredState] = useState<typeof ALL_STATES_SVG[0] | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showCircuits, setShowCircuits] = useState(true);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Search Filtered States
   const filteredStates = useMemo(() => {
@@ -156,48 +149,6 @@ export function IndiaMap() {
       s.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
-
-  // Zoom handlers
-  const handleZoomIn = () => setZoom((z) => Math.min(z + 0.35, 3.5));
-  const handleZoomOut = () => setZoom((z) => Math.max(z - 0.35, 0.8));
-  const handleReset = () => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-    setSelectedState(null);
-    setSearchQuery("");
-  };
-
-  // Wheel Zoom
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.15 : 0.15;
-    setZoom((z) => Math.min(Math.max(z + delta, 0.8), 3.5));
-  }, []);
-
-  // Mouse Drag Pan Handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging) {
-      setPan({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y,
-      });
-    }
-
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setTooltipPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    }
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
 
   // State Click Navigation
   const handleStateClick = (slug: string) => {
@@ -259,191 +210,12 @@ export function IndiaMap() {
             <span className="hidden sm:inline">Tourist Circuits</span>
           </button>
 
-          {/* Zoom Buttons */}
-          <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1 backdrop-blur-md">
-            <button
-              type="button"
-              onClick={handleZoomIn}
-              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
-              title="Zoom In"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={handleZoomOut}
-              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
-              title="Zoom Out"
-            >
-              <ZoomOut className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
-              title="Reset View"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* SVG Canvas Map Area */}
-      <div
-        ref={containerRef}
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        className={cn(
-          "relative h-[480px] sm:h-[620px] w-full overflow-hidden rounded-xl bg-gradient-to-b from-[#090909] via-[#0D0D0D] to-[#080808]",
-          isDragging ? "cursor-grabbing" : "cursor-grab",
-        )}
-      >
-        <svg
-          viewBox="0 0 580 580"
-          className="h-full w-full transition-transform duration-75"
-          style={{
-            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-            transformOrigin: "center center",
-          }}
-        >
-          {/* Subtle Map Grid Lines */}
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="0.5" />
-            </pattern>
-            {/* Pulsing destination marker glow filter */}
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <rect width="580" height="580" fill="url(#grid)" />
-
-          {/* Render All 28 States & 8 UTs Paths */}
-          <g id="states-group">
-            {ALL_STATES_SVG.map((state) => {
-              const regionColor = REGION_COLORS[state.region] || REGION_COLORS.North;
-              const isHovered = hoveredState?.slug === state.slug;
-              const isSelected = selectedState === state.slug || (searchQuery && state.name.toLowerCase().includes(searchQuery.toLowerCase()));
-
-              return (
-                <path
-                  key={state.slug}
-                  d={state.d}
-                  fill={isSelected ? "#E8A013" : isHovered ? regionColor.hover : regionColor.base}
-                  stroke={isSelected ? "#FFFFFF" : isHovered ? "#FFFFFF" : regionColor.border}
-                  strokeWidth={isSelected ? "1.8" : isHovered ? "1.5" : "0.75"}
-                  className="transition-all duration-200 cursor-pointer"
-                  style={{
-                    filter: isHovered || isSelected ? `drop-shadow(0 0 8px ${regionColor.glow})` : "none",
-                  }}
-                  onMouseEnter={() => setHoveredState(state)}
-                  onMouseLeave={() => setHoveredState(null)}
-                  onClick={() => handleStateClick(state.slug)}
-                />
-              );
-            })}
-          </g>
-
-          {/* Animated Tourist Circuit Paths */}
-          {showCircuits && (
-            <g id="circuits-group">
-              {TOURIST_CIRCUITS.map((circuit) => (
-                <polyline
-                  key={circuit.name}
-                  points={circuit.points}
-                  fill="none"
-                  stroke={circuit.color}
-                  strokeWidth="2"
-                  className="travel-circuit-line"
-                  opacity="0.85"
-                />
-              ))}
-            </g>
-          )}
-
-          {/* Pulsing Destination Pin Markers */}
-          <g id="destination-pins">
-            {DESTINATION_PINS.map((pin) => (
-              <g
-                key={pin.slug}
-                className="cursor-pointer group"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(`/destinations/${pin.slug}`);
-                }}
-              >
-                {/* Outer Pulsing Wave */}
-                <circle
-                  cx={pin.x}
-                  cy={pin.y}
-                  r="8"
-                  fill="none"
-                  stroke="#E8A013"
-                  strokeWidth="1.5"
-                  className="animate-pulse"
-                  opacity="0.6"
-                />
-                {/* Inner Core Dot */}
-                <circle
-                  cx={pin.x}
-                  cy={pin.y}
-                  r="3.5"
-                  fill="#E8A013"
-                  filter="url(#glow)"
-                />
-                {/* Micro Pin Label */}
-                <text
-                  x={pin.x + 6}
-                  y={pin.y + 3}
-                  fill="#F7F3EC"
-                  fontSize="8"
-                  fontWeight="600"
-                  fontFamily="Mukta"
-                  className="pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] opacity-90"
-                >
-                  {pin.name}
-                </text>
-              </g>
-            ))}
-          </g>
-        </svg>
-
-        {/* Floating Tooltip following hover */}
-        {hoveredState && (
-          <div
-            className="pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-full pb-3 transition-opacity duration-150"
-            style={{
-              left: `${tooltipPos.x}px`,
-              top: `${tooltipPos.y}px`,
-            }}
-          >
-            <div className="rounded-xl border border-turmeric/40 bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-turmeric animate-pulse" />
-                <p className="font-display text-sm font-bold text-warm-white">
-                  {hoveredState.name}
-                </p>
-              </div>
-              <p className="mt-0.5 text-[11px] text-muted-gray">
-                Capital: <span className="text-zinc-300 font-medium">{hoveredState.capital}</span>
-              </p>
-              <div className="mt-1 flex items-center justify-between gap-4 text-[10px] font-semibold">
-                <span className={REGION_COLORS[hoveredState.region]?.text || "text-turmeric"}>
-                  {hoveredState.region} India
-                </span>
-                <span className="text-turmeric">Click for State Guide →</span>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Interactive Leaflet Map Area */}
+      <div className="relative h-[480px] sm:h-[620px] w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-navy-dark z-10">
+        <LeafletMap />
       </div>
 
       {/* Bottom Region Legend & Circuit Indicator */}
