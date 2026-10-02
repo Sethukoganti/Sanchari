@@ -117,7 +117,7 @@ export default async function ExperienceDetailPage({
 
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-gray flex items-center gap-1.5 font-mono">
-                <Clock className="h-3.5 w-3.5 text-saffron" />
+                <Clock className="h-3.5 w-3.5 text-white" />
                 Duration:
               </span>
               <span className="font-semibold text-warm-white">{exp.duration}</span>
@@ -134,7 +134,7 @@ export default async function ExperienceDetailPage({
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-gray font-mono">Rating:</span>
               <span className="font-bold text-amber-300 flex items-center gap-1">
-                <Star className="h-3 w-3 fill-amber-300" />
+                <Star className="h-3 w-3 fill-white" />
                 {exp.rating}
               </span>
             </div>

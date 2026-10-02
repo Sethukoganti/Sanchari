@@ -39,7 +39,7 @@ export default async function StatePage({
     <>
       <div className="relative h-72 bg-navy sm:h-96">
         <Image
-          src={info.image}
+          src={info.image || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80"}
           alt=""
           fill
           className="object-cover opacity-55"

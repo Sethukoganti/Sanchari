@@ -50,9 +50,8 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
           <div key={item.label + idx} className="flex items-center gap-1.5">
             <ChevronRight className="h-3 w-3 text-zinc-600 shrink-0" />
             {item.href ? (
-              <Link
-                href={item.href}
-                className="hover:text-turmeric transition-colors truncate max-w-[200px]"
+              <Link href={item.href}
+                className="hover:text-white transition-colors truncate max-w-[200px]"
               >
                 {item.label}
               </Link>

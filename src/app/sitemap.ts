@@ -6,6 +6,7 @@ import {
   SITE,
   states,
 } from "@/data/content";
+import { staysData } from "@/data/booking";
 import type { StateDetails } from "@/lib/types";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,6 +18,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/map",
     "/stories",
     "/events",
+    "/food",
+    "/book",
+    "/book/flights",
+    "/book/trains",
+    "/book/buses",
+    "/book/stays",
+    "/my-bookings",
     "/gallery",
     "/about",
     "/contact",
@@ -34,6 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const destRoutes = destinations.map((d) => ({
     url: `${SITE.url}/destinations/${d.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const stayRoutes = staysData.map((s) => ({
+    url: `${SITE.url}/stays/${s.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
@@ -63,6 +78,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes,
     ...destRoutes,
+    ...stayRoutes,
     ...expRoutes,
     ...storyRoutes,
     ...stateRoutes,

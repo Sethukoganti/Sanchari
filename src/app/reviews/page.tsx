@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ReviewsPage() {
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Community Dispatches"
         title="Traveler Reviews & Field Notes"

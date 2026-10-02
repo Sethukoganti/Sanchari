@@ -16,13 +16,16 @@ export async function generateMetadata({
   const fest = getFestival(slug);
   if (!fest) return { title: "Festival Not Found · Explore India" };
 
+  const description = (fest.significance || fest.description || "").slice(0, 160);
+  const images = fest.gallery && fest.gallery.length > 0 ? fest.gallery : (fest.image ? [fest.image] : []);
+
   return {
     title: `${fest.name} — Significance, Rituals & Celebration Guide · Explore India`,
-    description: fest.significance.slice(0, 160),
+    description,
     openGraph: {
       title: fest.name,
-      description: fest.significance.slice(0, 160),
-      images: fest.gallery,
+      description,
+      images,
     },
   };
 }
@@ -41,16 +44,16 @@ export default async function FestivalDetailPage({
     "@context": "https://schema.org",
     "@type": "Festival",
     name: fest.name,
-    description: fest.significance,
+    description: fest.significance || fest.description || "",
     location: {
       "@type": "Place",
-      name: fest.states.join(", "),
+      name: (fest.states || (fest.state ? [fest.state] : [])).join(", "),
       address: {
         "@type": "PostalAddress",
         addressCountry: "India",
       },
     },
-    image: fest.gallery,
+    image: fest.gallery && fest.gallery.length > 0 ? fest.gallery : (fest.image ? [fest.image] : []),
   };
 
   return (
@@ -63,4 +66,3 @@ export default async function FestivalDetailPage({
     </>
   );
 }
-

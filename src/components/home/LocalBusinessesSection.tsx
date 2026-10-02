@@ -45,6 +45,7 @@ export function LocalBusinessesSection() {
                   alt={biz.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-transparent to-black/30" />
 
@@ -62,7 +63,7 @@ export function LocalBusinessesSection() {
                     {biz.category}
                   </span>
                   <span className="flex items-center gap-1 text-amber-300 font-bold">
-                    <Star className="h-3 w-3 fill-amber-300" />
+                    <Star className="h-3 w-3 fill-white" />
                     {biz.rating} ({biz.reviewsCount})
                   </span>
                 </div>

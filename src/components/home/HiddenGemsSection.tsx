@@ -48,6 +48,7 @@ export function HiddenGemsSection() {
                   alt={gem.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-transparent to-black/30" />
 
@@ -59,7 +60,7 @@ export function HiddenGemsSection() {
 
                 <div className="absolute bottom-3.5 left-3.5 right-3.5 flex justify-between items-center text-xs">
                   <span className="flex items-center gap-1 text-white font-semibold drop-shadow-md">
-                    <MapPin className="h-3.5 w-3.5 text-saffron" />
+                    <MapPin className="h-3.5 w-3.5 text-white" />
                     {gem.state}
                   </span>
                   <span className="flex items-center gap-1 text-emerald-300 font-mono text-[11px] bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-emerald-500/30">

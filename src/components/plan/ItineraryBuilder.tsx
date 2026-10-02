@@ -535,7 +535,7 @@ export function ItineraryBuilder() {
 
                   <div className="flex flex-wrap gap-4 text-xs pt-3 border-t border-white/5 pl-11">
                     <div className="flex items-center gap-1.5 text-zinc-400">
-                      <Bed className="h-3.5 w-3.5 text-turmeric" />
+                      <Bed className="h-3.5 w-3.5 text-white" />
                       <span>Stay: <strong className="text-zinc-200">{day.stay}</strong></span>
                     </div>
                     <div className="flex items-center gap-1.5 text-zinc-400">

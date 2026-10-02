@@ -10,7 +10,7 @@ export function ArticleCard({ article }: { article: Article }) {
         <div>
           <div className="relative aspect-[16/10] overflow-hidden bg-black/60">
             <Image
-              src={article.image}
+              src={article.image || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800&q=80"}
               alt={article.title}
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
@@ -24,7 +24,7 @@ export function ArticleCard({ article }: { article: Article }) {
 
           <div className="p-5">
             <div className="text-xs text-muted-gray font-mono">
-              {formatDate(article.date)} · {article.readTime}
+              {formatDate(article.date || article.publishDate || "2026-01-01")} · {article.readTime}
             </div>
             <h3 className="mt-2 font-display text-xl sm:text-2xl font-bold text-warm-white transition-colors duration-200 group-hover:text-turmeric">
               {article.title}

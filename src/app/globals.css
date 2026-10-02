@@ -1,17 +1,70 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================
+   LIGHT THEME (DEFAULT :root)
+   ========================= */
+:root {
+  color-scheme: light;
+
+  --background: #FDF9F1;
+  --foreground: #1E1B3B;
+
+  --surface: #FFFDF9;
+  --surface-elevated: #F4EEDF;
+
+  --border: rgba(30, 27, 59, 0.12);
+  --border-subtle: rgba(30, 27, 59, 0.06);
+
+  --text-main: #1E1B3B;
+  --text-muted: #59557C;
+
+  --card-bg: #FFFDF9;
+  --card-border: rgba(30, 27, 59, 0.1);
+  --chip-bg: rgba(30, 27, 59, 0.05);
+
+  --color-warm-white: #1E1B3B;
+  --color-muted-gray: #59557C;
+}
+
+/* =========================
+   DARK THEME (.dark)
+   ========================= */
+.dark {
+  color-scheme: dark;
+
+  --background: #0F0C24;
+  --foreground: #FDF9F1;
+
+  --surface: #171333;
+  --surface-elevated: #201B46;
+
+  --border: rgba(253, 249, 241, 0.12);
+  --border-subtle: rgba(253, 249, 241, 0.06);
+
+  --text-main: #FDF9F1;
+  --text-muted: #A39FB8;
+
+  --card-bg: rgba(23, 19, 51, 0.65);
+  --card-border: rgba(253, 249, 241, 0.12);
+  --chip-bg: rgba(253, 249, 241, 0.06);
+
+  --color-warm-white: #FDF9F1;
+  --color-muted-gray: #A39FB8;
+}
 
 @theme {
-  /* SANCHARI BHARAT Color System */
-  --color-navy: #0B132B;
-  --color-navy-dark: #070B19;
-  --color-navy-deep: #050811;
-  --color-navy-light: #1C2541;
-  --color-navy-surface: #111C38;
-  --color-dark-bg: #070B19;
-  --color-dark-surface: #0E172F;
-  --color-dark-elevated: #152244;
-  --color-dark-border: rgba(255, 255, 255, 0.12);
+  /* Global Overrides */
+  --color-white: #FFFDF9; /* Premium Cream */
+  --color-black: #090717; /* Deep Violet Blue */
+
+  /* Brand Color Tokens */
+  --color-navy: #1E1B3B;
+  --color-navy-dark: #0F0C24;
+  --color-navy-deep: #090717;
+  --color-navy-light: #2A2552;
+  --color-navy-surface: #171333;
 
   /* Primary Saffron / Orange Accent */
   --color-saffron: #F97316;
@@ -28,7 +81,7 @@
   --color-peacock-light: #10B981;
   --color-peacock-dark: #047857;
 
-  /* AI Wizard Violet / Purple Accent */
+  /* AI Violet Accent */
   --color-ai-violet: #8B5CF6;
   --color-ai-light: #A78BFA;
   --color-ai-dark: #6D28D9;
@@ -36,8 +89,8 @@
   --color-rani-light: #E05486;
 
   /* Text & Surface Tokens */
-  --color-warm-white: #F8FAFC;
-  --color-muted-gray: #94A3B8;
+  --color-warm-white: var(--color-warm-white);
+  --color-muted-gray: var(--color-muted-gray);
   --color-dark-gray: #64748B;
   --color-charcoal: #1E293B;
 
@@ -49,18 +102,62 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
-:root {
-  color-scheme: dark;
-  --background: #070B19;
-  --foreground: #F8FAFC;
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
   font-family: var(--font-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode overrides for high-contrast readability */
+:root:not(.dark) .text-warm-white {
+  color: #0B132B !important;
+}
+
+:root:not(.dark) .text-muted-gray {
+  color: #475569 !important;
+}
+
+:root:not(.dark) .text-zinc-100,
+:root:not(.dark) .text-zinc-200,
+:root:not(.dark) .text-zinc-300 {
+  color: #334155;
+}
+
+:root:not(.dark) .text-zinc-400 {
+  color: #475569;
+}
+
+:root:not(.dark) .text-zinc-500 {
+  color: #64748B;
+}
+
+:root:not(.dark) .text-\[\#F8FAFC\],
+:root:not(.dark) .text-\[\#F7F3EC\] {
+  color: #0B132B;
+}
+
+:root:not(.dark) .bg-navy-surface\/60,
+:root:not(.dark) .bg-navy-surface\/85,
+:root:not(.dark) .bg-navy-surface,
+:root:not(.dark) .bg-navy-dark\/60,
+:root:not(.dark) .bg-navy-dark,
+:root:not(.dark) .bg-navy-deep {
+  background-color: #FFFFFF;
+}
+
+:root:not(.dark) .border-white\/10,
+:root:not(.dark) .border-white\/5,
+:root:not(.dark) .border-white\/15,
+:root:not(.dark) .border-white\/20,
+:root:not(.dark) .border-white\/30,
+:root:not(.dark) .border-white\/40 {
+  border-color: rgba(15, 23, 42, 0.1);
 }
 
 /* Custom Scrollbars */
@@ -69,11 +166,14 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #070B19;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1C2541;
+  background: #94A3B8;
   border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1C2541;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #F97316;
@@ -108,30 +208,30 @@ body {
   padding-right: 0.25rem;
 }
 
-/* Glassmorphic Surfaces */
+/* Glassmorphic & Adaptive Surfaces */
 .card-surface {
-  background: rgba(17, 28, 56, 0.6);
+  background: var(--card-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-surface:hover {
-  border-color: rgba(249, 115, 22, 0.4);
+  border-color: rgba(249, 115, 22, 0.45);
   box-shadow: 0 16px 40px -12px rgba(249, 115, 22, 0.15);
 }
 
 .card-ai {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(17, 28, 56, 0.7));
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), var(--card-bg));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 1.25rem;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 1.5rem;
 }
 
 .card-ai:hover {
-  border-color: rgba(139, 92, 246, 0.6);
+  border-color: rgba(139, 92, 246, 0.65);
   box-shadow: 0 16px 40px -12px rgba(139, 92, 246, 0.25);
 }
 
@@ -142,7 +242,7 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #F97316, #EA580C);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
@@ -165,7 +265,7 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #8B5CF6, #6D28D9);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
@@ -185,22 +285,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.07);
-  color: #F8FAFC;
+  background: var(--chip-bg);
+  color: var(--text-main);
   font-weight: 600;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
   border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   transition: all 0.25s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(249, 115, 22, 0.1);
   border-color: rgba(249, 115, 22, 0.4);
-  color: #FFFFFF;
+  color: #F97316;
   transform: translateY(-2px);
 }
 
@@ -213,16 +313,16 @@ body {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #94A3B8;
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   transition: all 0.2s ease;
 }
 
 .chip:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  border-color: rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.1);
+  color: #F97316;
+  border-color: rgba(249, 115, 22, 0.4);
 }
 
 .chip-active {
@@ -235,20 +335,24 @@ body {
 .chip-ai {
   background: rgba(139, 92, 246, 0.18);
   border-color: #8B5CF6;
-  color: #A78BFA;
+  color: #8B5CF6;
   font-weight: 700;
 }
 
 .badge-hidden-gem {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
   border: 1px solid rgba(16, 185, 129, 0.4);
-  color: #34D399;
+  color: #059669;
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
+}
+
+.dark .badge-hidden-gem {
+  color: #34D399;
 }
 
 /* Animations */

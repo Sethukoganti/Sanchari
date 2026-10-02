@@ -60,7 +60,7 @@ export function ShareButton({ title, text, url, className }: ShareButtonProps) {
         </>
       ) : (
         <>
-          <Share2 className="h-3.5 w-3.5 text-turmeric" />
+          <Share2 className="h-3.5 w-3.5 text-white" />
           <span>Share Guide</span>
         </>
       )}

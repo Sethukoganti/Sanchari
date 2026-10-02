@@ -197,7 +197,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                       key={hl}
                       className="rounded-xl border border-white/5 bg-black/40 p-4 text-xs font-semibold text-zinc-200 flex items-center gap-2.5"
                     >
-                      <Sparkles className="h-4 w-4 text-turmeric shrink-0" />
+                      <Sparkles className="h-4 w-4 text-white shrink-0" />
                       <span>{hl}</span>
                     </div>
                   ))}
@@ -237,14 +237,14 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
           {activeTab === "cuisine" && (
             <div className="space-y-6 animate-fade-in">
               <div className="grid gap-6 sm:grid-cols-2">
-                {destination.localCuisine.map((food) => (
+                {destination.localCuisine?.map((food: any) => (
                   <div
                     key={food.name}
                     className="card-surface p-5 bg-white/[0.03] border-white/10 rounded-2xl space-y-3"
                   >
                     <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/50">
                       <Image
-                        src={food.image}
+                        src={food.image || "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80"}
                         alt={food.name}
                         fill
                         className="object-cover"
@@ -273,7 +273,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                   Historic Bazaars & Shopping
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {destination.localMarkets.map((m) => (
+                  {destination.localMarkets?.map((m: any) => (
                     <div
                       key={m.name}
                       className="card-surface p-5 bg-white/[0.03] border-white/10 rounded-2xl space-y-2"
@@ -293,7 +293,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                     Curated Heritage Stays
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    {hotels.map((h) => (
+                    {hotels.map((h: any) => (
                       <div
                         key={h.id}
                         className="card-surface p-5 bg-white/[0.03] border-white/10 rounded-2xl space-y-3"
@@ -331,14 +331,14 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
               {destination.photography && (
                 <div className="card-surface p-6 sm:p-8 bg-white/[0.03] border-white/10 rounded-3xl space-y-4">
                   <h3 className="font-display text-xl font-bold text-warm-white flex items-center gap-2">
-                    <Camera className="h-5 w-5 text-turmeric" />
+                    <Camera className="h-5 w-5 text-white" />
                     Photography Golden Hour & Prime Spots
                   </h3>
                   <p className="text-xs text-turmeric font-mono">
                     Best Timing: {destination.photography.bestTime}
                   </p>
                   <ul className="space-y-1.5 text-xs text-zinc-300">
-                    {destination.photography.bestSpots.map((spot) => (
+                    {destination.photography.bestSpots?.map((spot: string) => (
                       <li key={spot} className="flex items-center gap-2">
                         <span className="text-turmeric">•</span>
                         <span>{spot}</span>
@@ -355,7 +355,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                       Do&apos;s for Travelers
                     </h4>
                     <ul className="space-y-1.5 text-xs text-zinc-300">
-                      {destination.dosAndDonts.dos.map((d) => (
+                      {destination.dosAndDonts.dos?.map((d: string) => (
                         <li key={d} className="flex items-start gap-2">
                           <span className="text-emerald-400 font-bold">✓</span>
                           <span>{d}</span>
@@ -369,7 +369,7 @@ export function DestinationDetailClient({ destination }: DestinationDetailClient
                       Don&apos;ts for Travelers
                     </h4>
                     <ul className="space-y-1.5 text-xs text-zinc-300">
-                      {destination.dosAndDonts.donts.map((d) => (
+                      {destination.dosAndDonts.donts?.map((d: string) => (
                         <li key={d} className="flex items-start gap-2">
                           <span className="text-rose-400 font-bold">✗</span>
                           <span>{d}</span>

@@ -21,12 +21,12 @@ export function DestinationExplorer({
 }) {
   const { t } = useLanguage();
   const [regions, setRegions] = useState<Region[]>(
-    initialRegion && REGIONS.includes(initialRegion as Region)
+    initialRegion && (REGIONS as readonly string[]).includes(initialRegion)
       ? [initialRegion as Region]
       : [],
   );
   const [themes, setThemes] = useState<Theme[]>(
-    initialTheme && THEMES.includes(initialTheme as Theme)
+    initialTheme && (THEMES as readonly string[]).includes(initialTheme)
       ? [initialTheme as Theme]
       : [],
   );
@@ -36,8 +36,8 @@ export function DestinationExplorer({
 
   const filtered = useMemo(() => {
     let list = destinations.filter((d) => {
-      if (regions.length && !regions.includes(d.region)) return false;
-      if (themes.length && !themes.some((th) => d.themes.includes(th)))
+      if (regions.length && !regions.includes(d.region as any)) return false;
+      if (themes.length && !themes.some((th) => (d.themes as string[]).includes(th)))
         return false;
       if (query.trim()) {
         const q = query.toLowerCase();
@@ -171,7 +171,7 @@ export function DestinationExplorer({
               onChange={(e) =>
                 setSort(e.target.value as "featured" | "name" | "region")
               }
-              className="mt-2 w-full rounded-xl border border-[color:var(--surface-border)] bg-[color:var(--surface)] px-3 py-2.5 text-sm text-[color:var(--text)] outline-none transition focus:border-[#C41E3A] cursor-pointer"
+              className="mt-2 w-full rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-surface px-3 py-2.5 text-sm text-zinc-800 dark:text-zinc-200 outline-none transition focus:border-[#C41E3A] cursor-pointer"
             >
               <option value="featured">Featured first</option>
               <option value="name">Name A–Z</option>

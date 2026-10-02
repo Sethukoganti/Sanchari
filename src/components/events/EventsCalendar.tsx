@@ -31,9 +31,9 @@ export function EventsCalendar() {
       .filter((e) => {
         if (month === 0) return true;
         const targetMonth = monthNames[month];
-        return e.date.month === targetMonth;
+        return e.date?.month === targetMonth;
       })
-      .filter((e) => (region === "All" ? true : e.state.toLowerCase().includes(region.toLowerCase())));
+      .filter((e) => (region === "All" ? true : (e.state || "").toLowerCase().includes(region.toLowerCase())));
   }, [month, region]);
 
   return (
@@ -93,7 +93,7 @@ export function EventsCalendar() {
             >
               <div className="relative aspect-[16/9]">
                 <Image
-                  src={event.image}
+                  src={event.image || "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80"}
                   alt=""
                   fill
                   className="object-cover"
@@ -102,7 +102,7 @@ export function EventsCalendar() {
               </div>
               <div className="p-5 space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-saffron font-mono">
-                  {event.date.approximateString} · {event.state}
+                  {event.date?.approximateString || event.date?.month || "Seasonal"} · {event.state}
                 </p>
                 <h3 className="font-display text-xl font-bold text-warm-white">
                   {event.name}

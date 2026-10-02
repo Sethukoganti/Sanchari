@@ -71,11 +71,11 @@ export function GalleryGrid() {
             type="button"
             className="group relative w-full overflow-hidden rounded-2xl border border-white/10 text-left shadow-lg transition duration-300 hover:scale-[1.02] hover:border-turmeric cursor-pointer bg-black/60"
             onClick={() => setActive(index)}
-            aria-label={`Open ${item.title}`}
+            aria-label={`Open ${item.title || item.caption || "photo"}`}
           >
             <Image
               src={item.image}
-              alt={item.title}
+              alt={item.title || item.caption || "India travel photography"}
               width={800}
               height={index % 3 === 0 ? 1000 : 700}
               className="h-auto w-full object-cover transition duration-700 group-hover:scale-105"
@@ -86,7 +86,7 @@ export function GalleryGrid() {
               <span className="block font-mono text-[10px] font-bold uppercase tracking-wider text-turmeric">
                 {item.category} · {item.location}
               </span>
-              <span className="font-display text-xl font-bold">{item.title}</span>
+              <span className="font-display text-xl font-bold">{item.title || item.caption}</span>
             </span>
           </button>
         ))}
@@ -97,7 +97,7 @@ export function GalleryGrid() {
           className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 p-4 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
-          aria-label={current.title}
+          aria-label={current.title || current.caption || "Image"}
           onClick={() => setActive(null)}
         >
           <button
@@ -139,7 +139,7 @@ export function GalleryGrid() {
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-turmeric/30 bg-black/80 shadow-2xl">
               <Image
                 src={current.image}
-                alt={current.title}
+                alt={current.title || current.caption || "Gallery photo"}
                 fill
                 className="object-contain"
                 sizes="100vw"
@@ -147,7 +147,7 @@ export function GalleryGrid() {
               />
             </div>
             <div className="mt-4 text-center text-white">
-              <p className="font-display text-2xl font-bold">{current.title}</p>
+              <p className="font-display text-2xl font-bold">{current.title || current.caption}</p>
               <p className="mt-1 text-sm text-zinc-300">
                 {current.caption} · <span className="text-turmeric">{current.location}</span>
               </p>

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function ExperiencesPage() {
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="Living Cultural Traditions"
         title="Curated Experiences & Cultural Expeditions"
@@ -72,7 +72,7 @@ export default function ExperiencesPage() {
 
                 <div className="p-5 pt-0 border-t border-white/5 mt-auto flex items-center justify-between text-xs font-mono text-zinc-400">
                   <span className="flex items-center gap-1 text-amber-300 font-bold">
-                    <Star className="h-3.5 w-3.5 fill-amber-300" />
+                    <Star className="h-3.5 w-3.5 fill-white" />
                     {exp.rating}
                   </span>
                   <span className="text-saffron font-bold">

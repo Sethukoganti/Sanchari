@@ -25,9 +25,8 @@ export function FaqAccordion() {
                   <span className="h-2 w-2 rounded-full bg-turmeric shrink-0" />
                   <span>{item.q}</span>
                 </span>
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 shrink-0 text-turmeric transition-transform duration-300",
+                <ChevronDown className={cn(
+                    "h-5 w-5 shrink-0 text-white transition-transform duration-300",
                     isOpen && "rotate-180 text-white",
                   )}
                   aria-hidden

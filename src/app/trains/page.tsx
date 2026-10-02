@@ -51,7 +51,7 @@ export default function TrainsPage() {
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
                   <div className="absolute top-4 left-4 rounded-full bg-black/80 px-3 py-1 font-mono text-[10px] font-bold text-turmeric uppercase border border-turmeric/40 backdrop-blur-md flex items-center gap-1.5">
-                    <Star className="h-3 w-3 fill-turmeric" />
+                    <Star className="h-3 w-3 fill-white" />
                     Scenic Score: {train.scenicScore}/10
                   </div>
                 </div>
@@ -90,7 +90,7 @@ export default function TrainsPage() {
                       <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-200">
                         <span className="font-bold text-turmeric">{train.route.from}</span>
                         <span>→</span>
-                        {train.route.via.slice(0, 3).map((v) => (
+                        {train.route.via.slice(0, 3).map((v: string) => (
                           <span key={v} className="bg-white/5 px-2 py-0.5 rounded text-[11px]">
                             {v}
                           </span>
@@ -106,7 +106,7 @@ export default function TrainsPage() {
                         Fares & Travel Classes:
                       </span>
                       <div className="grid gap-2 sm:grid-cols-2">
-                        {train.classes.map((cls) => (
+                        {train.classes.map((cls: any) => (
                           <div
                             key={cls.name}
                             className="rounded-xl border border-white/5 bg-black/40 p-3 text-xs space-y-1"
@@ -149,4 +149,3 @@ export default function TrainsPage() {
     </div>
   );
 }
-

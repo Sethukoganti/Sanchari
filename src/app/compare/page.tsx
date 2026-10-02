@@ -16,7 +16,7 @@ export default function ComparePage() {
   const d2 = destinationsData.find((d) => d.slug === dest2Slug) || destinationsData[1];
 
   return (
-    <div className="min-h-screen pb-24 text-[#F7F3EC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F7F3EC]">
       <PageHero
         eyebrow="Side-by-Side Analysis"
         title="Compare Destinations"
@@ -70,7 +70,7 @@ export default function ComparePage() {
 
           {/* Comparison Cards Grid */}
           <div className="grid gap-6 lg:grid-cols-2">
-            {[d1, d2].map((dest, i) => (
+            {[d1, d2].map((dest) => (
               <div
                 key={dest.slug}
                 className="card-surface bg-white/[0.03] border-white/10 rounded-3xl overflow-hidden p-6 sm:p-8 space-y-6"
@@ -97,17 +97,17 @@ export default function ComparePage() {
                 <div className="space-y-4 text-xs divide-y divide-white/10">
                   <div className="pt-2 flex justify-between">
                     <span className="text-muted-gray">Best Season:</span>
-                    <span className="font-semibold text-warm-white">{dest.bestTime}</span>
+                    <span className="font-semibold text-warm-white">{dest.bestTimeToVisit || dest.bestTime}</span>
                   </div>
 
                   <div className="pt-3 flex justify-between">
                     <span className="text-muted-gray">Recommended Duration:</span>
-                    <span className="font-semibold text-warm-white">{dest.duration}</span>
+                    <span className="font-semibold text-warm-white">{dest.idealDurationDays ? `${dest.idealDurationDays} Days` : dest.duration}</span>
                   </div>
 
                   <div className="pt-3 flex justify-between">
                     <span className="text-muted-gray">Budget Category:</span>
-                    <span className="font-semibold text-turmeric">{dest.budget}</span>
+                    <span className="font-semibold text-turmeric">{dest.budgetTier || dest.budget || "Moderate"}</span>
                   </div>
 
                   <div className="pt-3">
@@ -126,7 +126,7 @@ export default function ComparePage() {
                     <ul className="space-y-1.5 text-zinc-300">
                       {dest.highlights.slice(0, 4).map((h) => (
                         <li key={h} className="flex items-start gap-2">
-                          <Check className="h-3.5 w-3.5 text-turmeric shrink-0 mt-0.5" />
+                          <Check className="h-3.5 w-3.5 text-white shrink-0 mt-0.5" />
                           <span>{h}</span>
                         </li>
                       ))}
@@ -136,10 +136,7 @@ export default function ComparePage() {
                   <div className="pt-3">
                     <span className="text-muted-gray block mb-2">Signature Dish:</span>
                     <p className="text-warm-white font-medium">
-                      {dest.localCuisine[0]?.name || "Local Regional Thali"}
-                    </p>
-                    <p className="text-zinc-400 text-[11px] mt-0.5">
-                      {dest.localCuisine[0]?.description || ""}
+                      {dest.localFoodSpecialities?.[0] || "Authentic Regional Thali"}
                     </p>
                   </div>
                 </div>
@@ -158,4 +155,3 @@ export default function ComparePage() {
     </div>
   );
 }
-

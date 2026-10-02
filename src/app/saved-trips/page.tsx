@@ -44,7 +44,13 @@ export default function SavedTripsPage() {
   };
 
   const handleShare = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
+    if (navigator.share) {
+      navigator.share({
+        title: selectedTrip?.title || "My Sanchari Trip",
+        text: selectedTrip?.summary || "Check out my Indian travel plan!",
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
       navigator.clipboard.writeText(window.location.href);
       setShareToast(true);
       setTimeout(() => setShareToast(false), 2500);
@@ -52,7 +58,7 @@ export default function SavedTripsPage() {
   };
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="My Trips Hub"
         title="Saved AI Itineraries & Journeys"
@@ -92,9 +98,8 @@ export default function SavedTripsPage() {
                   <h3 className="font-display text-lg font-bold text-warm-white">
                     Saved Itineraries ({trips.length})
                   </h3>
-                  <Link
-                    href="/plan"
-                    className="text-xs font-semibold text-saffron hover:underline flex items-center gap-1"
+                  <Link href="/plan"
+                    className="text-xs font-semibold text-white hover:underline flex items-center gap-1"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Plan New</span>

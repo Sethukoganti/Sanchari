@@ -33,7 +33,7 @@ export default function TravelSmartPage() {
   const dest = destinationsData.find((d) => d.name.includes(activeLocation)) || destinationsData[0];
 
   return (
-    <div className="min-h-screen pb-24 text-[#F8FAFC]">
+    <div className="min-h-screen pb-24 text-zinc-900 dark:text-[#F8FAFC]">
       <PageHero
         eyebrow="On-Ground Intelligence"
         title="Travel Smart Live Assistant"
@@ -98,7 +98,7 @@ export default function TravelSmartPage() {
                   <Compass className="h-3.5 w-3.5" />
                   Verified Food Trail:
                 </span>
-                <p className="text-xs text-warm-white font-semibold">{dest.localCuisine[0]?.name || "Traditional Regional Meal"}</p>
+                <p className="text-xs text-warm-white font-semibold">{dest.localFoodSpecialities?.[0] || "Traditional Regional Meal"}</p>
                 <span className="text-[11px] text-muted-gray block">Distance: ~0.4 km · Highly Recommended</span>
               </div>
 
@@ -107,7 +107,7 @@ export default function TravelSmartPage() {
                   <CloudSun className="h-3.5 w-3.5" />
                   Current Climate & Best Time:
                 </span>
-                <p className="text-xs text-warm-white font-semibold">{dest.bestTime}</p>
+                <p className="text-xs text-warm-white font-semibold">{dest.bestTimeToVisit || dest.bestTime}</p>
                 <span className="text-[11px] text-muted-gray block">Crowd: {dest.crowdLevel || "Moderate"}</span>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function TravelSmartPage() {
           {/* Women Traveler & Solo Safety Advisories */}
           <div className="card-surface p-6 sm:p-8 bg-navy-surface/60 border-white/10 rounded-3xl space-y-4">
             <h3 className="font-display text-xl font-bold text-warm-white flex items-center gap-2">
-              <Heart className="h-5 w-5 text-saffron" />
+              <Heart className="h-5 w-5 text-white" />
               Solo & Women Traveler Field Guidelines
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 text-xs text-zinc-300 font-body leading-relaxed">
@@ -175,4 +175,3 @@ export default function TravelSmartPage() {
     </div>
   );
 }
-
